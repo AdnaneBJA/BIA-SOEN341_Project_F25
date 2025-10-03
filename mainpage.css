@@ -1,0 +1,96 @@
+body{
+    background-color: #F6F1EC;
+
+}
+
+.menu-bar {
+    background-color: #DECAB5;
+    overflow: hidden;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-logo{
+    font-weight: bold;
+    font-size: 1.8em;
+    margin-left: 30px;
+    letter-spacing: 2px;
+}
+
+.menu-links{
+    display: flex;
+    gap: 10px;
+    margin-right: 20px;
+}
+
+.menu-bar a {
+    color: #000000;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: inline-block;
+}
+
+.menu-bar a:hover {
+    background-color: #AA8E70;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+    gap: 30px;
+}
+.button-row{
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    gap: 20px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.5s;
+}
+
+.button-row.show {
+    opacity:1;
+    pointer-events:auto;
+}
+
+.button-row button{
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+button{
+    background-color: #DECAB5;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1em;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0,
+        0, 0.1);
+    transition: background-color 0.5s ease;
+    
+}
+
+.btn-student:hover{
+    background-color: #BFD5F2;
+    cursor: pointer;
+}
+
+.btn-organizer:hover{
+    background-color: #A9C3A8;
+    cursor: pointer;
+}
+
+.btn-admin:hover{
+    background-color: #ea6348;
+    cursor: pointer;
+}
+
+
+
+
