@@ -2,8 +2,7 @@
 node_modules/
 
 # IDE settings
-.idea/
-
+/.idea
 # Environment files
 /backend/.env
 /backend/node_modules

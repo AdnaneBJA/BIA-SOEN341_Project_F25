@@ -5,6 +5,8 @@ var { Client } = require("pg");
 var cors = require("cors");
 const PORT = 3000;
 const createTables = require('./tables.js');
+const createOrganizerRoutes = require("./endpoints/organizer");
+
 
 app.use(express.json());
 app.use(
@@ -33,10 +35,11 @@ client.connect(err => {
     createTables(client);
 })
 
+app.use("/organizer", createOrganizerRoutes(client));
 
 app.listen(PORT, (err) => {
     if (err) {
         console.log("Error in server setup: ", err);
     }
-    console.log("Succesfully connected to port: ", PORT);
+    console.log("Successfully connected to port: ", PORT);
 })

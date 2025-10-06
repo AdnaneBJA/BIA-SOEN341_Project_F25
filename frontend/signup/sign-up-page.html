@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="sign-up-page.css" />
+</head>
+<body>
+<nav class="menu-bar">
+    <span class="menu-logo"><b>BIA</b></span>
+    <div class="menu-links">
+        <a href="mainpage.html">Home</a>
+        <a href="events.html">Events</a>
+        <a href="tickets.html">Tickets</a>
+    </div>
+</nav>
+
+<div class="center-content">
+    <h2>Create an Account</h2>
+    <form class="signup-form" id="userinfo">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="student">Student</option>
+                <option value="organizer">Organizer</option>
+            </select>
+        </div>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
+    <p id="success-message" class="success-message">Account created successfully!</p>
+</div>
+<script src="sign-up-page.js"></script>
+</body>
+</html>
