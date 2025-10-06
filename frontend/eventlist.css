@@ -1,0 +1,119 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #0078d4;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  background: white;
+  padding: 14px 24px;
+  margin: 30px 80px;
+  border-radius: 50px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#searchInput {
+  flex: 1;               
+  min-width: 300px;        
+  padding: 14px 18px;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  background-color: #f9f9f9;
+  font-size: 16px;
+}
+
+.search-container select,
+.search-container input[type="date"] {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  background-color: #f9f9f9;
+  font-size: 15px;
+}
+
+.search-container input:focus,
+.search-container select:focus {
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+}
+
+#searchButton {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#searchButton:hover {
+  background-color: #005ea2;
+  transform: scale(1.05);
+}
+
+.event-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 40px 80px;
+}
+
+.event-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.event-info {
+  padding: 16px;
+}
+
+.event-info h2 {
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.event-info p {
+  margin: 6px 0;
+  color: #555;
+}
+
+.event-info button {
+  margin-top: 10px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.event-info button:hover {
+  background-color: #005ea2;
+}
