@@ -1,3 +1,6 @@
+const { Parser } = require('@json2csv/plainjs');
+
+
 require('dotenv').config();
 var express = require("express");
 var app = express();
@@ -36,6 +39,31 @@ client.connect(err => {
 })
 
 app.use("/organizer", createOrganizerRoutes(client));
+
+app.get('/export-attendees', async (req, res) => {
+    try {
+        const result = await client.query(`
+            SELECT "studentID", "studentUserName", "studentPassword"
+             FROM public."Student"
+        `);
+
+        const attendees = result.rows;
+
+        const json2csvParser = new Parser({
+           fields: ['studentID', 'studentUserName', 'studentPassword']
+        });
+
+        const csv = json2csvParser.parse(attendees);
+
+
+        res.header('Content-Type', 'text/csv');
+        res.attachment(`attendees.csv`);
+        res.send(csv);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send('Error generating the CSV: ' + e);
+    }
+});
 
 app.listen(PORT, (err) => {
     if (err) {
