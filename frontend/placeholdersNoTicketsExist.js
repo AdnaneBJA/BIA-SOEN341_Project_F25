@@ -9,7 +9,6 @@ function TicketAnalytics({analytics}){
         </div>
 
     );
-
 }
 
 export default TicketAnalytics; //in case we need it somewhere else

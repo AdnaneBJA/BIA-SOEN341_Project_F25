@@ -1,10 +1,10 @@
 import React from 'react';
 
-function ExportAttendeeListButton({ onExport }) { //onExport is a function (can change the name later)
+function ExportAttendeeListButton({ onExport }) { 
     return (
         //onExport is called when the button is clicked (need to define it)
-        <button onClick={onExport}> 
-        Export Attendee List
+        <button onClick = {onExport}> 
+            Export Attendee List
         </button>
     );
 }
