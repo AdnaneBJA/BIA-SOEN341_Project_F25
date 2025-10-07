@@ -58,3 +58,14 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
     sendData();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const role = localStorage.getItem('role');
+    const hasOrganizer = localStorage.getItem('organizerUsername');
+    const hasStudent = localStorage.getItem('studentUsername');
+    const hasAdmin = localStorage.getItem('adminUsername');
+
+    if (role || hasOrganizer || hasStudent || hasAdmin) {
+        window.location.href = '../login/login.html';
+    }
+});
