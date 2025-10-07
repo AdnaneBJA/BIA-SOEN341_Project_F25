@@ -9,7 +9,7 @@ var cors = require("cors");
 const PORT = 3000;
 const createTables = require('./tables.js');
 const createOrganizerRoutes = require("./endpoints/organizer");
-
+const createLoginRoutes = require("./endpoints/login");
 
 app.use(express.json());
 app.use(
@@ -39,6 +39,7 @@ client.connect(err => {
 })
 
 app.use("/organizer", createOrganizerRoutes(client));
+app.use("/login", createLoginRoutes(client));
 
 app.get('/export-attendees', async (req, res) => {
     try {

@@ -8,28 +8,35 @@
     <title>Main Page</title>
 </head>
 <body>
-    <nav class = "menu-bar">
-        <span class = "menu-logo"><b>BIA</b></span>
-        <div class = "menu-links">
-            <a href = "mainpage.html"> Home </a>
-            <a href = "events.html"> Events </a>
-            <a href = "tickets.html"> Tickets </a>
-        </div> 
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="mainpage.html">Home</a>
+            <a href="../eventlist.html">Events</a>
+            <a href="#">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
     </nav>
        
-        <div class="center-content">
-            <h1 id="typed" ></h1>
-        </div>
-        
-        <div class="button-row">
-        <button class="btn-student" onclick = "location.href = 'studentDashboard.html'"> Register as a Student</button>
-        <button class="btn-organizer" onclick = "location.href = 'organizerDashboard.html'"> Register as an Organizer</button>
-        <button class="btn-admin" onclick = "location.href = 'adminDashboard.html'"> Admin Login</button>
-        <button class="btn-student" onclick = "location.href = 'registerAsStudent.html'"> Register as a Student</button>
-        <button class="btn-organizer" onclick = "location.href = '../signup/sign-up-page.html'"> Register as an Organizer</button>
-        <button class="btn-admin" onclick = "location.href = 'adminLogin.html'"> Admin Login</button>
-
+    <div class="center-content">
+        <h1 id="typed" ></h1>
     </div>
-     <script src="mainpage.js"></script>
+
+    <div class="button-row">
+        <button class="btn-student" onclick = "location.href = 'studentDashboard.html'" title="Browse events, save them, and view your tickets"> Student Dashboard</button>
+        <button class="btn-organizer" onclick = "location.href = 'organizerDashboard.html'" title="Create and manage events, track attendance, and view analytics"> Organizer Dashboard</button>
+        <button class="btn-admin" onclick = "location.href = 'adminDashboard.html'" title="Moderate organizer accounts and event listings; view platform analytics"> Admin Dashboard</button>
+        <button class="btn-organizer" onclick = "location.href = '../signup/sign-up-page.html'">Register</button>
+        <button class="btn-organizer" onclick = "location.href = '../login/login.html'">Login</button>
+        <button class="btn-admin" onclick = "location.href = 'adminLogin.html'"> Admin Login</button>
+    </div>
+    <script src="mainpage.js"></script>
 </body>
 </html>

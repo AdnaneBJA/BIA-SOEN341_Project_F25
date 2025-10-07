@@ -1,21 +1,42 @@
 body{
     background-color: #F6F1EC;
-
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .menu-bar {
     background-color: #DECAB5;
     overflow: hidden;
-    padding: 10px 0;
+    padding: 10px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.menu-left { justify-self: start; }
+.menu-right { justify-self: end; }
+.menu-center {
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
+    justify-content: center;
     align-items: center;
 }
+
+.menu-center a {
+    color: #000000;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+}
+
+.menu-center a:hover { background-color: #AA8E70; }
 
 .menu-logo{
     font-weight: bold;
     font-size: 1.8em;
-    margin-left: 30px;
+    margin-left: 14px;
     letter-spacing: 2px;
 }
 
@@ -30,10 +51,70 @@ body{
     text-decoration: none;
     padding: 14px 20px;
     display: inline-block;
+    border-radius: 6px;
 }
 
 .menu-bar a:hover {
     background-color: #AA8E70;
+}
+
+.menu-status {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#user-status{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000;
+    font-size: 0.95em;
+}
+
+.disconnect-btn{
+    margin-left: 12px;
+    background: #ffffff;
+    color: #333;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.disconnect-btn:hover{
+    background-color: #AA8E70;
+    color: #fff;
+    border-color: #AA8E70;
+    cursor: pointer;
+}
+
+.status-label{
+    color: #333;
+    font-weight: 600;
+}
+
+.status-username{
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 4px 10px;
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    font-weight: 600;
+}
+
+.role-badge{
+    background: rgba(170, 142, 112, 0.12);
+    color: #5a4634;
+    border: 1px solid #AA8E70;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
 }
 
 .center-content {
@@ -90,7 +171,3 @@ button{
     background-color: #ea6348;
     cursor: pointer;
 }
-
-
-
-
