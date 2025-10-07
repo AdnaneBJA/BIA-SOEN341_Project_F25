@@ -6,7 +6,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    background-color: #F6F1EC;
     min-height: 100vh;
     padding: 20px;
 }
@@ -21,7 +22,8 @@ body {
 }
 
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    background-color: #DECAB5;
     color: white;
     padding: 30px;
     text-align: center;
@@ -91,7 +93,7 @@ body {
 }
 
 .ticket-section h3 {
-    color: #667eea;
+    color: #000000;
     font-size: 18px;
     margin-bottom: 15px;
 }
@@ -140,8 +142,8 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background-color: #DECAB5;
+    color: rgb(0, 0, 0);
 }
 
 .btn-primary:hover {
@@ -150,8 +152,8 @@ body {
 }
 
 .btn-secondary {
-    background: #e0e0e0;
-    color: #333;
+    background: #DECAB5;
+    color: #000000;
 }
 
 .btn-secondary:hover {

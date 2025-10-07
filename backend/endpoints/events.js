@@ -1,0 +1,102 @@
+
+const express = require("express");
+const router = express.Router();
+
+module.exports = (client) => {
+    router.get("/", async (req, res) => {
+        try {
+            const sql = `SELECT * FROM public."Events";`;
+            const result = await client.query(sql);
+
+            res.status(200).json({
+                message: "Retrieving all events",
+                data: result.rows,
+            });
+        } catch (error) {
+            console.error("Database error:", error);
+            res.status(500).json({ error: "Database error" });
+        }
+    });
+
+router.post("/", async (req, res) => {
+    const { 
+        eventName, 
+        organizerID, 
+        eventType, 
+        startTime, 
+        endTime, 
+        location, 
+        maxParticipants, 
+        eventPrices,
+        eventDescription,
+        organizerUserName, 
+        Organization
+    } = req.body;
+
+    if (!eventName || !startTime || !endTime || !maxParticipants || !eventPrices || !Organization || !organizerUserName) {
+        return res.status(400).json({ 
+            error: "Required fields: eventName, startTime, endTime, maxParticipants, eventPrices, Organization Name, organizerUserName" 
+        });
+    }
+
+    try {
+        //first get the organizerID by using organizerUserName
+        const organizerLookupSql = `
+            SELECT "organizerID" FROM public."Organizer" 
+            WHERE "organizerUserName" = $1;
+        `;
+        const organizerResult = await client.query(organizerLookupSql, [organizerUserName]);
+
+        if (organizerResult.rows.length === 0) {
+            return res.status(404).json({ 
+                error: "Organizer not found" 
+            });
+        }
+
+        const organizerID = organizerResult.rows[0].organizerID;
+        // now insert event into table with organizerID and organizerUserName
+        const sql = `
+            INSERT INTO public."Events" (
+                "eventName",  
+                "organizerID", 
+                "eventType", 
+                "startTime", 
+                "endTime", 
+                "location", 
+                "maxParticipants", 
+                "eventPrices",
+                "eventDescription",
+                "organizerUserName", 
+                "Organization"
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            RETURNING *;
+        `;
+        
+        const values = [
+            eventName, 
+            organizerID, 
+            eventType, 
+            startTime, 
+            endTime, 
+            location, 
+            maxParticipants, 
+            eventPrices,
+            eventDescription,
+            organizerUserName, 
+            Organization
+        ];
+        
+        const result = await client.query(sql, values);
+
+        res.status(201).json({
+            message: "Event created successfully!",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Database error" });
+    }
+});
+    return router;
+};

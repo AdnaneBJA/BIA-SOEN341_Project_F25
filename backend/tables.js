@@ -29,9 +29,16 @@ async function createTables(client) {
     "maxParticipants" INTEGER NOT NULL,
     "currentParticipants" INTEGER DEFAULT 0,
     "eventPrices" INTEGER NOT NULL,
+    "eventDescription" VARCHAR(2000),
+    "organizerUserName" VARCHAR(255) NOT NULL,
+    "Organization" VARCHAR(255) NOT NULL,
     CONSTRAINT fk_events_organizer
       FOREIGN KEY ("organizerID") 
-      REFERENCES "Organizer" ("organizerID")
+      REFERENCES "Organizer" ("organizerID"),
+    CONSTRAINT fk_events_organizer_username
+      FOREIGN KEY ("organizerUserName") 
+      REFERENCES "Organizer" ("organizerUserName")
+
   );
 
   CREATE TABLE IF NOT EXISTS "Booking" (
