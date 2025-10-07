@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
         //first get the organizerID by using organizerUserName
         const organizerLookupSql = `
             SELECT "organizerID" FROM public."Organizer" 
-            WHERE "organizerUserName" = $1;
+            WHERE "organizerUserName" = $1; 
         `;
         const organizerResult = await client.query(organizerLookupSql, [organizerUserName]);
 
