@@ -46,13 +46,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="time">Start Time <span class="required">*</span></label>
-                        <input type="time" id="time" name="time" required>
+                        <label for="startTime">Start Time <span class="required">*</span></label>
+                        <input type="time" id="startTime" name="startTime" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="time">End Time <span class="required">*</span></label>
-                        <input type="time" id="time" name="time" required>
+                        <label for="endTime">End Time <span class="required">*</span></label>
+                        <input type="time" id="endTime" name="endTime" required>
                     </div>
                 </div>
 
@@ -64,6 +64,11 @@
                 <div class="form-group">
                     <label for="organization">Organization <span class="required">*</span></label>
                     <input type="text" id="organization" name="organization" placeholder="Enter Organization Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="organizerUserName">Organizer User Name <span class="required">*</span></label>
+                    <input type="text" id="organizerUserName" name="organizerUserName" placeholder="Enter Your Organizer User Name" required>
                 </div>
 
                 <div class="ticket-section">
@@ -90,7 +95,7 @@
 
                     <div class="form-group price-input" id="priceGroup">
                         <label for="price">Ticket Price ($) <span class="required">*</span></label>
-                        <input type="number" id="price" name="price" placeholder="Enter ticket price" min="0" step="0.01">
+                        <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="0" step="1">
                     </div>
                 </div>
 
@@ -102,6 +107,6 @@
         </div>
     </div>
 
-    <script src="EventCreationPageBackend.js"></script>
+    <script src="EventCreationPagejs.js"></script>
 </body>
 </html>

@@ -33,9 +33,9 @@ router.post("/", async (req, res) => {
         Organization
     } = req.body;
 
-    if (!eventName || !startTime || !endTime || !maxParticipants || !eventPrices || !Organization || !organizerUserName) {
+    if (!eventName || !startTime || !endTime || !maxParticipants || !eventPrices || !Organization || !organizerUserName || !location) {
         return res.status(400).json({ 
-            error: "Required fields: eventName, startTime, endTime, maxParticipants, eventPrices, Organization Name, organizerUserName" 
+            error: "Required fields: eventName, startTime, endTime, location, maxParticipants, eventPrices, Organization Name, organizerUserName" 
         });
     }
 
