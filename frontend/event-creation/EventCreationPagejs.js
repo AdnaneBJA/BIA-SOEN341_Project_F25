@@ -15,7 +15,9 @@ function togglePriceInput() {
 
 function handleSubmit(event) {
     event.preventDefault();
-    
+    console.log("Organizer ID: ", localStorage.getItem("organizerID"));
+
+
     // Get the ticket type and set price accordingly
     const ticketType = document.querySelector('input[name="ticketType"]:checked').value;
     let finalPrice = 0;
@@ -28,7 +30,7 @@ function handleSubmit(event) {
     
     const formData = {
         eventName: document.getElementById('title').value,
-        organizerUserName: document.getElementById("organizerUserName").value, // Get from the new input field
+        organizerUserName: localStorage.getItem("organizerUsername"), // Get from the new input field
         eventType: document.getElementById('category').value,
         startTime: new Date(document.getElementById('date').value + 'T' + document.getElementById('startTime').value).toISOString(),
         endTime: new Date(document.getElementById('date').value + 'T' + document.getElementById('endTime').value).toISOString(),
@@ -75,7 +77,18 @@ function resetForm() {
 document.addEventListener('DOMContentLoaded', function() {
     // Set minimum date to today
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
-    
     // Initialize the price input visibility (should be hidden by default since "free" is checked)
     togglePriceInput();
+
+    // Show user info in navbar
+    const username = localStorage.getItem('organizerUsername') || '';
+    const role = localStorage.getItem('role') || '';
+    document.querySelector('.status-username').textContent = username;
+    document.querySelector('.role-badge').textContent = role;
+
+    // Disconnect button logic
+    document.getElementById('disconnect-btn').onclick = function() {
+        localStorage.clear();
+        window.location.href = '../login/login.html';
+    };
 });
