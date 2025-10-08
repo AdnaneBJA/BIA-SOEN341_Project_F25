@@ -7,16 +7,6 @@
     <link rel="stylesheet" href="EventCreationPageStyle.css">
 </head>
 <body>
-    <!-- Added shared header from sign-up page -->
-    <nav class="menu-bar">
-        <span class="menu-logo"><b>BIA</b></span>
-        <div class="menu-links">
-            <a href="../main-page/mainpage.html">Home</a>
-            <a href="../eventlist.html">Events</a>
-            <a href="#">Tickets</a>
-        </div>
-    </nav>
-
     <div class="container">
         <div class="header">
             <h1>Create New Event</h1>
@@ -56,26 +46,38 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="time">Event Time <span class="required">*</span></label>
-                        <input type="time" id="time" name="time" required>
+                        <label for="startTime">Start Time <span class="required">*</span></label>
+                        <input type="time" id="startTime" name="startTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime">End Time <span class="required">*</span></label>
+                        <input type="time" id="endTime" name="endTime" required>
                     </div>
                 </div>
 
-                <!-- Grouped to save vertical space -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="location">Location <span class="required">*</span></label>
-                        <input type="text" id="location" name="location" placeholder="Enter event location" required>
-                    </div>
+                <div class="form-group">
+                    <label for="location">Location <span class="required">*</span></label>
+                    <input type="text" id="location" name="location" placeholder="Enter event location" required>
+                </div>
 
-                    <div class="form-group">
-                        <label for="organization">Organization <span class="required">*</span></label>
-                        <input type="text" id="organization" name="organization" placeholder="Enter organizing body" required>
-                    </div>
+                <div class="form-group">
+                    <label for="organization">Organization <span class="required">*</span></label>
+                    <input type="text" id="organization" name="organization" placeholder="Enter Organization Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="organizerUserName">Organizer User Name <span class="required">*</span></label>
+                    <input type="text" id="organizerUserName" name="organizerUserName" placeholder="Enter Your Organizer User Name" required>
                 </div>
 
                 <div class="ticket-section">
                     <h3>Ticket Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="capacity">Ticket Capacity <span class="required">*</span></label>
+                        <input type="number" id="capacity" name="capacity" placeholder="Enter maximum capacity" min="1" required>
+                    </div>
 
                     <div class="form-group">
                         <label>Ticket Type <span class="required">*</span></label>
@@ -91,16 +93,9 @@
                         </div>
                     </div>
 
-                    <!-- Capacity and price in a row to reduce height -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="capacity">Ticket Capacity <span class="required">*</span></label>
-                            <input type="number" id="capacity" name="capacity" placeholder="Max capacity" min="1" required>
-                        </div>
-                        <div class="form-group price-input" id="priceGroup">
-                            <label for="price">Ticket Price ($) <span class="required">*</span></label>
-                            <input type="number" id="price" name="price" placeholder="Ticket price" min="0" step="0.01">
-                        </div>
+                    <div class="form-group price-input" id="priceGroup">
+                        <label for="price">Ticket Price ($) <span class="required">*</span></label>
+                        <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="0" step="1">
                     </div>
                 </div>
 
