@@ -6,7 +6,6 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    /* FIX: allow scrolling on all screen sizes */
     overflow-y: auto;
 }
 
@@ -197,7 +196,6 @@ form { width: 100%; display: contents; }
 
 .required { color: #e74c3c; }
 
-/* Error text (from your first code) */
 .error-message {
     color: red;
     font-size: 0.95em;
