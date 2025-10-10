@@ -1,3 +1,89 @@
+// Mock event data based on Events table schema
+const mockEvents = [
+    {
+        eventID: 1,
+        eventName: "Campus Concert",
+        organizerID: 101,
+        eventType: "Music",
+        startTime: "2025-10-15T19:00:00",
+        endTime: "2025-10-15T22:00:00",
+        location: "Main Auditorium",
+        maxParticipants: 200,
+        currentParticipants: 150,
+        eventPrices: 20,
+        eventDescription: "Live music event featuring local bands.",
+        organizerUserName: "musicOrg",
+        Organization: "Music Club",
+        ticketsIssued: 160,
+        attendanceRate: 0.94, // 150/160
+        remainingCapacity: 40 // 200-160
+    },
+    {
+        eventID: 2,
+        eventName: "Spring Play",
+        organizerID: 102,
+        eventType: "Arts & Theatre",
+        startTime: "2025-11-01T18:00:00",
+        endTime: "2025-11-01T20:00:00",
+        location: "Drama Hall",
+        maxParticipants: 100,
+        currentParticipants: 80,
+        eventPrices: 15,
+        eventDescription: "Annual spring play performed by students.",
+        organizerUserName: "theatreOrg",
+        Organization: "Drama Society",
+        ticketsIssued: 90,
+        attendanceRate: 0.89, // 80/90
+        remainingCapacity: 10 // 100-90
+    },
+    {
+        eventID: 3,
+        eventName: "Film Night",
+        organizerID: 103,
+        eventType: "Film",
+        startTime: "2025-10-20T20:00:00",
+        endTime: "2025-10-20T23:00:00",
+        location: "Cinema Room",
+        maxParticipants: 60,
+        currentParticipants: 45,
+        eventPrices: 10,
+        eventDescription: "Screening of classic and indie films.",
+        organizerUserName: "filmOrg",
+        Organization: "Film Club",
+        ticketsIssued: 50,
+        attendanceRate: 0.90, // 45/50
+        remainingCapacity: 10 // 60-50
+    }
+];
+
+// Populate dropdown
+document.addEventListener("DOMContentLoaded", function() {
+    const select = document.getElementById("eventSelect");
+    mockEvents.forEach(event => {
+        const option = document.createElement("option");
+        option.value = event.eventID;
+        option.textContent = event.eventName;
+        select.appendChild(option);
+    });
+
+    // Show dashboard on selection
+    select.addEventListener("change", function() {
+        const event = mockEvents.find(e => e.eventID == this.value);
+        if (event) {
+            document.getElementById("dashboard").innerHTML = `
+                <h2>${event.eventName} Analytics</h2>
+                <ul>
+                    <li><b>Tickets Issued:</b> ${event.ticketsIssued}</li>
+                    <li><b>Attendance Rate:</b> ${(event.attendanceRate * 100).toFixed(1)}%</li>
+                    <li><b>Remaining Capacity:</b> ${event.remainingCapacity}</li>
+                </ul>
+            `;
+        }
+    });
+
+    // Initial dashboard
+    select.dispatchEvent(new Event("change"));
+});
 //const { load } = require("mime");
 
 //analytics function
