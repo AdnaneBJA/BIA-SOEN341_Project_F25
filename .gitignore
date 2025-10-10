@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# IDE settings
+/.idea
+# Environment files
+/backend/.env
+/backend/node_modules

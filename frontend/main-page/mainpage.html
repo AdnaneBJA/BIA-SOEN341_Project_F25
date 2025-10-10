@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mainpage.css">
+    <title>Main Page</title>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="mainpage.html">Home</a>
+            <a href="../eventlist.html">Events</a>
+            <a href="tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+       
+    <div class="center-content">
+        <h1 id="typed" ></h1>
+    </div>
+
+    <div class="button-row">
+        <button class="btn-student" onclick = "location.href = 'studentDashboard.html'" title="Browse events, save them, and view your tickets"> Student Dashboard</button>
+        <button class="btn-organizer" onclick = "location.href = 'organizerDashboard.html'" title="Create and manage events, track attendance, and view analytics"> Organizer Dashboard</button>
+        <button class="btn-admin" onclick = "location.href = 'adminDashboard.html'" title="Moderate organizer accounts and event listings; view platform analytics"> Admin Dashboard</button>
+        <button class="btn-organizer" onclick = "location.href = '../signup/sign-up-page.html'">Register</button>
+        <button class="btn-organizer" onclick = "location.href = '../login/login.html'">Login</button>
+        <button class="btn-admin" onclick = "location.href = 'adminLogin.html'"> Admin Login</button>
+    </div>
+    <script src="mainpage.js"></script>
+</body>
+</html>
