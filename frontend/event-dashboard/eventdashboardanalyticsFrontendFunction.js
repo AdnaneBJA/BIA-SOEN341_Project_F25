@@ -72,11 +72,28 @@ document.addEventListener("DOMContentLoaded", function() {
         if (event) {
             document.getElementById("dashboard").innerHTML = `
                 <h2>${event.eventName} Analytics</h2>
-                <ul>
-                    <li><b>Tickets Issued:</b> ${event.ticketsIssued}</li>
-                    <li><b>Attendance Rate:</b> ${(event.attendanceRate * 100).toFixed(1)}%</li>
-                    <li><b>Remaining Capacity:</b> ${event.remainingCapacity}</li>
-                </ul>
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tickets Issued</td>
+                            <td>${event.ticketsIssued}</td>
+                        </tr>
+                        <tr>
+                            <td>Attendance Rate</td>
+                            <td>${(event.attendanceRate * 100).toFixed(1)}%</td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Capacity</td>
+                            <td>${event.remainingCapacity}</td>
+                        </tr>
+                    </tbody>
+                </table>
             `;
         }
     });
