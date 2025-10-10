@@ -1,128 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Event - Campus Events</title>
-    <link rel="stylesheet" href="EventCreationPageStyle.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Event - Campus Events</title>
+  <link rel="stylesheet" href="EventCreationPageStyle.css" />
+  <style>
+    /* --- Scroll fix + general overrides --- */
+    html, body {
+      height: auto;
+      min-height: 100%;
+      overflow-y: auto;           /* enables vertical scroll */
+      overflow-x: hidden;         /* prevent sideways scroll */
+      scroll-behavior: smooth;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+      padding: 40px 5%;
+      box-sizing: border-box;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.95em;
+      margin: 2px 0 8px 0;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <nav class="menu-bar">
-        <div class="menu-left">
-            <span class="menu-logo"><b>BIA</b></span>
-        </div>
-        <div class="menu-center">
-            <a href="../main-page/mainpage.html">Home</a>
-            <a href="../eventlist.html">Events</a>
-            <a href="#">Tickets</a>
-        </div>
-        <div class="menu-right">
-            <div class="menu-status">
-                <span id="user-status">
-                  <span class="status-label">Currently logged in as:</span>
-                  <span class="status-username"></span>
-                  <span class="role-badge"></span>
-                </span>
-                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="header">
-            <h1>Create New Event</h1>
-            <p>Fill in the details below to create your campus event</p>
-        </div>
+  <nav class="menu-bar">
+    <div class="menu-left">
+      <span class="menu-logo"><b>BIA</b></span>
+    </div>
+    <div class="menu-center">
+      <a href="../main-page/mainpage.html">Home</a>
+      <a href="../eventlist.html">Events</a>
+      <a href="#">Tickets</a>
+    </div>
+    <div class="menu-right">
+      <div class="menu-status">
+        <span id="user-status">
+          <span class="status-label">Currently logged in as:</span>
+          <span class="status-username"></span>
+          <span class="role-badge"></span>
+        </span>
+        <button id="disconnect-btn" class="disconnect-btn" type="button">
+          Disconnect
+        </button>
+      </div>
+    </div>
+  </nav>
 
-        <div class="form-container">
-            <form id="eventForm" onsubmit="handleSubmit(event)">
-                <div class="form-group">
-                    <label for="title">Event Title <span class="required">*</span></label>
-                    <input type="text" id="title" name="title" placeholder="Enter event title" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Event Description <span class="required">*</span></label>
-                    <textarea id="description" name="description" placeholder="Describe your event..." required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="category">Category <span class="required">*</span></label>
-                    <select id="category" name="category" required>
-                        <option value="">Select a category</option>
-                        <option value="academic">Academic</option>
-                        <option value="sports">Sports</option>
-                        <option value="cultural">Cultural</option>
-                        <option value="social">Social</option>
-                        <option value="workshop">Workshop</option>
-                        <option value="career">Career</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="date">Event Date <span class="required">*</span></label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="startTime">Start Time <span class="required">*</span></label>
-                        <input type="time" id="startTime" name="startTime" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="endTime">End Time <span class="required">*</span></label>
-                        <input type="time" id="endTime" name="endTime" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="location">Location <span class="required">*</span></label>
-                    <input type="text" id="location" name="location" placeholder="Enter event location" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="organization">Organization <span class="required">*</span></label>
-                    <input type="text" id="organization" name="organization" placeholder="Enter Organization Name" required>
-                </div>
-
-
-                <div class="ticket-section">
-                    <h3>Ticket Information</h3>
-                    
-                    <div class="form-group">
-                        <label for="capacity">Ticket Capacity <span class="required">*</span></label>
-                        <input type="number" id="capacity" name="capacity" placeholder="Enter maximum capacity" min="1" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Ticket Type <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="ticketType" value="free" checked onchange="togglePriceInput()">
-                                <span>Free</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="ticketType" value="paid" onchange="togglePriceInput()">
-                                <span>Paid</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group price-input" id="priceGroup">
-                        <label for="price">Ticket Price ($) <span class="required">*</span></label>
-                        <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="0" step="1">
-                    </div>
-                </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Event</button>
-                </div>
-            </form>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>Create New Event</h1>
+      <p>Fill in the details below to create your campus event</p>
     </div>
 
-    <script src="EventCreationPagejs.js"></script>
+    <div class="form-container">
+      <form id="eventForm" novalidate>
+        <div class="form-group">
+          <label for="title">Event Title <span class="required">*</span></label>
+          <input type="text" id="title" name="title" placeholder="Enter event title" required />
+          <span class="error-message" id="titleError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Event Description <span class="required">*</span></label>
+          <textarea id="description" name="description" placeholder="Describe your event..." required></textarea>
+          <span class="error-message" id="descriptionError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category <span class="required">*</span></label>
+          <select id="category" name="category" required>
+            <option value="">Select a category</option>
+            <option value="academic">Academic</option>
+            <option value="sports">Sports</option>
+            <option value="cultural">Cultural</option>
+            <option value="social">Social</option>
+            <option value="workshop">Workshop</option>
+            <option value="career">Career</option>
+            <option value="other">Other</option>
+          </select>
+          <span class="error-message" id="categoryError"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Event Date <span class="required">*</span></label>
+            <input type="date" id="date" name="date" required />
+            <span class="error-message" id="dateError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="startTime">Start Time <span class="required">*</span></label>
+            <input type="time" id="startTime" name="startTime" required />
+            <span class="error-message" id="startTimeError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="endTime">End Time <span class="required">*</span></label>
+            <input type="time" id="endTime" name="endTime" required />
+            <span class="error-message" id="endTimeError"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location <span class="required">*</span></label>
+          <input type="text" id="location" name="location" placeholder="Enter event location" required />
+          <span class="error-message" id="locationError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="organization">Organization <span class="required">*</span></label>
+          <input type="text" id="organization" name="organization" placeholder="Enter Organization Name" required />
+          <span class="error-message" id="organizationError"></span>
+        </div>
+
+        <div class="ticket-section">
+          <h3>Ticket Information</h3>
+
+          <div class="form-group">
+            <label for="capacity">Ticket Capacity <span class="required">*</span></label>
+            <input type="number" id="capacity" name="capacity" placeholder="Enter maximum capacity" min="1" required />
+            <span class="error-message" id="capacityError"></span>
+          </div>
+
+          <div class="form-group">
+            <label>Ticket Type <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="ticketType" value="free" checked onchange="togglePriceInput()" />
+                <span>Free</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="ticketType" value="paid" onchange="togglePriceInput()" />
+                <span>Paid</span>
+              </label>
+            </div>
+            <span class="error-message" id="ticketTypeError"></span>
+          </div>
+
+          <div class="form-group price-input" id="priceGroup" style="display:none;">
+            <label for="price">Ticket Price ($) <span class="required">*</span></label>
+            <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 10)" min="0" step="1" />
+            <span class="error-message" id="priceError"></span>
+          </div>
+        </div>
+
+        <div class="btn-container" style="text-align:center; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePriceInput() {
+      const paidSelected = document.querySelector('input[name="ticketType"][value="paid"]').checked;
+      const priceGroup = document.getElementById("priceGroup");
+      const priceInput = document.getElementById("price");
+
+      if (paidSelected) {
+        priceGroup.style.display = "";
+        priceInput.setAttribute("required", "required");
+      } else {
+        priceGroup.style.display = "none";
+        priceInput.removeAttribute("required");
+        priceInput.value = "";
+        document.getElementById("priceError").textContent = "";
+      }
+    }
+
+    function clearErrors() {
+      const ids = [
+        "titleError","descriptionError","categoryError",
+        "dateError","startTimeError","endTimeError",
+        "locationError","organizationError",
+        "capacityError","ticketTypeError","priceError"
+      ];
+      ids.forEach(id => document.getElementById(id).textContent = "");
+    }
+
+    function resetForm() {
+      const form = document.getElementById("eventForm");
+      form.reset();
+      clearErrors();
+      togglePriceInput();
+    }
+
+    document.getElementById("eventForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearErrors();
+      let valid = true;
+
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const category = document.getElementById("category").value;
+      const dateValue = document.getElementById("date").value;
+      const startTime = document.getElementById("startTime").value;
+      const endTime = document.getElementById("endTime").value;
+      const location = document.getElementById("location").value.trim();
+      const organization = document.getElementById("organization").value.trim();
+      const capacity = document.getElementById("capacity").value;
+      const paidSelected = document.querySelector('input[name="ticketType"][value="paid"]').checked;
+      const freeSelected = document.querySelector('input[name="ticketType"][value="free"]').checked;
+      const price = document.getElementById("price").value;
+
+      if (!title) { document.getElementById("titleError").textContent = "Event title is required."; valid = false; }
+      if (!description) { document.getElementById("descriptionError").textContent = "Description is required."; valid = false; }
+      if (!category) { document.getElementById("categoryError").textContent = "Please select a category."; valid = false; }
+
+      if (!dateValue) {
+        document.getElementById("dateError").textContent = "Event date is required.";
+        valid = false;
+      } else {
+        const today = new Date(); today.setHours(0,0,0,0);
+        const eventDate = new Date(dateValue);
+        if (eventDate <= today) {
+          document.getElementById("dateError").textContent = "Event date must be in the future.";
+          valid = false;
+        }
+      }
+
+      if (!startTime) { document.getElementById("startTimeError").textContent = "Start time is required."; valid = false; }
+      if (!endTime) { document.getElementById("endTimeError").textContent = "End time is required."; valid = false; }
+      if (startTime && endTime) {
+        const dateForCompare = dateValue || new Date().toISOString().slice(0,10);
+        const start = new Date(`${dateForCompare}T${startTime}`);
+        const end = new Date(`${dateForCompare}T${endTime}`);
+        if (end <= start) {
+          document.getElementById("endTimeError").textContent = "End time must be after start time.";
+          valid = false;
+        }
+      }
+
+      if (!location) { document.getElementById("locationError").textContent = "Location is required."; valid = false; }
+      if (!organization) { document.getElementById("organizationError").textContent = "Organization is required."; valid = false; }
+
+      if (!capacity || isNaN(capacity) || capacity < 1) {
+        document.getElementById("capacityError").textContent = "Enter a valid capacity (≥1).";
+        valid = false;
+      }
+
+      if (!freeSelected && !paidSelected) {
+        document.getElementById("ticketTypeError").textContent = "Please select a ticket type.";
+        valid = false;
+      }
+
+      if (paidSelected) {
+        if (!price || isNaN(price) || price <= 0) {
+          document.getElementById("priceError").textContent = "Enter a valid positive ticket price.";
+          valid = false;
+        }
+      }
+
+      if (valid) alert("Event created successfully! (form is valid)");
+    });
+
+    document.addEventListener("DOMContentLoaded", togglePriceInput);
+  </script>
 </body>
 </html>
