@@ -1,8 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -10,7 +6,8 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    /* FIX: allow scrolling on all screen sizes */
+    overflow-y: auto;
 }
 
 .menu-bar {
@@ -76,11 +73,7 @@ body {
     border-color: #AA8E70;
     cursor: pointer;
 }
-.status-label{
-    color: #333;
-    font-weight: 600;
-    font-size: 16px;
-}
+.status-label{ color: #333; font-weight: 600; font-size: 16px; }
 .status-username{
     background: #ffffff;
     border: 1px solid rgba(0,0,0,0.08);
@@ -100,9 +93,10 @@ body {
     font-size: 16px;
 }
 
+/* Card */
 .container {
     max-width: 700px;
-    margin: 32px auto 0 auto;
+    margin: 32px auto 24px auto;
     background: white;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -111,18 +105,12 @@ body {
 
 .header {
     background-color: #DECAB5;
-    color: white;
+    color: black;
     padding: 18px 10px;
     text-align: center;
 }
-.header h1 {
-    font-size: 30px;
-    margin-bottom: 6px;
-}
-.header p {
-    font-size: 16px;
-    opacity: 0.9;
-}
+.header h1 { font-size: 30px; margin-bottom: 6px; }
+.header p { font-size: 16px; opacity: 0.9; }
 
 .form-container {
     padding: 14px 14px 8px 14px;
@@ -130,13 +118,9 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 18px;
 }
-form {
-    width: 100%;
-    display: contents;
-}
-.form-group {
-    margin-bottom: 10px;
-}
+form { width: 100%; display: contents; }
+
+.form-group { margin-bottom: 10px; }
 .form-group label {
     display: block;
     font-weight: 600;
@@ -170,6 +154,7 @@ form {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
 }
+
 .ticket-section {
     background: #f8f9fa;
     padding: 8px;
@@ -177,32 +162,15 @@ form {
     margin-bottom: 10px;
     grid-column: 1 / span 2;
 }
-.ticket-section h3 {
-    color: #000000;
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-.radio-group {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-.radio-option {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-}
-.radio-option input[type="radio"] {
-    width: auto;
-    cursor: pointer;
-}
-.price-input {
-    display: none;
-}
-.price-input.active {
-    display: block;
-}
+.ticket-section h3 { color: #000000; font-size: 18px; margin-bottom: 8px; }
+
+.radio-group { display: flex; gap: 12px; margin-bottom: 8px; }
+.radio-option { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.radio-option input[type="radio"] { width: auto; cursor: pointer; }
+
+.price-input { display: none; }
+.price-input.active { display: block; }
+
 .btn-container {
     display: flex;
     gap: 8px;
@@ -219,30 +187,25 @@ form {
     cursor: pointer;
     transition: all 0.3s;
 }
-.btn-primary {
-    background-color: #DECAB5;
-    color: rgb(0, 0, 0);
-}
+.btn-primary { background-color: #DECAB5; color: rgb(0, 0, 0); }
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
-.btn-secondary {
-    background: #DECAB5;
-    color: #000000;
+.btn-secondary { background: #DECAB5; color: #000000; }
+.btn-secondary:hover { background: #d0d0d0; }
+
+.required { color: #e74c3c; }
+
+/* Error text (from your first code) */
+.error-message {
+    color: red;
+    font-size: 0.95em;
+    margin: 2px 0 8px 0;
+    display: block;
 }
-.btn-secondary:hover {
-    background: #d0d0d0;
-}
-.required {
-    color: #e74c3c;
-}
+
 @media (max-width: 900px) {
-    .container {
-        max-width: 98vw;
-    }
-    .form-container {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
+    .container { max-width: 98vw; }
+    .form-container { grid-template-columns: 1fr; gap: 8px; }
 }
