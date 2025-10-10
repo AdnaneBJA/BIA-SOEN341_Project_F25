@@ -1,0 +1,16 @@
+input[type="file"]{
+    margin-bottom: 20px;
+}
+
+#result {
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.valid {
+    color: green;
+}
+.invalid {
+    color: red;
+}
+

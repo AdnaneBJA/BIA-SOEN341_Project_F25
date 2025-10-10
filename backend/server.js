@@ -31,6 +31,9 @@ const client = new Client({
     password: process.env.DB_PASSWORD,
 });
 
+//i added this for now
+module.exports = client;
+
 client.connect(err => {
     if (err) {
         console.log("Error when connecting to database: ", err);
