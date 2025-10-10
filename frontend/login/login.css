@@ -48,7 +48,7 @@ body {
     gap: 20px;
 }
 
-.signup-form {
+.login-form {
     background-color: #ffffff;
     padding: 40px 50px;
     border-radius: 10px;
@@ -56,31 +56,21 @@ body {
     width: 320px;
 }
 
-.signup-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+.login-form h2 { text-align: center; margin-bottom: 20px; }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
+.form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
 
-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+label { font-weight: bold; margin-bottom: 5px; }
 
-input,
-select {
+input[type="text"],
+input[type="password"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
 }
 
-.signup-btn {
+.login-btn {
     width: 100%;
     background-color: #decab5;
     border: none;
@@ -92,37 +82,12 @@ select {
     transition: background-color 0.3s ease;
 }
 
-.signup-btn:hover {
-    background-color: #aa8e70;
-    cursor: pointer;
-}
+.login-btn:hover { background-color: #aa8e70; cursor: pointer; }
 
-.success-message {
-    display: none;
-    background-color: #decab5;
-    color: #000;
-    padding: 15px 25px;
-    border-radius: 5px;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: opacity 0.4s ease, transform 0.3s ease;
-    opacity: 0;
-    transform: translateY(-10px);
-}
+.helper-text { font-size: 0.9em; color: #555; text-align: center; }
 
-.success-message.show {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
+.success-message { display:none; margin-top:12px; background-color:#decab5; color:#000; padding:12px 16px; border-radius:6px; font-weight:600; box-shadow:0 3px 6px rgba(0,0,0,0.1); }
+.success-message.show { display:block; }
 
-.success-message.fade-out {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-.helper-text {
-    font-size: 0.9em;
-    color: #555;
-    text-align: center;
-}
+.error-message { display:none; margin-top:12px; background-color:#f8d7da; color:#842029; padding:12px 16px; border-radius:6px; font-weight:600; box-shadow:0 3px 6px rgba(0,0,0,0.1); border:1px solid #f5c2c7; }
+.error-message.show { display:block; }
