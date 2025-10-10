@@ -21,7 +21,7 @@ app.get("/analytics", async (req, res) => {
         res.status(500).json({ error: "Database error" });
     }});
 
-app.get("/Events", async (req, res) => {
+app.get("/events", async (req, res) => {
     try{
         const results = await database.query("SELECT * FROM Events"); 
         res.json(results.rows); 
@@ -33,7 +33,7 @@ app.get("/Events", async (req, res) => {
 app.get("/analytics/:eventID", async (req, res) => {
     const eventID = req.params.eventID;
     try{
-        const analyticsResults = await database.query("SELECT * FROM event_analytics WHERE event_id = $1", [eventID]); 
+        const analyticsResults = await database.query("SELECT * FROM Events WHERE eventID = $1", [eventID]); 
     
         res.json(analyticsResults.rows); 
     } catch (error) {
