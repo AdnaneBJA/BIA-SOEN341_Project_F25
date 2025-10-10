@@ -63,7 +63,7 @@ form.addEventListener("submit", async (event) => {
             }
 
             setTimeout(() => {
-                window.location.href = "../main-page/mainpage.html";
+                window.location.href = "../main-page/organizerDashboard.html";
             }, 1500);
             return;
         }
