@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event</title>
+  <link rel="stylesheet" href="event_creation.css">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.95em;
+      margin: 2px 0 8px 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Create a New Event</h1>
+  </header>
+
+  <main>
+    <form id="eventForm" novalidate>
+      <!-- Event Title -->
+      <div class="form-group">
+        <label for="eventTitle">Event Title</label>
+        <input type="text" id="eventTitle" name="eventTitle" placeholder="Enter event name" required>
+        <span class="error-message" id="eventTitleError"></span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="eventDescription">Description</label>
+        <textarea id="eventDescription" name="eventDescription" rows="4" placeholder="Describe the event..." required></textarea>
+        <span class="error-message" id="eventDescriptionError"></span>
+      </div>
+
+      <!-- Date and Time -->
+      <div class="form-group">
+        <label for="eventDate">Date</label>
+        <input type="date" id="eventDate" name="eventDate" required>
+        <span class="error-message" id="eventDateError"></span>
+
+        <label for="eventTime">Time</label>
+        <input type="time" id="eventTime" name="eventTime" required>
+        <span class="error-message" id="eventTimeError"></span>
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label for="eventLocation">Location</label>
+        <input type="text" id="eventLocation" name="eventLocation" placeholder="Enter event location" required>
+        <span class="error-message" id="eventLocationError"></span>
+      </div>
+
+      <!-- Ticket Info -->
+      <div class="form-group">
+        <label for="eventCapacity">Ticket Capacity</label>
+        <input type="number" id="eventCapacity" name="eventCapacity" min="1" placeholder="Enter max number of participants" required>
+        <span class="error-message" id="eventCapacityError"></span>
+      </div>
+
+      <!-- Ticket Type -->
+      <div class="form-group">
+        <label for="eventType">Ticket Type</label>
+        <select id="eventType" name="eventType" required>
+          <option value="">Select ticket type</option>
+          <option value="Free">Free</option>
+          <option value="Paid">Paid</option>
+        </select>
+        <span class="error-message" id="eventTypeError"></span>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit">Create Event</button>
+    </form>
+  </main>
+  <script>
+    document.getElementById("eventForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      // Get field values
+      const title = document.getElementById("eventTitle").value.trim();
+      const description = document.getElementById("eventDescription").value.trim();
+      const dateValue = document.getElementById("eventDate").value;
+      const timeValue = document.getElementById("eventTime").value;
+      const location = document.getElementById("eventLocation").value.trim();
+      const capacity = document.getElementById("eventCapacity").value;
+      const type = document.getElementById("eventType").value;
+
+      // Clear previous errors
+      document.getElementById("eventTitleError").textContent = "";
+      document.getElementById("eventDescriptionError").textContent = "";
+      document.getElementById("eventDateError").textContent = "";
+      document.getElementById("eventTimeError").textContent = "";
+      document.getElementById("eventLocationError").textContent = "";
+      document.getElementById("eventCapacityError").textContent = "";
+      document.getElementById("eventTypeError").textContent = "";
+
+      // Title validation
+      if (!title) {
+        document.getElementById("eventTitleError").textContent = "Event title is required.";
+        valid = false;
+      }
+
+      // Description validation
+      if (!description) {
+        document.getElementById("eventDescriptionError").textContent = "Description is required.";
+        valid = false;
+      }
+
+      // Date validation
+      if (!dateValue) {
+        document.getElementById("eventDateError").textContent = "Event date is required.";
+        valid = false;
+      } else {
+        // Must be in the future
+        const today = new Date();
+        today.setHours(0,0,0,0); // strip time
+        const eventDate = new Date(dateValue);
+        if (eventDate <= today) {
+          document.getElementById("eventDateError").textContent = "Event date must be in the future.";
+          valid = false;
+        }
+      }
+
+      // Time validation
+      if (!timeValue) {
+        document.getElementById("eventTimeError").textContent = "Event time is required.";
+        valid = false;
+      }
+
+      // Location validation
+      if (!location) {
+        document.getElementById("eventLocationError").textContent = "Location is required.";
+        valid = false;
+      }
+
+      // Capacity validation
+      if (!capacity || isNaN(capacity) || Number(capacity) < 1) {
+        document.getElementById("eventCapacityError").textContent = "Enter a valid capacity (must be at least 1).";
+        valid = false;
+      }
+
+      // Ticket type validation
+      if (!type) {
+        document.getElementById("eventTypeError").textContent = "Ticket type is required.";
+        valid = false;
+      }
+
+      if (valid) {
+        alert("Event created successfully! (form is valid)");
+    
+      }
+    });
+  </script>
+</body>
+</html>
