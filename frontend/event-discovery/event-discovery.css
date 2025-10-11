@@ -1,59 +1,66 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #F6F1EC;
   margin: 0;
   padding: 0;
 }
 
+/* HEADER */
 header {
-  background-color: #0078d4;
-  color: white;
+  background-color: #DECAB5;
+  color: #5a4634;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+/* SEARCH BAR */
 .search-container {
-  background: white;
+  background: #ffffff;
   padding: 14px 24px;
   margin: 30px 80px;
   border-radius: 50px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 #searchInput {
-  flex: 1;               
-  min-width: 300px;        
+  flex: 1;
+  min-width: 300px;
   padding: 14px 18px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 50px;
   outline: none;
-  background-color: #f9f9f9;
+  background-color: #fdfaf7;
   font-size: 16px;
+  color: #333;
 }
 
 .search-container select,
 .search-container input[type="date"] {
   padding: 12px 16px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 50px;
   outline: none;
-  background-color: #f9f9f9;
+  background-color: #fdfaf7;
   font-size: 15px;
+  color: #5a4634;
 }
 
 .search-container input:focus,
 .search-container select:focus {
   background-color: #fff;
-  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+  box-shadow: 0 0 0 2px rgba(170, 142, 112, 0.3);
 }
 
+/* BUTTON */
 #searchButton {
-  background-color: #0078d4;
-  color: white;
+  background-color: #AA8E70;
+  color: #fff;
   border: none;
   padding: 12px 30px;
   border-radius: 50px;
@@ -63,10 +70,11 @@ header {
 }
 
 #searchButton:hover {
-  background-color: #005ea2;
+  background-color: #8f735b;
   transform: scale(1.05);
 }
 
+/* EVENT GRID */
 .event-grid {
   display: flex;
   flex-wrap: wrap;
@@ -75,45 +83,51 @@ header {
   padding: 40px 80px;
 }
 
+/* EVENT CARD */
 .event-card {
-  background: white;
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   width: 320px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(170, 142, 112, 0.15);
 }
 
 .event-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
+/* EVENT INFO */
 .event-info {
   padding: 16px;
 }
 
 .event-info h2 {
   margin: 0;
-  color: #333;
+  color: #5a4634;
   font-size: 20px;
+  font-weight: 700;
 }
 
 .event-info p {
   margin: 6px 0;
-  color: #555;
+  color: #6e5a45;
 }
 
+/* EVENT BUTTON */
 .event-info button {
   margin-top: 10px;
-  background-color: #0078d4;
-  color: white;
+  background-color: #AA8E70;
+  color: #fff;
   border: none;
   padding: 10px 16px;
   border-radius: 25px;
   cursor: pointer;
   font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .event-info button:hover {
-  background-color: #005ea2;
+  background-color: #8f735b;
 }

@@ -10,7 +10,7 @@
     <title>Organizer Dashboard</title>
 </head>
 <body>
-    
+
     <nav class = "menu-bar">
         <span class = "menu-logo"><b>BIA</b></span>
         <span class = "menu-logo">Organizer Dashboard</span>
@@ -18,16 +18,16 @@
             <a href = "mainpage.html"> Home </a>
             <a href = "events.html"> Events </a>
             <a href = "tickets.html"> Tickets </a>
-        </div> 
+        </div>
     </nav>
-       
+
         <div class="center-content">
             <h1 id="typed"></h1>
         </div>
-        
-        <div class = 'tools-container'>
-            <h2>Tools</h2>
-            <button onclick="handleExport()">Export Attendee List</button>
+
+        <div >
+            <button class="btn-attendee" onclick="handleExport()">Export Attendee List</button>
+            <button class="btn-event" onclick = "location.href = '../event-creation/EventCreationPage.html'"> Create New Event</button>
 
             <nav>
                 <h3>Ticket Validation</h3>
@@ -124,7 +124,7 @@
             </nav>
         </div>
 
-    
+
     <script>
         function handleExport() {
             window.open(`http://localhost:3000/export-attendees`, '_blank');

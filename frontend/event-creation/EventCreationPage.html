@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Create Event - Campus Events</title>
     <link rel="stylesheet" href="EventCreationPageStyle.css">
 </head>
@@ -14,17 +14,22 @@
         </div>
 
         <div class="form-container">
-            <form id="eventForm" onsubmit="handleSubmit(event)">
+            <form id="eventForm" onsubmit="handleSubmit(event)" novalidate>
+                <!-- Title -->
                 <div class="form-group">
                     <label for="title">Event Title <span class="required">*</span></label>
                     <input type="text" id="title" name="title" placeholder="Enter event title" required>
+                    <span class="error-message" id="titleError"></span>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
                     <label for="description">Event Description <span class="required">*</span></label>
                     <textarea id="description" name="description" placeholder="Describe your event..." required></textarea>
+                    <span class="error-message" id="descriptionError"></span>
                 </div>
 
+                <!-- Category -->
                 <div class="form-group">
                     <label for="category">Category <span class="required">*</span></label>
                     <select id="category" name="category" required>
@@ -37,46 +42,59 @@
                         <option value="career">Career</option>
                         <option value="other">Other</option>
                     </select>
+                    <span class="error-message" id="categoryError"></span>
                 </div>
 
+                <!-- Date/Time -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="date">Event Date <span class="required">*</span></label>
                         <input type="date" id="date" name="date" required>
+                        <span class="error-message" id="dateError"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="startTime">Start Time <span class="required">*</span></label>
                         <input type="time" id="startTime" name="startTime" required>
+                        <span class="error-message" id="startTimeError"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="endTime">End Time <span class="required">*</span></label>
                         <input type="time" id="endTime" name="endTime" required>
+                        <span class="error-message" id="endTimeError"></span>
                     </div>
                 </div>
 
+                <!-- Location -->
                 <div class="form-group">
                     <label for="location">Location <span class="required">*</span></label>
                     <input type="text" id="location" name="location" placeholder="Enter event location" required>
+                    <span class="error-message" id="locationError"></span>
                 </div>
 
+                <!-- Organization -->
                 <div class="form-group">
                     <label for="organization">Organization <span class="required">*</span></label>
                     <input type="text" id="organization" name="organization" placeholder="Enter Organization Name" required>
+                    <span class="error-message" id="organizationError"></span>
                 </div>
 
+                <!-- Organizer User Name -->
                 <div class="form-group">
                     <label for="organizerUserName">Organizer User Name <span class="required">*</span></label>
                     <input type="text" id="organizerUserName" name="organizerUserName" placeholder="Enter Your Organizer User Name" required>
+                    <span class="error-message" id="organizerUserNameError"></span>
                 </div>
 
+                <!-- Tickets -->
                 <div class="ticket-section">
                     <h3>Ticket Information</h3>
                     
                     <div class="form-group">
                         <label for="capacity">Ticket Capacity <span class="required">*</span></label>
                         <input type="number" id="capacity" name="capacity" placeholder="Enter maximum capacity" min="1" required>
+                        <span class="error-message" id="capacityError"></span>
                     </div>
 
                     <div class="form-group">
@@ -91,11 +109,13 @@
                                 <span>Paid</span>
                             </label>
                         </div>
+                        <span class="error-message" id="ticketTypeError"></span>
                     </div>
 
                     <div class="form-group price-input" id="priceGroup">
                         <label for="price">Ticket Price ($) <span class="required">*</span></label>
-                        <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="0" step="1">
+                        <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="1" step="1">
+                        <span class="error-message" id="priceError"></span>
                     </div>
                 </div>
 
