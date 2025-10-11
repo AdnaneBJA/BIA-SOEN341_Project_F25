@@ -11,11 +11,11 @@ const analyticsData = {
 }
 
 router.get('/:eventId', (req, res) => {
-    const eventId = req.params.eventId; //extract the eventID from the URL
-    const data = analyticsData[eventId]; //look up the data for the eventID given
+    const eventID = req.params.eventID; //extract the eventID from the URL
+    const data = analyticsData[eventID]; //look up the data for the eventID given
 
     if (data) {
-        res.json({eventId, analytics: data}); //if found, return the data as JSON (looks like python dictionaries)
+        res.json({eventID, analytics: data}); //if found, return the data as JSON (looks like python dictionaries)
     } else {
         res.status(404).json({error: 'Event not found'}); //if eventID not found, return 404
     }
