@@ -5,18 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Analytics Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="eventdashboardanalyticsFrontendFunction.js" defer></script>
+    <script src="eventdashboard.js" defer></script>
     <link rel="stylesheet" href="eventdashboard.css">
     
 </head>
 <body>
-    <nav class = "menu-bar">
-        <span class = "menu-logo"><b>BIA</b></span>
-        <div class = "menu-links">
-            <a href = "mainpage.html"> Home </a>
-            <a href = "events.html"> Events </a>
-            <a href = "tickets.html"> Tickets </a>
-        </div> 
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../eventlist.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
     </nav>
     <div class="center-title">
         <h1>Event Analytics Dashboard</h1>
