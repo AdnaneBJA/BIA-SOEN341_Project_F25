@@ -10,6 +10,13 @@ body{
     justify-content: center;
     align-items: center;
     margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.center-title h1 {
+    font-size: 32px;
+    color: #333;
+    font-weight: 600;
 }
 
 .menu-bar {
@@ -243,4 +250,44 @@ body{
     color: #333;
     font-size: 28px;
     font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.action-buttons button {
+    background-color: #DECAB5;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1em;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-attendee:hover {
+    background-color: #BFD5F2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-event:hover {
+    background-color: #A9C3A8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 20px;
 }

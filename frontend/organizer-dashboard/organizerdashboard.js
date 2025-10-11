@@ -82,6 +82,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 
+// Handle CSV export
+function handleExport() {
+    window.open(`http://localhost:3000/export-attendees`, '_blank');
+}
 
 function updateUserStatus(){
     const statusEl = document.getElementById('user-status');

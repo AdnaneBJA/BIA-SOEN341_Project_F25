@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="student-dashboard.css">
+    <title>Student Dashboard</title>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+       
+    <div class="dashboard-header">
+        <h1>Student Dashboard</h1>
+        <p class="welcome-text">Welcome back! Here's your event activity</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- My Tickets Section -->
+        <section class="dashboard-section tickets-section">
+            <div class="section-header">
+                <h2>🎟️ My Tickets</h2>
+                <a href="../main-page/tickets.html" class="view-all-link">View All →</a>
+            </div>
+            <div id="my-tickets" class="tickets-grid">
+                <!-- Tickets will be populated by JavaScript -->
+                <p class="loading-text">Loading your tickets...</p>
+            </div>
+        </section>
+
+        <!-- My Saved Events Section -->
+        <section class="dashboard-section saved-events-section">
+            <div class="section-header">
+                <h2>⭐ My Saved Events</h2>
+                <a href="#" class="view-all-link" id="view-saved-link">View All →</a>
+            </div>
+            <div id="saved-events" class="events-grid">
+                <!-- Saved events will be populated by JavaScript -->
+                <p class="loading-text">Loading your saved events...</p>
+            </div>
+        </section>
+
+        <!-- Browse All Events Section -->
+        <section class="dashboard-section browse-section">
+            <div class="section-header">
+                <h2>🔍 Browse All Events</h2>
+            </div>
+            <div class="browse-content">
+                <p class="browse-description">Discover exciting events happening on campus</p>
+                <button class="browse-btn" onclick="location.href='../event-discovery/event-discovery.html'">
+                    Browse All Events
+                </button>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section class="dashboard-section upcoming-section">
+            <div class="section-header">
+                <h2>📅 Upcoming Events</h2>
+                <a href="../event-discovery/event-discovery.html" class="view-all-link">View All →</a>
+            </div>
+            <div id="upcoming-events" class="events-grid">
+                <!-- Upcoming events will be populated by JavaScript -->
+                <p class="loading-text">Loading upcoming events...</p>
+            </div>
+        </section>
+
+        <!-- Suggested Categories Section -->
+        <section class="dashboard-section categories-section">
+            <div class="section-header">
+                <h2>🏷️ Event Categories</h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterByCategory('Sports')">
+                    <span class="category-icon">⚽</span>
+                    <span class="category-name">Sports</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('Music')">
+                    <span class="category-icon">🎵</span>
+                    <span class="category-name">Music</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('Arts')">
+                    <span class="category-icon">🎨</span>
+                    <span class="category-name">Arts</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('Technology')">
+                    <span class="category-icon">💻</span>
+                    <span class="category-name">Technology</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('Social')">
+                    <span class="category-icon">🎉</span>
+                    <span class="category-name">Social</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('Academic')">
+                    <span class="category-icon">📚</span>
+                    <span class="category-name">Academic</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="student-dashboard.js"></script>
+</body>
+</html>
