@@ -171,3 +171,14 @@ button{
     background-color: #ea6348;
     cursor: pointer;
 }
+
+.btn-attendee:hover{
+    background-color: #BFD5F2;
+    cursor: pointer;
+}
+
+.btn-event:hover{
+    background-color: #BFD5F2;
+    cursor: pointer;
+}
+
