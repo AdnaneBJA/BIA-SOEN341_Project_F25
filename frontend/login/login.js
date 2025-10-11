@@ -67,6 +67,26 @@ form.addEventListener("submit", async (event) => {
             }, 1500);
             return;
         }
+        else if (receivedInfo.message === "Successfully retrieved student information") {
+            const studentID = receivedInfo.data[0].studentID;
+            const studentUsername = receivedInfo.data[0].studentUserName;
+            const studentPassword = receivedInfo.data[0].studentPassword;
+            localStorage.setItem("studentID", studentID);
+            localStorage.setItem("studentUsername", studentUsername);
+            localStorage.setItem("studentPassword", studentPassword);
+            localStorage.setItem("role", "Student");
+
+            // Show styled success message
+            if (successBox) {
+                successBox.textContent = `Successfully logged in as ${studentUsername}. Redirecting...`;
+                successBox.classList.add("show");
+                successBox.style.display = "block";
+            }
+            setTimeout(() => {
+                window.location.href = "../main-page/mainpage.html";
+            }, 1500);
+            return;
+        }
 
         if (receivedInfo.message === "No users have the data entered") {
             if (errorBox) {

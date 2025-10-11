@@ -30,7 +30,7 @@ function handleSubmit(event) {
     
     const formData = {
         eventName: document.getElementById('title').value,
-        organizerUserName: localStorage.getItem("organizerUsername"), // Get from the new input field
+        organizerUserName: localStorage.getItem("organizerUsername"),
         eventType: document.getElementById('category').value,
         startTime: new Date(document.getElementById('date').value + 'T' + document.getElementById('startTime').value).toISOString(),
         endTime: new Date(document.getElementById('date').value + 'T' + document.getElementById('endTime').value).toISOString(),
@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the price input visibility (should be hidden by default since "free" is checked)
     togglePriceInput();
 
-    // Show user info in navbar
     const username = localStorage.getItem('organizerUsername') || '';
     const role = localStorage.getItem('role') || '';
     document.querySelector('.status-username').textContent = username;

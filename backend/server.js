@@ -9,6 +9,7 @@ var cors = require("cors");
 const PORT = 3000;
 const createTables = require('./tables.js');
 const createOrganizerRoutes = require("./endpoints/organizer");
+const createStudentRoutes = require("./endpoints/student");
 const createEventRoutes = require("./endpoints/events");
 const createLoginRoutes = require("./endpoints/login");
 
@@ -31,6 +32,9 @@ const client = new Client({
     password: process.env.DB_PASSWORD,
 });
 
+//i added this for now
+module.exports = client;
+
 client.connect(err => {
     if (err) {
         console.log("Error when connecting to database: ", err);
@@ -40,6 +44,7 @@ client.connect(err => {
 })
 
 app.use("/organizer", createOrganizerRoutes(client));
+app.use("/student", createStudentRoutes(client));
 app.use("/events", createEventRoutes(client));
 app.use("/login", createLoginRoutes(client));
 
