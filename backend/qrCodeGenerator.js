@@ -11,20 +11,41 @@ const client = new Client({
     password: process.env.DB_PASSWORD,
 });
 
-async function generateQRCodes() {
+// async function generateQRCodes() {
+//   try {
+//     await client.connect();
+//     console.log("Connected to PostgreSQL");
+
+//     const result = await client.query('SELECT "ticketID" FROM public."Ticket"');
+
+//     for (const row of result.rows) {
+//       const ticketID = row.ticketid; 
+//       const data = `ticketID:${ticketID}`;
+
+//       await QRCode.toFile(`./qrcodes/ticket_${ticketID}.png`, data);
+//       console.log(`Created QR for ticket ${ticketID}`);
+//     }
+
+//   } catch (err) {
+//     console.error('Error generating QR codes:', err);
+//   } finally {
+//     await client.end();
+//     console.log('Connection closed');
+//   }
+// }
+
+// generateQRCodes();
+
+async function generateQRCodes(ticketID) {
   try {
-    await client.connect();
-    console.log("Connected to PostgreSQL");
 
-    const result = await client.query('SELECT "ticketID" FROM public."Ticket"');
+    const qrData = `ticketID:${ticketID}`;
+    const qrPath = `./qrcodes/ticket_${ticketID}.png`;
 
-    for (const row of result.rows) {
-      const ticketID = row.ticketid; 
-      const data = `ticketID:${ticketID}`;
 
-      await QRCode.toFile(`./qrcodes/ticket_${ticketID}.png`, data);
-      console.log(`Created QR for ticket ${ticketID}`);
-    }
+    console.log(`Created QR for ticket ${ticketID} at ${qrPath}`);
+
+    return qrPath;
 
   } catch (err) {
     console.error('Error generating QR codes:', err);
@@ -34,7 +55,7 @@ async function generateQRCodes() {
   }
 }
 
-generateQRCodes();
+// generateQRCodes();
 
 module.exports = { generateQRCodes };
 
