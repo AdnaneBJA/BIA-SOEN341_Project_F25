@@ -32,7 +32,19 @@ module.exports = (client) => {
             return;
         }
 
+        let queryStudentTable = `SELECT *
+                                FROM public."Student"
+                                WHERE "Student"."studentUserName" = $1
+                                  and "Student"."studentPassword" = $2;`;
 
+        const studentResponse = await client.query(queryStudentTable, values);
+        if (studentResponse.rows.length >= 1) {
+            res.status(200).json({
+                message: "Successfully retrieved student information",
+                data: studentResponse.rows,
+            })
+            return;
+        }
 
         res.status(200).json({
             message: "No users have the data entered"
@@ -43,4 +55,3 @@ module.exports = (client) => {
 
     return app;
 }
-

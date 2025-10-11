@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="organizerdashboard.js" defer></script>
+    <link rel="stylesheet" href="organizerdashboard.css">
+    
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="center-title">
+        <h1>Organizer Dashboard</h1>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn-attendee" onclick="handleExport()">Export Attendee List</button>
+        <button class="btn-event" onclick="location.href = '../event-creation/EventCreationPage.html'">Create New Event</button>
+    </div>
+
+    <div class="dashboard-content">
+        <select id="eventSelect"></select>
+        <div id="dashboard"></div>
+    </div>
+
+
+</body>
+</html>

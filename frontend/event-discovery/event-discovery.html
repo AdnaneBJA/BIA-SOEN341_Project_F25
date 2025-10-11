@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Events</title>
+  <link rel="stylesheet" href="event-discovery.css">
+</head>
+<body>
+  <header>
+    <h1>Campus Events</h1>
+  </header>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for events..." />
+
+    <select id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="Tech">Tech</option>
+      <option value="Arts">Arts</option>
+      <option value="Sports">Sports</option>
+    </select>
+
+    <select id="organizationFilter">
+      <option value="">All Organizations</option>
+      <option value="CS Society">CS Society</option>
+      <option value="Student Union">Student Union</option>
+      <option value="Athletics">Athletics</option>
+    </select>
+
+    <input type="date" id="dateFilter" />
+    <button id="searchButton" onclick="filterEvents()">Search</button>
+  </div>
+
+  <main class="event-grid" id="results">
+  </main>
+
+  <script src="event-discovery.js"></script>
+</body>
+</html>
