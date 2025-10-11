@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { generateICS } = require("./calendarUtils");
+const client = require("../server");
 
 router.get("/:eventID", async (req, res) => {
   const { eventID } = req.params;
 
   try {
-    const result = await req.db.query("SELECT * FROM Event WHERE eventID = $1", [eventID]);
+    const result = await client.query("SELECT * FROM Event WHERE eventID = $1", [eventID]);
     const event = result.rows[0];
 
     if (!event) {
