@@ -1,5 +1,6 @@
 const QRCode = require('qrcode');
 const { Client } = require('pg');
+require('dotenv').config();
 
 // async function generateQRCode(data) {
 //     try {
@@ -11,12 +12,20 @@ const { Client } = require('pg');
 //     }
 // }
 
+const client = new Client({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+});
+
 async function generateQRCodes() {
   try {
     await client.connect();
     console.log("Connected to PostgreSQL");
 
-    const result = await client.query('SELECT ticketID FROM public."Ticket"');
+    const result = await client.query('SELECT "ticketID" FROM public."Ticket"');
 
     for (const row of result.rows) {
       const ticketID = row.ticketid; 
@@ -36,6 +45,6 @@ async function generateQRCodes() {
 
 generateQRCodes();
 
-module.exports = { generateQRCode };
+module.exports = { generateQRCodes };
 
 

@@ -23,7 +23,7 @@ async function createTables(client) {
     "eventID" INTEGER NOT NULL,
     "studentID" INTEGER NOT NULL,
     "purchaseTime" TIMESTAMP NOT NULL,
-    "valid" BOOLEAN DEFAULT TRUE
+    "valid" BOOLEAN DEFAULT TRUE,
     "qrCode" VARCHAR(255) NOT NULL
     );
 
