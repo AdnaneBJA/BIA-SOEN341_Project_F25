@@ -57,7 +57,7 @@ The additional feature will be a flexible pricing option for last minute ticket 
   <tr>
     <td>Adnane Bejja</td>
     <td>40264362</td>
-    <td>AdnaneB3</td>
+    <td>AdnaneBJA</td>
   </tr>
 </table>
 
@@ -67,3 +67,4 @@ The additional feature will be a flexible pricing option for last minute ticket 
 3. CSS<br>
 
 4. PostgreSQL<br>
+
