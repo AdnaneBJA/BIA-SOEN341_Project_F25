@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mainpage.css">
+    <link rel="stylesheet" href="tickets.css">
+
     <title>Organizer Dashboard</title>
 </head>
 <body>
@@ -20,12 +22,106 @@
     </nav>
        
         <div class="center-content">
-            <h1 id="typed" ></h1>
+            <h1 id="typed"></h1>
         </div>
         
-        <div >
+        <div class = 'tools-container'>
+            <h2>Tools</h2>
             <button onclick="handleExport()">Export Attendee List</button>
 
+            <nav>
+                <h3>Ticket Validation</h3>
+                <p>
+                    Upload ticket QR code image for validation
+                </p>
+
+                <input type="file" id="qrCode" accept="image/*"/>
+                <canvas id="qrCanvas" style="display:none;"></canvas>
+                <div id="result"></div>
+
+                <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+
+                <script>
+                    const fileInput = document.getElementById("qrCode");
+                    const canvas = document.getElementById("qrCanvas");
+                    const ctx = canvas.getContext("2d");
+                    const resultDiv = document.getElementById("result");
+
+                    fileInput.addEventListener("change", async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = new Image();
+                        img.onload = async () => {
+                        
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (qrCode) {
+                            const ticketID = qrCode.data.trim();
+                            resultDiv.textContent = `QR Code Data: ${ticketID}`; //!!! look for ticket id name in db
+                            resultDiv.className = "";
+        //-----------------------------------
+                            // Send to backend for validation
+                            // try {
+                            // const res = await fetch("http://localhost:3000/validate-ticket", {
+                            //     method: "POST",
+                            //     headers: { "Content-Type": "application/json" },
+                            //     body: JSON.stringify({ ticketID }),
+                            // });
+                            // const data = await res.json();
+
+                            // if (data.valid) {
+                            //     resultDiv.innerHTML += `<br>Ticket is <span class="valid">VALID</span>`;
+                            // } else {
+                            //     resultDiv.innerHTML += `<br>Ticket is <span class="invalid">INVALID</span>`;
+                            // }
+                            // } catch (err) {
+                            //     console.error(err);
+                            //     resultDiv.textContent = "Error connecting to the server.";
+                            // }
+                            try {
+                                const res = await fetch("http://localhost:3000/validate-ticket", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ ticketID }),
+                                });
+
+                                if (!res.ok) {
+                                    const errorData = await res.json().catch(() => ({}));
+                                    resultDiv.textContent = errorData.message || "Server returned an error.";
+                                    return;
+                                }
+
+                                const data = await res.json();
+                                if (data.valid) {
+                                    resultDiv.innerHTML += `<br>Ticket is <span class="valid">VALID</span>`;
+                                } else {
+                                    resultDiv.innerHTML += `<br>Ticket is <span class="invalid">INVALID</span>`;
+                                }
+                                
+                                } catch (err) {
+                                console.error("Network error:", err);
+                                resultDiv.textContent = "Could not connect to the backend server.";
+                                }
+        //-----------------------------------
+                        } else {
+                            resultDiv.textContent = "No valid QR code found.";
+                        }
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    });
+                </script>
+
+            </nav>
         </div>
 
     

@@ -6,10 +6,7 @@ const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const app = express();
 
-
-app.use(
-    cors()
-);
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -38,7 +35,7 @@ app.post('/validate-ticket', async (req, res) => {
         //!!! Valid assumes there is a column named valid in Ticket table. if not, change to check if valid or not
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        const result = await client.query('SELECT * FROM "Ticket" WHERE "ticketID" = $1', [ticketID]);
+        const result = await client.query('SELECT * FROM public."Ticket" WHERE "ticketID" = $1', [ticketID]);
         if (result.rows.length === 0) {
             return res.status(404).json({ valid: false, message: 'Ticket not found' });
         }

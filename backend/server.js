@@ -71,6 +71,18 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
+app.get('/ticket/:id/qr', async (req, res) => {
+    const ticketID = req.params.id;
+    const qrData = `https://your-server.com/validate-ticket?ticketID=${ticketID}`;
+
+    try {
+        const qrCode = await generateQRCode(qrData);
+        res.send(`<img src="${qrCode}" alt="QR Code for ticket ${ticketID}" />`);
+    } catch (err) {
+        res.status(500).send('Error generating QR code');
+    }
+});
+
 app.listen(PORT, (err) => {
     if (err) {
         console.log("Error in server setup: ", err);

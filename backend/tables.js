@@ -24,6 +24,7 @@ async function createTables(client) {
     "studentID" INTEGER NOT NULL,
     "purchaseTime" TIMESTAMP NOT NULL,
     "valid" BOOLEAN DEFAULT TRUE
+    "qrCode" VARCHAR(255) NOT NULL
     );
 
   CREATE TABLE IF NOT EXISTS "Events" (
