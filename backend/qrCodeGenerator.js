@@ -2,15 +2,6 @@ const QRCode = require('qrcode');
 const { Client } = require('pg');
 require('dotenv').config();
 
-// async function generateQRCode(data) {
-//     try {
-//         const qrCodeDataURL = await QRCode.toDataURL(data);
-//         return qrCodeDataURL;
-//     } catch (err) {
-//         console.error('Error generating QR code:', err);
-//         throw err;
-//     }
-// }
 
 const client = new Client({
     host: process.env.DB_HOST,

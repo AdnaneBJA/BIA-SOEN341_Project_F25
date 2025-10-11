@@ -65,27 +65,9 @@
 
                         if (qrCode) {
                             const ticketID = qrCode.data.trim();
-                            resultDiv.textContent = `QR Code Data: ${ticketID}`; //!!! look for ticket id name in db
+                            resultDiv.textContent = `QR Code Data: ${ticketID}`; 
                             resultDiv.className = "";
-        //-----------------------------------
-                            // Send to backend for validation
-                            // try {
-                            // const res = await fetch("http://localhost:3000/validate-ticket", {
-                            //     method: "POST",
-                            //     headers: { "Content-Type": "application/json" },
-                            //     body: JSON.stringify({ ticketID }),
-                            // });
-                            // const data = await res.json();
-
-                            // if (data.valid) {
-                            //     resultDiv.innerHTML += `<br>Ticket is <span class="valid">VALID</span>`;
-                            // } else {
-                            //     resultDiv.innerHTML += `<br>Ticket is <span class="invalid">INVALID</span>`;
-                            // }
-                            // } catch (err) {
-                            //     console.error(err);
-                            //     resultDiv.textContent = "Error connecting to the server.";
-                            // }
+        
                             try {
                                 const res = await fetch("http://localhost:3000/validate-ticket", {
                                     method: "POST",
@@ -110,7 +92,7 @@
                                 console.error("Network error:", err);
                                 resultDiv.textContent = "Could not connect to the backend server.";
                                 }
-        //-----------------------------------
+        
                         } else {
                             resultDiv.textContent = "No valid QR code found.";
                         }

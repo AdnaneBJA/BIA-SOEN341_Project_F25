@@ -31,18 +31,14 @@ app.post('/validate-ticket', async (req, res) => {
         return res.status(400).json({ error: 'Ticket ID is required' });
     }
     try{
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //!!! Valid assumes there is a column named valid in Ticket table. if not, change to check if valid or not
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         const result = await client.query('SELECT * FROM public."Ticket" WHERE "ticketID" = $1', [ticketID]);
         if (result.rows.length === 0) {
-            return res.status(404).json({ valid: false, message: 'Ticket not found' });
+            return res.status(404).json({ valid: false, message: 'Ticket does not exist' });
         }
 
         const ticket = result.rows[0];
         if (ticket.valid){
-            return res.status(200).json({ valid: true, message: 'Ticket is valid' });
+            return res.status(200).json({valid: true, message: 'Ticket is valid'});
         }
         else{
             return res.status(200).json({ valid: false, message: 'Ticket has already been used or is expired'});
