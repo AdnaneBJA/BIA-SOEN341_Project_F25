@@ -9,8 +9,8 @@ module.exports = (client) => {
   router.post('/claim-tickets', async (req, res) => {
     const { eventID, studentID, email } = req.body;
 
-    if (!eventID || !studentID || !email) {
-      return res.status(400).json({ error: 'Event ID, Student ID, and Email are required. One or more are missing' });
+    if (!eventID || !studentID) {
+      return res.status(400).json({ error: 'Event ID, Student ID are required. One or more are missing' });
     }
 
     try {

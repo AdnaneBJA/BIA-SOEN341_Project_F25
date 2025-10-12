@@ -7,7 +7,7 @@ router.get("/:eventID", async (req, res) => {
   const { eventID } = req.params;
 
   try {
-    const result = await client.query("SELECT * FROM Event WHERE eventID = $1", [eventID]);
+    const result = await client.query('SELECT * FROM public."Events" WHERE "eventID" = $1', [eventID]);
     const event = result.rows[0];
 
     if (!event) {
@@ -15,15 +15,15 @@ router.get("/:eventID", async (req, res) => {
     }
 
     const icsContent = generateICS({
-      eventID: event.eventid,
-      eventName: event.eventname,
-      startTime: event.starttime,
-      endTime: event.endtime,
-      description: event.eventdescription,
+      eventID: event.eventID,
+      eventName: event.eventName,
+      startTime: event.startTime,
+      endTime: event.endTime,
+      description: event.eventDescription,
       location: event.location
     });
 
-    res.setHeader("Content-Disposition", `attachment; filename=${event.eventname}.ics`);
+    res.setHeader("Content-Disposition", `attachment; filename=${event.eventName}.ics`);
     res.setHeader("Content-Type", "text/calendar");
     res.send(icsContent);
 

@@ -126,12 +126,6 @@ async function claimTicket(eventID, eventName) {
             alert('Please log in as a student first.');
             return;
         }
-        if (!email) {
-            email = prompt('Enter your email to receive the ticket QR code:');
-            if (!email) return;
-            // cache for next time
-            localStorage.setItem('studentEmail', email);
-        }
 
         const res = await fetch('http://localhost:3000/claim-tickets', {
             method: 'POST',

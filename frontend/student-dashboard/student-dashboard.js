@@ -48,6 +48,9 @@ function updateUserStatus(){
     }
 }
 
+// Track saved events for quick lookups
+let savedEventIds = new Set();
+
 // Load My Tickets
 async function loadMyTickets() {
     const ticketsContainer = document.getElementById('my-tickets');
@@ -129,17 +132,28 @@ async function loadSavedEvents() {
         const response = await fetch(`http://localhost:3000/student/saved-events/${studentID}`);
         const savedEvents = await response.json();
 
-        if (savedEvents && savedEvents.length > 0) {
+        // Update local set for quick checks in other sections
+        savedEventIds = new Set(savedEvents.map(e => String(e.eventID)));
+
+        if (Array.isArray(savedEvents) && savedEvents.length > 0) {
             // Display only the first 3 saved events
             const recentSaved = savedEvents.slice(0, 3);
-            savedContainer.innerHTML = recentSaved.map(event => `
-                <div class="event-card" onclick="viewEvent(${event.eventID})">
+            savedContainer.innerHTML = recentSaved.map(event => {
+                const start = event.startTime ? new Date(event.startTime) : null;
+                const dateText = start ? start.toLocaleDateString() : 'TBA';
+                const timeText = start ? start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                const icsHref = `http://localhost:3000/calendar/${event.eventID}`;
+                return `
+                <div class="event-card" data-event-id="${event.eventID}">
                     <h3>${event.eventName}</h3>
-                    <p><strong>Date:</strong> ${new Date(event.startTime).toLocaleDateString()}</p>
-                    <p><strong>Location:</strong> ${event.location}</p>
-                    <span class="event-type">${event.eventType}</span>
-                </div>
-            `).join('');
+                    <p><strong>Date:</strong> ${dateText} ${timeText}</p>
+                    <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
+                    <div class="event-actions" style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+                        <a class="btn" href="${icsHref}" download>📅 Add to Calendar (.ics)</a>
+                        <button class="btn btn-danger" onclick="removeSavedEvent(${event.eventID}, event)">Remove</button>
+                    </div>
+                </div>`;
+            }).join('');
         } else {
             savedContainer.innerHTML = `
                 <div class="empty-state">
@@ -157,6 +171,62 @@ async function loadSavedEvents() {
                 <p class="empty-state-text">Unable to load saved events. Please try again later.</p>
             </div>
         `;
+    }
+}
+
+// Save an event for the student
+async function saveEvent(eventID, ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    const studentID = localStorage.getItem('studentID');
+    if (!studentID) {
+        alert('Please log in to save events.');
+        return;
+    }
+    try {
+        const res = await fetch('http://localhost:3000/student/saved-events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ studentID, eventID })
+        });
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload.error || 'Failed to save event');
+        savedEventIds.add(String(eventID));
+        await loadSavedEvents();
+        const btn = document.querySelector(`button.save-btn[data-event-id='${eventID}']`);
+        if (btn) {
+            btn.outerHTML = `<button class="unsave-btn" data-event-id="${eventID}" onclick="removeSavedEvent(${eventID}, event)">Saved ✓ (Remove)</button>`;
+        }
+    } catch (e) {
+        console.error('Save event error:', e);
+        alert('Could not save event.');
+    }
+}
+
+// Remove a saved event for the student
+async function removeSavedEvent(eventID, ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    const studentID = localStorage.getItem('studentID');
+    if (!studentID) {
+        alert('Please log in.');
+        return;
+    }
+    try {
+        const res = await fetch('http://localhost:3000/student/saved-events', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ studentID, eventID })
+        });
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload.error || 'Failed to remove saved event');
+        savedEventIds.delete(String(eventID));
+        await loadSavedEvents();
+        const btn = document.querySelector(`button.unsave-btn[data-event-id='${eventID}']`) || document.querySelector(`button.save-btn[data-event-id='${eventID}']`);
+        if (btn) {
+            btn.outerHTML = `<button class="save-btn" data-event-id="${eventID}" onclick="saveEvent(${eventID}, event)">⭐ Save</button>`;
+        }
+    } catch (e) {
+        console.error('Remove saved event error:', e);
+        alert('Could not remove saved event.');
     }
 }
 
@@ -179,16 +249,26 @@ async function loadUpcomingEvents() {
                 .slice(0, 3); // Show only first 3
 
             if (upcomingEvents.length > 0) {
-                upcomingContainer.innerHTML = upcomingEvents.map(event => `
+                upcomingContainer.innerHTML = upcomingEvents.map(event => {
+                    const start = event.startTime ? new Date(event.startTime) : null;
+                    const dateText = start ? start.toLocaleDateString() : 'TBA';
+                    const timeText = start ? start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                    const saved = savedEventIds.has(String(event.eventID));
+                    const saveControl = saved
+                        ? `<button class="unsave-btn" data-event-id="${event.eventID}" onclick="removeSavedEvent(${event.eventID}, event)">Saved ✓ (Remove)</button>`
+                        : `<button class="save-btn" data-event-id="${event.eventID}" onclick="saveEvent(${event.eventID}, event)">⭐ Save</button>`;
+                    return `
                     <div class="event-card" onclick="viewEvent(${event.eventID})">
                         <h3>${event.eventName}</h3>
-                        <p><strong>Date:</strong> ${new Date(event.startTime).toLocaleDateString()}</p>
-                        <p><strong>Time:</strong> ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p><strong>Date:</strong> ${dateText}</p>
+                        <p><strong>Time:</strong> ${timeText}</p>
                         <p><strong>Location:</strong> ${event.location}</p>
                         <p><strong>Price:</strong> ${event.eventPrices > 0 ? '$' + event.eventPrices : 'Free'}</p>
                         <span class="event-type">${event.eventType || ''}</span>
+                        <div class="event-actions" style="margin-top:8px;">${saveControl}</div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
             } else {
                 upcomingContainer.innerHTML = `
                     <div class="empty-state">
@@ -227,3 +307,7 @@ function filterByCategory(category) {
     // Redirect to events page with category filter
     window.location.href = `../event-discovery/event-discovery.html`;
 }
+
+// Expose actions for inline handlers
+window.saveEvent = saveEvent;
+window.removeSavedEvent = removeSavedEvent;
