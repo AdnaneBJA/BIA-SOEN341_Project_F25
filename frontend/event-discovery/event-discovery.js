@@ -13,6 +13,7 @@ let claimedEventIds = new Set();
 // Fetch events from database on page load
 document.addEventListener("DOMContentLoaded", async () => {
     await prefetchClaimedTickets();
+    await fetchOrganizations();
     await fetchEventsFromDatabase();
 });
 
@@ -27,6 +28,27 @@ async function prefetchClaimedTickets() {
         }
     } catch (err) {
         console.error('Error prefetching claimed tickets:', err);
+    }
+}
+
+async function fetchOrganizations() {
+    const select = document.getElementById('organizationFilter');
+    if (!select) return;
+    try {
+        const res = await fetch('http://localhost:3000/events/organizations');
+        const payload = await res.json();
+        const orgs = Array.isArray(payload?.data) ? payload.data : [];
+
+        select.innerHTML = '<option value="">All Organizations</option>';
+
+        orgs.forEach(org => {
+            const opt = document.createElement('option');
+            opt.value = org;
+            opt.textContent = org;
+            select.appendChild(opt);
+        });
+    } catch (e) {
+        console.error('Error loading organizations:', e);
     }
 }
 
@@ -90,12 +112,15 @@ function displayResults(results) {
     container.innerHTML = results.map(e => {
         const startDate = e.startTime ? new Date(e.startTime).toLocaleDateString() : "TBA";
         const startTime = e.startTime ? new Date(e.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "";
-        const price = e.eventPrices > 0 ? `$${e.eventPrices}` : "Free";
+        const isPaidEvent = Number(e.eventPrices) > 0;
+        const price = isPaidEvent ? `$${e.eventPrices}` : "Free";
         const isClaimed = claimedEventIds.has(String(e.eventID));
         const safeEventName = (e.eventName || '').replace(/'/g, "\\'");
+        const claimLabel = isPaidEvent ? 'Buy Ticket' : 'Claim Ticket';
         const claimControl = isClaimed
             ? `<span class="claimed-label" style="display:inline-block;padding:8px 12px;border-radius:6px;background:#eef;color:#556;">Ticket already claimed</span>`
-            : `<button class="claim-ticket-btn" data-event-id="${e.eventID}" onclick="claimTicket('${e.eventID}', '${safeEventName}')">🎟️ Claim Ticket</button>`;
+            : `<button class="claim-ticket-btn" data-event-id="${e.eventID}" onclick="claimTicket('${e.eventID}', '${safeEventName}')">\ud83c\udf9f\ufe0f ${claimLabel}</button>`;
+        const icsHref = `http://localhost:3000/calendar/${e.eventID}`;
 
         return `
             <div class="event-card">
@@ -104,12 +129,15 @@ function displayResults(results) {
                 <p><strong>Hosted by:</strong> ${e.organizerUserName}</p>
                  <p><strong>Organization:</strong> ${e.Organization}</p>
                 <p><strong>Type:</strong> ${e.eventType}</p>
-                <p>📅 ${startDate} ${startTime}</p>
-                <p>📍 ${e.location}</p>
+                <p>\ud83d\udcc5 ${startDate} ${startTime}</p>
+                <p>\ud83d\udccd ${e.location}</p>
                 <p><strong>Price:</strong> ${price}</p>
                 <p><strong>Number of Participants:</strong> ${e.currentParticipants} / ${e.maxParticipants}</p>
                 <p style="font-size:0.9em; color:#666;">${e.eventDescription}</p>
-                ${claimControl}
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                  ${claimControl}
+                  <a class="add-to-cal" href="${icsHref}" download style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;text-decoration:none;">\ud83d\udcc5 Add to Calendar</a>
+                </div>
               </div>
             </div>
           `;
@@ -127,13 +155,26 @@ async function claimTicket(eventID, eventName) {
             return;
         }
 
-        const res = await fetch('http://localhost:3000/claim-tickets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ eventID, studentID, email })
-        });
+        const attemptClaim = async (mockPaid = false) => {
+            const res = await fetch('http://localhost:3000/claim-tickets', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ eventID, studentID, email, mockPaid })
+            });
+            let payload = {};
+            try { payload = await res.json(); } catch (_) {}
+            return { res, payload };
+        };
 
-        const payload = await res.json().catch(() => ({}));
+        let { res, payload } = await attemptClaim(false);
+
+        if (res.status === 402) {
+            const price = typeof payload.price !== 'undefined' ? payload.price : 'unknown';
+            const proceed = confirm(`This event requires payment. Proceed with mock payment of $${price}?`);
+            if (!proceed) return;
+            ({ res, payload } = await attemptClaim(true));
+        }
+
         if (!res.ok) {
             alert(payload.error || 'Failed to claim ticket.');
             return;

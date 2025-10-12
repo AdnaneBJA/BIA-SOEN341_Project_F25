@@ -77,6 +77,9 @@ async function createTables(client) {
 
   -- Migrations for legacy databases
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "qrCode" VARCHAR(255) NOT NULL DEFAULT 'pending';
+  ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "purchaseAmount" INTEGER DEFAULT 0;
+  ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "paymentStatus" VARCHAR(50) DEFAULT 'free';
+  ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "transactionId" VARCHAR(100);
 
   DO $$ BEGIN
     IF NOT EXISTS (
