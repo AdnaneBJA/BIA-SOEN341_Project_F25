@@ -90,6 +90,24 @@ app.get('/ticket/:id/qr', async (req, res) => {
     }
 });
 
+app.post('/events', async (req, res) => {
+    try{
+        const{ eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization} = req.body;
+        const insertQuery = `
+            INSERT INTO public."Events" 
+            ("eventID", "eventName", "organizerID", "eventType", "startTime", "endTime", "location", "maxParticipants", "currentParticipants", "eventPrices", "eventDescription", "organizerUserName", "Organization") 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
+        `;
+        const values = [eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization];
+
+        const result = await client.query(insertQuery, values);
+        res.status(201).json(result.rows[0]);
+    }catch (err) {
+        console.error('Error creating event:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 app.listen(PORT, (err) => {
     if (err) {
         console.log("Error in server setup: ", err);
