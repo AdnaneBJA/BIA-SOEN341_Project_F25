@@ -51,7 +51,7 @@ app.use("/student", createStudentRoutes(client));
 app.use("/events", createEventRoutes(client));
 app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
-app.use("/calendar", calendarRoutes);
+app.use("/calendar", calendarRoutes(client));
 
 app.get('/export-attendees', async (req, res) => {
     try {

@@ -45,7 +45,7 @@ function createCalendarRoutes(client) {
         const { eventID } = req.params;
 
         try {
-            const result = await client.query("SELECT * FROM Event WHERE eventID = $1", [eventID]);
+            const result = await client.query('SELECT * FROM "Events" WHERE "eventID" = $1', [eventID]);
             const event = result.rows[0];
 
             if (!event) {
