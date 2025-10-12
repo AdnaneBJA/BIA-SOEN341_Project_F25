@@ -68,18 +68,27 @@ async function loadMyTickets() {
         const response = await fetch(`http://localhost:3000/student/tickets/${studentID}`);
         const tickets = await response.json();
 
-        if (tickets && tickets.length > 0) {
+        if (Array.isArray(tickets) && tickets.length > 0) {
             // Display only the first 3 tickets
             const recentTickets = tickets.slice(0, 3);
-            ticketsContainer.innerHTML = recentTickets.map(ticket => `
+            ticketsContainer.innerHTML = recentTickets.map(ticket => {
+                const eventDate = ticket.eventDate ? new Date(ticket.eventDate) : null;
+                const dateText = eventDate ? eventDate.toLocaleDateString() : 'TBA';
+                const timeText = eventDate ? eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                const qrSrc = ticket.qrCodeUrl ? `http://localhost:3000${ticket.qrCodeUrl}` : '';
+                return `
                 <div class="ticket-card">
-                    <h3>${ticket.eventName || 'Event'}</h3>
-                    <p><strong>Date:</strong> ${new Date(ticket.eventDate).toLocaleDateString()}</p>
+                    <div class="ticket-card-header">
+                        <h3>${ticket.eventName || 'Event'}</h3>
+                        <span class="ticket-status ${ticket.valid ? 'active' : 'inactive'}">${ticket.valid ? 'Active' : 'Invalid'}</span>
+                    </div>
+                    <p><strong>Date:</strong> ${dateText} ${timeText}</p>
                     <p><strong>Location:</strong> ${ticket.location || 'TBA'}</p>
                     <p><strong>Ticket ID:</strong> #${ticket.ticketID}</p>
-                    <span class="ticket-status active">Active</span>
+                    ${qrSrc ? `<div class="ticket-qr"><img src="${qrSrc}" alt="QR for ticket #${ticket.ticketID}"/></div>` : ''}
                 </div>
-            `).join('');
+                `;
+            }).join('');
         } else {
             ticketsContainer.innerHTML = `
                 <div class="empty-state">
@@ -158,13 +167,14 @@ async function loadUpcomingEvents() {
     try {
         // Fetch all events from backend
         const response = await fetch('http://localhost:3000/events');
-        const allEvents = await response.json();
+        const payload = await response.json();
+        const events = payload?.data || [];
 
-        if (allEvents && allEvents.length > 0) {
+        if (Array.isArray(events) && events.length > 0) {
             // Filter events that are in the future
             const now = new Date();
-            const upcomingEvents = allEvents
-                .filter(event => new Date(event.startTime) > now)
+            const upcomingEvents = events
+                .filter(event => event.startTime && new Date(event.startTime) > now)
                 .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
                 .slice(0, 3); // Show only first 3
 
@@ -173,10 +183,10 @@ async function loadUpcomingEvents() {
                     <div class="event-card" onclick="viewEvent(${event.eventID})">
                         <h3>${event.eventName}</h3>
                         <p><strong>Date:</strong> ${new Date(event.startTime).toLocaleDateString()}</p>
-                        <p><strong>Time:</strong> ${new Date(event.startTime).toLocaleTimeString()}</p>
+                        <p><strong>Time:</strong> ${new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         <p><strong>Location:</strong> ${event.location}</p>
                         <p><strong>Price:</strong> ${event.eventPrices > 0 ? '$' + event.eventPrices : 'Free'}</p>
-                        <span class="event-type">${event.eventType}</span>
+                        <span class="event-type">${event.eventType || ''}</span>
                     </div>
                 `).join('');
             } else {
@@ -217,4 +227,3 @@ function filterByCategory(category) {
     // Redirect to events page with category filter
     window.location.href = `../event-discovery/event-discovery.html`;
 }
-

@@ -6,6 +6,7 @@ var express = require("express");
 var app = express();
 var { Client } = require("pg");
 var cors = require("cors");
+const path = require('path');
 const PORT = 3000;
 const createTables = require('./tables.js');
 const createOrganizerRoutes = require("./endpoints/organizer");
@@ -14,6 +15,7 @@ const createEventRoutes = require("./endpoints/events");
 const createLoginRoutes = require("./endpoints/login");
 const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
+const createTicketsRoutes = require('./endpoints/tickets');
 
 
 app.use(express.json());
@@ -52,6 +54,8 @@ app.use("/events", createEventRoutes(client));
 app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
 app.use("/calendar", calendarRoutes);
+app.use(createTicketsRoutes(client));
+app.use('/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
 
 app.get('/export-attendees', async (req, res) => {
     try {
@@ -78,17 +82,6 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
-app.get('/ticket/:id/qr', async (req, res) => {
-    const ticketID = req.params.id;
-    const qrData = `https://your-server.com/validate-ticket?ticketID=${ticketID}`;
-
-    try {
-        const qrCode = await generateQRCode(qrData);
-        res.send(`<img src="${qrCode}" alt="QR Code for ticket ${ticketID}" />`);
-    } catch (err) {
-        res.status(500).send('Error generating QR code');
-    }
-});
 
 app.listen(PORT, (err) => {
     if (err) {

@@ -23,8 +23,7 @@ async function createTables(client) {
     "eventID" INTEGER NOT NULL,
     "studentID" INTEGER NOT NULL,
     "purchaseTime" TIMESTAMP NOT NULL,
-    "valid" BOOLEAN DEFAULT TRUE,
-    "qrCode" VARCHAR(255) NOT NULL
+    "valid" BOOLEAN DEFAULT TRUE
     );
 
   CREATE TABLE IF NOT EXISTS "Events" (
@@ -63,10 +62,20 @@ async function createTables(client) {
       FOREIGN KEY ("studentID") 
       REFERENCES "Student" ("studentID")
   );
+
+  -- Migrations for legacy databases
+  ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "qrCode" VARCHAR(255) NOT NULL DEFAULT 'pending';
+
+  DO $$ BEGIN
+    IF NOT EXISTS (
+      SELECT 1 FROM pg_constraint WHERE conname = 'unique_ticket_per_student_event'
+    ) THEN
+      ALTER TABLE public."Ticket" ADD CONSTRAINT unique_ticket_per_student_event UNIQUE ("eventID", "studentID");
+    END IF;
+  END $$;
   `;
 
     await client.query(query);
 }
 
 module.exports = createTables;
-
