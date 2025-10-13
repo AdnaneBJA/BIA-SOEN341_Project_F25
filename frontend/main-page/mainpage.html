@@ -27,7 +27,8 @@
     </nav>
        
     <div class="center-content">
-        <h1 id="typed" ></h1>
+        <h1 id="typed"></h1>
+        <p class="subtitle">Discover, create, and manage campus events with secure QR-code tickets.</p>
     </div>
 
     <div class="button-row">
@@ -38,6 +39,91 @@
         <button class="btn-organizer" onclick = "location.href = '../login/login.html'">Login</button>
         <button class="btn-admin" onclick = "location.href = 'adminLogin.html'"> Admin Login</button>
     </div>
+
+    <section class="section about">
+        <div class="section-inner">
+            <h2>What is BIA?</h2>
+            <p>
+                BIA is your campus hub for events and ticketing. Students can discover and save events, organizers can
+                create and manage their events, and QR-code tickets keep entry fast and secure.
+            </p>
+        </div>
+    </section>
+
+    <section class="section features">
+        <div class="section-inner">
+            <h2>Key Features</h2>
+            <div class="cards">
+                <article class="card">
+                    <div class="card-icon" aria-hidden="true">🔎</div>
+                    <h3>Discover & Save</h3>
+                    <p>Browse upcoming events, search by interest, and save your favorites for later.</p>
+                </article>
+                <article class="card">
+                    <div class="card-icon" aria-hidden="true">🗓️</div>
+                    <h3>Create & Manage</h3>
+                    <p>Organizers create events, set capacity and pricing, and track attendance and analytics.</p>
+                </article>
+                <article class="card">
+                    <div class="card-icon" aria-hidden="true">🎟️</div>
+                    <h3>Smart QR Tickets</h3>
+                    <p>Every ticket has a unique QR code for quick validation and secure entry.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section how-it-works">
+        <div class="section-inner">
+            <h2>How It Works</h2>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-badge">1</span>
+                    <div class="step-body">
+                        <h4>Find an event</h4>
+                        <p>Students explore the events page and save what they like.</p>
+                    </div>
+                </li>
+                <li class="step">
+                    <span class="step-badge">2</span>
+                    <div class="step-body">
+                        <h4>Claim a ticket</h4>
+                        <p>Reserve a free ticket or purchase a paid one depending on the event.</p>
+                    </div>
+                </li>
+                <li class="step">
+                    <span class="step-badge">3</span>
+                    <div class="step-body">
+                        <h4>Scan and go</h4>
+                        <p>Show your QR code at the door—organizers scan to validate instantly.</p>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="section cta">
+        <div class="section-inner">
+            <h2>Ready to get started?</h2>
+            <div class="cta-actions">
+                <button class="btn-organizer" onclick="location.href = '../signup/sign-up-page.html'">Create an Organizer Account</button>
+                <button class="btn-student" onclick="location.href = '../login/login.html'">Login as Student</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>© <span id="year"></span> BIA Events</span>
+            <span class="dot">•</span>
+            <a href="../event-discovery/event-discovery.html">Explore Events</a>
+        </div>
+    </footer>
+
     <script src="mainpage.js"></script>
+    <script>
+        // Set year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
