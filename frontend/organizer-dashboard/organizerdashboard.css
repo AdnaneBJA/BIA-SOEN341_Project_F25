@@ -291,3 +291,127 @@ body{
     margin-top: 20px;
     padding: 0 20px;
 }
+
+/* --- QR Validator Section --- */
+.validator-section{
+    width: 100%;
+    max-width: 820px;
+    margin: 30px auto 60px auto;
+    padding: 0 10px;
+}
+
+.validator-section h2{
+    text-align: center;
+    color: #333;
+    font-size: 26px;
+    font-weight: 600;
+    margin: 10px 0 16px;
+}
+
+.validator-card{
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 20px;
+}
+
+.upload-row{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.dropzone{
+    border: 2px dashed #DECAB5;
+    border-radius: 10px;
+    background: #faf9f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    padding: 14px;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.dropzone.dragging{
+    border-color: #AA8E70;
+    background: #f4ede6;
+    box-shadow: 0 4px 10px rgba(170, 142, 112, 0.25);
+}
+.dz-content{ text-align: center; color: #5a4634; }
+.dz-icon{ font-size: 28px; margin-bottom: 6px; }
+.dz-text{ font-weight: 600; margin-bottom: 6px; }
+.dz-filename{ font-size: 12px; color: #777; }
+
+.btn-primary, .btn-secondary{
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 100%;
+    align-self: center;
+}
+.btn-primary{
+    background-color: #DECAB5;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.btn-primary:hover{ background-color: #AA8E70; color: #fff; }
+
+.or-sep{ display:flex; align-items:center; justify-content:center; margin: 18px 0; }
+.or-sep span{
+    font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1.2px;
+    border: 1px solid #e0d6cc; border-radius: 999px; padding: 4px 10px; background: #fff;
+}
+
+.manual-row{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+}
+
+.text-input{
+    padding: 12px 14px;
+    border: 2px solid #DECAB5;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.text-input:focus{
+    outline: none;
+    border-color: #AA8E70;
+    box-shadow: 0 0 0 4px rgba(170,142,112,0.15);
+}
+
+.btn-secondary{
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+.btn-secondary:hover{ background-color: #f6f1ec; }
+
+.validation-result{
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 700;
+    padding: 10px 12px;
+    border-radius: 8px;
+}
+.validation-result.ok{
+    color: #1d6b2a;
+    background: #e6f5ea;
+    border: 1px solid #b6e2c0;
+}
+.validation-result.err{
+    color: #8a2d2d;
+    background: #fdeaea;
+    border: 1px solid #f1bbbb;
+}
+
+@media (max-width: 640px){
+    .upload-row, .manual-row{ grid-template-columns: 1fr; }
+    .btn-primary, .btn-secondary{ height: auto; }
+}

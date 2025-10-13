@@ -1,42 +1,36 @@
-
-
 const express = require("express");
+const router = express.Router();
 const { generateICS } = require("./calendarUtils");
+const client = require("../server");
 
-function createCalendarRoutes(client) {
-    const router = express.Router();
+router.get("/:eventID", async (req, res) => {
+  const { eventID } = req.params;
 
-    router.get("/:eventID", async (req, res) => {
-        const { eventID } = req.params;
+  try {
+    const result = await client.query('SELECT * FROM public."Events" WHERE "eventID" = $1', [eventID]);
+    const event = result.rows[0];
 
-        try {
-            const result = await client.query('SELECT * FROM "Events" WHERE "eventID" = $1', [eventID]);
-            const event = result.rows[0];
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
 
-            if (!event) {
-                return res.status(404).json({ message: "Event not found" });
-            }
-
-            const icsContent = generateICS({
-                eventID: event.eventid,
-                eventName: event.eventname,
-                startTime: event.starttime,
-                endTime: event.endtime,
-                description: event.eventdescription,
-                location: event.location
-            });
-
-            res.setHeader("Content-Disposition", `attachment; filename=${event.eventname}.ics`);
-            res.setHeader("Content-Type", "text/calendar");
-            res.send(icsContent);
-
-        } catch (error) {
-            console.error("Error generating calendar file:", error);
-            res.status(500).json({ message: "Failed to generate calendar file" });
-        }
+    const icsContent = generateICS({
+      eventID: event.eventID,
+      eventName: event.eventName,
+      startTime: event.startTime,
+      endTime: event.endTime,
+      description: event.eventDescription,
+      location: event.location
     });
 
-    return router;
-}
+    res.setHeader("Content-Disposition", `attachment; filename=${event.eventName}.ics`);
+    res.setHeader("Content-Type", "text/calendar");
+    res.send(icsContent);
 
-module.exports = createCalendarRoutes;
+  } catch (error) {
+    console.error("Error generating calendar file:", error);
+    res.status(500).json({ message: "Failed to generate calendar file" });
+  }
+});
+
+module.exports = router;

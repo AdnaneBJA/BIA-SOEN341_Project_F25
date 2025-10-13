@@ -7,23 +7,10 @@ let letterIndex = 0;
 
 function type() {
     if (letterIndex < phrase.length) {
-    typewriter.textContent += phrase.charAt(letterIndex);
-    letterIndex++;
-    setTimeout(type, 100); 
-    } else{
-        showButtons();
+        typewriter.textContent += phrase.charAt(letterIndex);
+        letterIndex++;
+        setTimeout(type, 100);
     }
-}
-
-function showButtons(){
-    const buttonRow = document.querySelector('.button-row');
-    const buttons = buttonRow.querySelectorAll('button');
-    buttonRow.classList.add('show');
-    buttons.forEach((btn, i) => {
-        setTimeout(() => {
-            btn.style.opacity = 1;
-        }, i * 600);
-    });
 }
 
 function updateUserStatus(){

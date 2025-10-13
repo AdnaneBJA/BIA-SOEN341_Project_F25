@@ -1,62 +1,21 @@
 const QRCode = require('qrcode');
-const { Client } = require('pg');
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 
-
-const client = new Client({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    password: process.env.DB_PASSWORD,
-});
-
-// async function generateQRCodes() {
-//   try {
-//     await client.connect();
-//     console.log("Connected to PostgreSQL");
-
-//     const result = await client.query('SELECT "ticketID" FROM public."Ticket"');
-
-//     for (const row of result.rows) {
-//       const ticketID = row.ticketid; 
-//       const data = `ticketID:${ticketID}`;
-
-//       await QRCode.toFile(`./qrcodes/ticket_${ticketID}.png`, data);
-//       console.log(`Created QR for ticket ${ticketID}`);
-//     }
-
-//   } catch (err) {
-//     console.error('Error generating QR codes:', err);
-//   } finally {
-//     await client.end();
-//     console.log('Connection closed');
-//   }
-// }
-
-// generateQRCodes();
 
 async function generateQRCodes(ticketID) {
-  try {
-
-    const qrData = `ticketID:${ticketID}`;
-    const qrPath = `./qrcodes/ticket_${ticketID}.png`;
-
-
-    console.log(`Created QR for ticket ${ticketID} at ${qrPath}`);
-
-    return qrPath;
-
-  } catch (err) {
-    console.error('Error generating QR codes:', err);
-  } finally {
-    await client.end();
-    console.log('Connection closed');
+  const qrData = String(ticketID);
+  const relPath = path.join('qrcodes', `ticket_${ticketID}.png`);
+  const absDir = path.join(__dirname, 'qrcodes');
+  if (!fs.existsSync(absDir)) {
+    fs.mkdirSync(absDir, { recursive: true });
   }
+  const absPath = path.join(__dirname, relPath);
+
+  await QRCode.toFile(absPath, qrData);
+  const dataUrl = await QRCode.toDataURL(qrData);
+
+  return { qrPath: absPath, relPath, dataUrl };
 }
 
-// generateQRCodes();
-
 module.exports = { generateQRCodes };
-
-
