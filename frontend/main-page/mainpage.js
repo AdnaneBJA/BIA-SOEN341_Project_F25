@@ -50,5 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    type();
+    // Show title instantly for a smoother first paint (no waiting)
+    const typedEl = document.getElementById('typed');
+    if (typedEl) typedEl.textContent = phrase;
 });

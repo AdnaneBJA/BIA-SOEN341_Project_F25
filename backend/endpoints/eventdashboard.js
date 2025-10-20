@@ -19,9 +19,8 @@ module.exports = (client) => {
                 return res.json(results.rows);
             }
 
-            const allSql = 'SELECT * FROM ' + 'public' + '."Events"';
-            const analyticsResults = await client.query(allSql);
-            res.json(analyticsResults.rows);
+            // Security: don't return all events from the organizer dashboard endpoint without owner context
+            return res.status(403).json({ error: 'Organizer identity required' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Database error" });
