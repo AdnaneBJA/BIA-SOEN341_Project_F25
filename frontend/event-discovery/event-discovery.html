@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Events</title>
+  <link rel="stylesheet" href="event-discovery.css">
+</head>
+<body>
+  <nav class="menu-bar">
+    <div class="menu-left">
+      <span class="menu-logo"><b>BIA</b></span>
+    </div>
+    <div class="menu-center">
+      <a href="../student-dashboard/student-dashboard.html">Student Dashboard</a>
+    </div>
+
+  </nav>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for events..." aria-label="Search events" />
+
+    <select id="categoryFilter" aria-label="Filter by category">
+      <option value="">All Categories</option>
+      <option value="academic">Academic</option>
+      <option value="sports">Sports</option>
+      <option value="cultural">Cultural</option>
+      <option value="social">Social</option>
+      <option value="workshop">Workshop</option>
+      <option value="career">Career</option>
+      <option value="other">Other</option>
+    </select>
+
+    <select id="organizationFilter" aria-label="Filter by organization">
+      <option value="">All Organizations</option>
+      <option value="CS Society">CS Society</option>
+      <option value="Student Union">Student Union</option>
+      <option value="Athletics">Athletics</option>
+    </select>
+
+    <input type="date" id="dateFilter" aria-label="Filter by date" />
+    <button id="searchButton" onclick="filterEvents()">Search</button>
+  </div>
+
+  <main class="event-grid" id="results">
+  </main>
+
+  <script src="event-discovery.js"></script>
+</body>
+</html>
