@@ -142,6 +142,11 @@ async function fetchEvents() {
         const organizerID = localStorage.getItem('organizerID');
         const organizerUsername = localStorage.getItem('organizerUsername');
 
+        if (!organizerID && !organizerUsername) {
+            console.warn('Organizer identity missing; refusing to fetch all events');
+            return [];
+        }
+
         let url = 'http://localhost:3000/eventdashboard';
         if (organizerID) {
             url += `?organizerID=${encodeURIComponent(organizerID)}`;

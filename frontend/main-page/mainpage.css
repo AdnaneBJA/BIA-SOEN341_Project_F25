@@ -126,7 +126,7 @@ body{
     gap: 30px;
 }
 
-/* Button row: show immediately with a subtle entrance animation */
+/* Button row: show immediately with no delayed fade-in */
 .button-row{
     display: flex;
     flex-wrap: wrap;
@@ -137,25 +137,11 @@ body{
     max-width: 980px;
 }
 
-/* Smooth entrance for buttons (starts immediately) */
-@keyframes fadeInUp{
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
+/* Remove entrance animation for instant display */
 .button-row button{
-    animation: fadeInUp 350ms ease both;
-}
-.button-row button:nth-child(1){ animation-delay: 20ms; }
-.button-row button:nth-child(2){ animation-delay: 70ms; }
-.button-row button:nth-child(3){ animation-delay: 120ms; }
-.button-row button:nth-child(4){ animation-delay: 170ms; }
-.button-row button:nth-child(5){ animation-delay: 220ms; }
-.button-row button:nth-child(6){ animation-delay: 270ms; }
-
-/* Respect reduced motion preferences */
-@media (prefers-reduced-motion: reduce){
-    .button-row button{ animation: none; }
+    opacity: 1;
+    transform: none;
+    animation: none !important;
 }
 
 /* Base button styling consistent with palette */
