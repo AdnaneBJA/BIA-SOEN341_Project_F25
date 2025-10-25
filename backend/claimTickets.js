@@ -22,7 +22,7 @@ function claimTickets(client){
             return res.status(400).json({ error: 'Event ID, Student ID, and Email are required. One or more are missing' });
         }
 
-        const eventResult = await client.query('SELECT "maxParticipants" FROM public."Event" WHERE "eventID" = $1', [eventID]);
+        const eventResult = await client.query('SELECT "maxParticipants" FROM public."Events" WHERE "eventID" = $1', [eventID]);
         
         if (eventResult.rows.length === 0) {
             return res.status(404).json({ error: 'Event not found' });
