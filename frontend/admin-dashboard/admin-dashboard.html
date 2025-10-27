@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../main-page/mainpage.css">
+    <link rel="stylesheet" href="admin-dashboard.css">
+    <title>Admin Dashboard - BIA</title>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status">Admin</span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="center-content hero" style="margin-top:40px; gap:12px;">
+        <h1>Admin Dashboard (MOCK page for the moment)</h1>
+        <p class="subtitle">Welcome to the admin area. Manage organizers, review events, and view platform analytics.</p>
+
+        <section style="width:90%; max-width:1000px; margin-top:18px;">
+            <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+                <h2 style="margin-top:0;">Quick Actions</h2>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <button onclick="location.href='../signup/sign-up-page.html'">Approve Organizer</button>
+                    <button onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Moderate Event Listing</button>
+                </div>
+            </div>
+
+            <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
+                <h2 style="margin-top:0;">Platform Statistics (hardcoded for the moment)</h2>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="text-align:left; border-bottom:2px solid #eaded3;">
+                            <th style="padding:8px">Metric</th>
+                            <th style="padding:8px">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Total Organizers</td>
+                            <td style="padding:8px">12</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Active Events</td>
+                            <td style="padding:8px">34</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px">Tickets Issued</td>
+                            <td style="padding:8px">1,248</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
+                <h2 style="margin-top:0;">Participation trends</h2>
+                <p>[we should have a table or graph containing the participation trends inside this box]</p>
+            </div>
+
+            <div class="card" style="margin-top:16px;">
+                <h2 style="margin-top:0;">Management</h2>
+                <div class="row" style="margin-top:12px;">
+                    <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Manage Organizations</button>
+                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>© <span id="year"></span> BIA Events</span>
+            <span class="dot">•</span>
+            <a href="../event-discovery/event-discovery.html">Explore Events</a>
+        </div>
+    </footer>
+
+    <!-- Admin page script -->
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>
