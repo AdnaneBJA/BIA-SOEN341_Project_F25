@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Analytics Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script src="organizerdashboard.js" defer></script>
     <link rel="stylesheet" href="organizerdashboard.css">
     
@@ -39,6 +40,30 @@
     <div class="dashboard-content">
         <select id="eventSelect"></select>
         <div id="dashboard"></div>
+
+        <!-- QR Ticket Validation Section -->
+        <section class="validator-section" aria-labelledby="validator-title">
+            <h2 id="validator-title">Validate Tickets</h2>
+            <div class="validator-card">
+                <div class="upload-row">
+                    <label id="qr-dropzone" class="dropzone" for="qr-file">
+                        <input type="file" id="qr-file" accept="image/*" hidden>
+                        <div class="dz-content">
+                            <div class="dz-icon" aria-hidden="true">📷</div>
+                            <div class="dz-text">Drop QR image here or click to upload</div>
+                            <div id="qr-file-name" class="dz-filename"></div>
+                        </div>
+                    </label>
+                    <button id="scan-btn" type="button" class="btn-primary">Scan Image</button>
+                </div>
+                <div class="or-sep"><span>or</span></div>
+                <div class="manual-row">
+                    <input id="ticket-id-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Enter Ticket ID manually" class="text-input">
+                    <button id="validate-id-btn" type="button" class="btn-secondary">Validate by ID</button>
+                </div>
+                <div id="validation-result" class="validation-result" role="status" aria-live="polite"></div>
+            </div>
+        </section>
     </div>
 
 

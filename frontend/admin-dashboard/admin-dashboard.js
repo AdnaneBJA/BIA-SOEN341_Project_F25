@@ -1,19 +1,5 @@
-const phrase = 
- "Welcome to Campus Events & Ticketing"
-;
 
-const typewriter = document.getElementById("typed");
-let letterIndex = 0;
-
-function type() {
-    if (letterIndex < phrase.length) {
-        typewriter.textContent += phrase.charAt(letterIndex);
-        letterIndex++;
-        setTimeout(type, 100);
-    }
-}
-
-function updateUserStatus(){
+function updateAdminUserStatus(){
     const statusEl = document.getElementById('user-status');
     const disconnectBtn = document.getElementById('disconnect-btn');
     if (!statusEl) return;
@@ -34,23 +20,19 @@ function updateUserStatus(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateUserStatus();
+    updateAdminUserStatus();
 
     const disconnectBtn = document.getElementById('disconnect-btn');
     if (disconnectBtn) {
         disconnectBtn.addEventListener('click', () => {
-            try {
-                localStorage.clear();
-            } catch (e) {
-                console.error('Failed to clear localStorage', e);
-            }
-            updateUserStatus();
+            try { localStorage.clear(); } catch (e) { console.error('Failed to clear localStorage', e); }
+            updateAdminUserStatus();
+            setTimeout(() => location.reload(), 200);
         });
     }
-
-    // Show title instantly for a smoother first paint (no waiting)
-    const typedEl = document.getElementById('typed');
-    if (typedEl) typedEl.textContent = phrase;
 });
+

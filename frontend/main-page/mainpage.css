@@ -125,60 +125,197 @@ body{
     margin-top: 60px;
     gap: 30px;
 }
+
+/* Button row: show immediately with no delayed fade-in */
 .button-row{
     display: flex;
-    flex-direction:row;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    opacity:0;
-    pointer-events:none;
-    transition: opacity 0.5s;
+    gap: 16px;
+    margin: 28px auto 40px;
+    padding: 0 16px;
+    max-width: 980px;
 }
 
-.button-row.show {
-    opacity:1;
-    pointer-events:auto;
-}
-
+/* Remove entrance animation for instant display */
 .button-row button{
-    opacity: 0;
-    transition: opacity 0.5s;
+    opacity: 1;
+    transform: none;
+    animation: none !important;
 }
 
+/* Base button styling consistent with palette */
 button{
     background-color: #DECAB5;
     border: none;
-    padding: 20px 40px;
-    font-size: 1em;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0,
-        0, 0.1);
-    transition: background-color 0.5s ease;
-    
+    padding: 16px 28px;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.12s ease, box-shadow 0.2s ease;
+}
+button:focus-visible{
+    outline: 3px solid rgba(170,142,112,0.5);
+    outline-offset: 2px;
+}
+button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 14px rgba(0,0,0,0.15);
 }
 
-.btn-student:hover{
-    background-color: #BFD5F2;
-    cursor: pointer;
+.btn-student:hover{ background-color: #BFD5F2; cursor: pointer; }
+.btn-organizer:hover{ background-color: #A9C3A8; cursor: pointer; }
+.btn-admin:hover{ background-color: #ea6348; cursor: pointer; }
+.btn-attendee:hover{ background-color: #BFD5F2; cursor: pointer; }
+.btn-event:hover{ background-color: #BFD5F2; cursor: pointer; }
+
+/* Hero subtitle under the typed title */
+.subtitle{
+    margin: 6px 0 0;
+    color: #5a4634;
+    font-size: 18px;
+    text-align: center;
+    padding: 0 16px;
 }
 
-.btn-organizer:hover{
-    background-color: #A9C3A8;
-    cursor: pointer;
+/* Generic section wrapper */
+.section{
+    padding: 36px 16px;
+}
+.section .section-inner{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.section h2{
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin: 0 0 18px;
+}
+.section p{
+    color: #444;
 }
 
-.btn-admin:hover{
-    background-color: #ea6348;
-    cursor: pointer;
+/* About */
+.section.about p{
+    text-align: center;
+    font-size: 18px;
 }
 
-.btn-attendee:hover{
-    background-color: #BFD5F2;
-    cursor: pointer;
+/* Features */
+.section.features .cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+@media (max-width: 900px){
+    .section.features .cards{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+    .section.features .cards{ grid-template-columns: 1fr; }
 }
 
-.btn-event:hover{
-    background-color: #BFD5F2;
-    cursor: pointer;
+.card{
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 18px;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+.card-icon{
+    width: 56px;
+    height: 56px;
+    line-height: 56px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    background: #F6F1EC;
+    color: #5a4634;
+    font-size: 28px;
+    box-shadow: inset 0 0 0 2px #DECAB5;
+}
+.card h3{ margin: 8px 0 6px; color: #333; }
+.card p{ margin: 0; color: #555; }
+
+/* How it works */
+.section.how-it-works .steps{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+@media (max-width: 900px){
+    .section.how-it-works .steps{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+    .section.how-it-works .steps{ grid-template-columns: 1fr; }
+}
+.step{
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+}
+.step-badge{
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #DECAB5;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+.step-body h4{ margin: 2px 0 6px; color: #333; }
+.step-body p{ margin: 0; color: #555; }
+
+/* CTA */
+.section.cta{
+    background: #f4ede6;
+    border-top: 1px solid #eaded3;
+    border-bottom: 1px solid #eaded3;
+}
+.section.cta h2{ margin-bottom: 10px; }
+.cta-actions{
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
+/* Footer */
+.footer{
+    border-top: 1px solid #eaded3;
+    padding: 16px;
+    background: #fff;
+}
+.footer-inner{
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #5a4634;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+.footer a{
+    color: #5a4634;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(90,70,52,0.4);
+}
+.footer a:hover{
+    color: #AA8E70;
+    border-bottom-color: #AA8E70;
+}
+.footer .dot{ opacity: 0.5; }

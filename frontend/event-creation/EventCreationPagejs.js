@@ -26,7 +26,7 @@ document.getElementById('eventForm').addEventListener('submit', function (e) {
   const endTime = document.getElementById('endTime').value;
   const location = document.getElementById('location').value.trim();
   const organization = document.getElementById('organization').value.trim();
-  const organizerUserName = document.getElementById('organizerUserName').value.trim();
+  // const organizerUserName = document.getElementById('organizerUserName').value.trim();
   const capacity = document.getElementById('capacity').value;
   const ticketType = document.querySelector('input[name="ticketType"]:checked')?.value;
   const price = document.getElementById('price').value;
@@ -62,7 +62,7 @@ document.getElementById('eventForm').addEventListener('submit', function (e) {
 
   if (!location) { document.getElementById('locationError').textContent = 'Location is required.'; valid = false; }
   if (!organization) { document.getElementById('organizationError').textContent = 'Organization is required.'; valid = false; }
-  if (!organizerUserName) { document.getElementById('organizerUserNameError').textContent = 'Organizer username is required.'; valid = false; }
+  // if (!organizerUserName) { document.getElementById('organizerUserNameError').textContent = 'Organizer username is required.'; valid = false; }
 
   if (!capacity || isNaN(capacity) || Number(capacity) < 1) {
     document.getElementById('capacityError').textContent = 'Enter valid capacity (at least 1).';

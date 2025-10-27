@@ -7,6 +7,24 @@
     <link rel="stylesheet" href="EventCreationPageStyle.css">
 </head>
 <body>
+    <!-- Added shared navbar (same structure and styling as main page) -->
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
             <h1>Create New Event</h1>
@@ -14,7 +32,7 @@
         </div>
 
         <div class="form-container">
-            <form id="eventForm" onsubmit="handleSubmit(event)" novalidate>
+            <form id="eventForm" novalidate>
                 <!-- Title -->
                 <div class="form-group">
                     <label for="title">Event Title <span class="required">*</span></label>
@@ -80,12 +98,12 @@
                     <span class="error-message" id="organizationError"></span>
                 </div>
 
-                <!-- Organizer User Name -->
+                <!-- Organizer User Name
                 <div class="form-group">
                     <label for="organizerUserName">Organizer User Name <span class="required">*</span></label>
                     <input type="text" id="organizerUserName" name="organizerUserName" placeholder="Enter Your Organizer User Name" required>
                     <span class="error-message" id="organizerUserNameError"></span>
-                </div>
+                </div> -->
 
                 <!-- Tickets -->
                 <div class="ticket-section">
@@ -128,5 +146,39 @@
     </div>
 
     <script src="EventCreationPagejs.js"></script>
+
+    <!-- Inline script to update navbar user status and handle disconnect (parity with main page) -->
+    <script>
+        function updateUserStatusNavbar(){
+            const statusEl = document.getElementById('user-status');
+            const disconnectBtn = document.getElementById('disconnect-btn');
+            if (!statusEl) return;
+
+            const role = localStorage.getItem('role');
+            if (role) {
+                const usernameKey = `${role.toLowerCase()}Username`;
+                const username = localStorage.getItem(usernameKey) || 'Unknown';
+                statusEl.innerHTML = `
+                    <span class="status-label">Currently logged in as:</span>
+                    <span class="status-username">${username}</span>
+                    <span class="role-badge">${role}</span>
+                `;
+                if (disconnectBtn) disconnectBtn.style.display = 'inline-flex';
+            } else {
+                statusEl.innerHTML = `<span class="status-label">Not logged in</span>`;
+                if (disconnectBtn) disconnectBtn.style.display = 'none';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserStatusNavbar();
+            const disconnectBtn = document.getElementById('disconnect-btn');
+            if (disconnectBtn) {
+                disconnectBtn.addEventListener('click', () => {
+                    try { localStorage.clear(); } catch (e) { console.error('Failed to clear localStorage', e); }
+                    updateUserStatusNavbar();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var { Client } = require("pg");
 var cors = require("cors");
+const path = require('path');
 const PORT = 3000;
 const createTables = require('./tables.js');
 const createOrganizerRoutes = require("./endpoints/organizer");
@@ -13,6 +14,7 @@ const createEventRoutes = require("./endpoints/events");
 const createLoginRoutes = require("./endpoints/login");
 const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
+const createTicketsRoutes = require('./endpoints/tickets');
 
 //app.use('/', claimTickets());
 app.use(express.json());
@@ -51,25 +53,106 @@ app.use("/events", createEventRoutes(client));
 app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
 app.use("/calendar", calendarRoutes);
+app.use(createTicketsRoutes(client));
+app.use('/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
+
+function toCsv(attendees) {
+    const parser = new Parser({
+        fields: ['studentID', 'studentUserName', 'studentPassword'],
+        eol: '\r\n'
+    });
+    const core = parser.parse(attendees);
+    const withSep = `sep=,\r\n${core}`;
+    return `\uFEFF${withSep}`;
+}
+
+function sanitizeForFilename(name) {
+    if (!name) return '';
+    return String(name).replace(/[^a-zA-Z0-9_-]+/g, '_').slice(0, 60);
+}
+
+async function verifyEventOwnership(eventId, organizerID, organizerUsername) {
+    if (!organizerID && !organizerUsername) return true; // nothing to verify
+    try {
+        const q = await client.query('SELECT "organizerID", "organizerUserName" FROM public."Events" WHERE "eventID" = $1', [eventId]);
+        const row = q.rows[0];
+        if (!row) return false;
+        if (organizerID && Number(organizerID) !== Number(row.organizerid || row.organizerID)) return false;
+        if (organizerUsername && String(organizerUsername) !== String(row.organizerusername || row.organizerUserName)) return false;
+        return true;
+    } catch (e) {
+        console.error('Ownership check failed', e);
+        return false;
+    }
+}
+
+app.get('/events/:eventId/export-attendees', async (req, res) => {
+    const { eventId } = req.params;
+    const { organizerID, organizerUsername } = req.query;
+    if (!eventId) return res.status(400).send('Missing eventId');
+    try {
+        const allowed = await verifyEventOwnership(eventId, organizerID, organizerUsername);
+        if (!allowed) return res.status(403).send('Forbidden: Event does not belong to this organizer');
+
+        const evt = await client.query('SELECT "eventName" FROM public."Events" WHERE "eventID" = $1', [eventId]);
+        const eventName = evt.rows[0]?.eventName || `event_${eventId}`;
+
+        const sql = `
+            SELECT s."studentID", s."studentUserName", s."studentPassword"
+            FROM public."Ticket" t
+            JOIN public."Student" s ON s."studentID" = t."studentID"
+            WHERE t."eventID" = $1
+            ORDER BY s."studentID" ASC
+        `;
+        const result = await client.query(sql, [eventId]);
+        const csv = toCsv(result.rows);
+
+        const safeName = sanitizeForFilename(eventName);
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', `attachment; filename="attendees_${safeName}_${eventId}.csv"`);
+
+        return res.send(csv);
+    } catch (e) {
+        console.error('Error exporting attendees for event', eventId, e);
+        return res.status(500).send('Error generating the CSV');
+    }
+});
 
 app.get('/export-attendees', async (req, res) => {
     try {
+        const eventId = req.query.eventID;
+        const { organizerID, organizerUsername } = req.query;
+        if (eventId) {
+            const allowed = await verifyEventOwnership(eventId, organizerID, organizerUsername);
+            if (!allowed) return res.status(403).send('Forbidden: Event does not belong to this organizer');
+
+            const evt = await client.query('SELECT "eventName" FROM public."Events" WHERE "eventID" = $1', [eventId]);
+            const eventName = evt.rows[0]?.eventName || `event_${eventId}`;
+
+            const sql = `
+                SELECT s."studentID", s."studentUserName", s."studentPassword"
+                FROM public."Ticket" t
+                JOIN public."Student" s ON s."studentID" = t."studentID"
+                WHERE t."eventID" = $1
+                ORDER BY s."studentID" ASC
+            `;
+            const result = await client.query(sql, [eventId]);
+            const csv = toCsv(result.rows);
+            const safeName = sanitizeForFilename(eventName);
+            res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+            res.setHeader('Content-Disposition', `attachment; filename="attendees_${safeName}_${eventId}.csv"`);
+
+            return res.send(csv);
+        }
+
+        // Fallback: export all students (legacy behavior)
         const result = await client.query(`
             SELECT "studentID", "studentUserName", "studentPassword"
              FROM public."Student"
         `);
-
-        const attendees = result.rows;
-
-        const json2csvParser = new Parser({
-           fields: ['studentID', 'studentUserName', 'studentPassword']
-        });
-
-        const csv = json2csvParser.parse(attendees);
-
-
-        res.header('Content-Type', 'text/csv');
-        res.attachment(`attendees.csv`);
+        const csv = toCsv(result.rows);
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename="attendees_all_students.csv"');
         res.send(csv);
     } catch (e) {
         console.error(e);
@@ -77,17 +160,6 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
-app.get('/ticket/:id/qr', async (req, res) => {
-    const ticketID = req.params.id;
-    const qrData = `https://your-server.com/validate-ticket?ticketID=${ticketID}`;
-
-    try {
-        const qrCode = await generateQRCode(qrData);
-        res.send(`<img src="${qrCode}" alt="QR Code for ticket ${ticketID}" />`);
-    } catch (err) {
-        res.status(500).send('Error generating QR code');
-    }
-});
 
 // app.post('/events', async (req, res) => {
 //     try{
