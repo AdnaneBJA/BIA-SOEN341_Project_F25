@@ -5,10 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mainpage.css">
-    <title>Organizer Dashboard</title>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <title>Administrator Dashboard</title>
 </head>
 <body>
     
+    <script src="../main-page/adminDashboard.js"></script>
+        
+    <script type=" text/babel">
+       
+    </script>
+
     <nav class = "menu-bar">
         <span class = "menu-logo"><b>BIA</b></span>
         <span class = "menu-logo">Administrator Dashboard</span>
@@ -18,11 +29,14 @@
             <a href = "tickets.html"> Tickets </a>
         </div> 
     </nav>
-       
-        <div class="center-content">
-            <h1 id="typed" ></h1>
-        </div>
 
+
+       
+    <div class="center-content">
+        <h1 id="typed" ></h1>
+    </div>
+
+    <div id="admin-root"></div>
 
     </body>
 </html>

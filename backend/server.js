@@ -16,6 +16,8 @@ const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
 const createTicketsRoutes = require('./endpoints/tickets');
 
+//app.use('/organizations', (req, res, next) => { req.db = client; next(); }, organizationModificationRoutes);
+
 //app.use('/', claimTickets());
 app.use(express.json());
 app.use(
@@ -160,6 +162,12 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
+//for admin modifications of organizations
+const organizationModificationRoutes = require('./endpoints/organizationModification');
+app.use('/organizations', (req, res, next) => {
+    req.db = client;
+    next();
+}, organizationModificationRoutes);
 
 // app.post('/events', async (req, res) => {
 //     try{
