@@ -1,3 +1,26 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import AdminOrganizations from '../admin-dashboard/organizationMod';
+
+// const container = document.getElementById('admin-root');
+// const root = createRoot(container);
+// root.render(<AdminOrganizations />);
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// document.addEventListener('DOMContentLoaded', () => {
+//     const btn = document.getElementById('manage-org-btn');
+//     const orgRoot = document.getElementById('org-root');
+//     if (btn && orgRoot) {
+//         btn.addEventListener('click', () => {
+//             orgRoot.style.display = 'block';
+//             if (!orgRoot.hasChildNodes()) {
+//                 const root = createRoot(orgRoot);
+//                 root.render(<AdminOrganizations />);
+//             }
+//         });
+//     }
+// });
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function updateAdminUserStatus(){
     const statusEl = document.getElementById('user-status');

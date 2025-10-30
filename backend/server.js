@@ -1,6 +1,5 @@
 const { Parser } = require('@json2csv/plainjs');
 
-
 require('dotenv').config();
 var express = require("express");
 var app = express();
@@ -18,7 +17,9 @@ const calendarRoutes = require("./endpoints/calendar");
 const createTicketsRoutes = require('./endpoints/tickets');
 const discountFeatureRoutes = require('./endpoints/discountFeature');
 
+//app.use('/organizations', (req, res, next) => { req.db = client; next(); }, organizationModificationRoutes);
 
+//app.use('/', claimTickets());
 app.use(express.json());
 app.use(
     cors({
@@ -163,6 +164,30 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
+//for admin modifications of organizations
+const organizationModificationRoutes = require('./endpoints/organizationModification');
+app.use('/organizations', (req, res, next) => {
+    req.db = client;
+    next();
+}, organizationModificationRoutes);
+
+// app.post('/events', async (req, res) => {
+//     try{
+//         const{ eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization} = req.body;
+//         const insertQuery = `
+//             INSERT INTO public."Events" 
+//             ("eventID", "eventName", "organizerID", "eventType", "startTime", "endTime", "location", "maxParticipants", "currentParticipants", "eventPrices", "eventDescription", "organizerUserName", "Organization") 
+//             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
+//         `;
+//         const values = [eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization];
+
+//         const result = await client.query(insertQuery, values);
+//         res.status(201).json(result.rows[0]);
+//     }catch (err) {
+//         console.error('Error creating event:', err);
+//         res.status(500).json({ error: 'Server error' });
+//     }
+// });
 
 app.listen(PORT, (err) => {
     if (err) {
