@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="../main-page/mainpage.css">
     <link rel="stylesheet" href="admin-dashboard.css">
     <title>Admin Dashboard - BIA</title>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
 </head>
 <body>
     <nav class="menu-bar">
@@ -73,9 +78,13 @@
             <div class="card" style="margin-top:16px;">
                 <h2 style="margin-top:0;">Management</h2>
                 <div class="row" style="margin-top:12px;">
-                    <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Manage Organizations</button>
+                    <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Overview Organizer Dashboard</button>
+                    <!-- additional button below!!!!!!!!-->
+                     <button class="admin-btn" id="manage-org-btn">Manage Organizations</button>
                     <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles</button>
                 </div>
+                <!-- addition below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+                 <div id="org-root" style="display:none; margin-top:20px;"></div>
             </div>
         </section>
     </main>
@@ -88,7 +97,89 @@
         </div>
     </footer>
 
-    <!-- Admin page script -->
-    <script src="admin-dashboard.js"></script>
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+  
+    <script type="text/babel">
+        function AdminOrganizations() {
+            const [organizations, setOrganizations] = React.useState([]);
+            const [form, setForm] = React.useState({ name: '', description: '' });
+            const [message, setMessage] = React.useState('');
+
+            React.useEffect(() => {
+                fetch('http://localhost:3000/organizations')
+                    .then(res => res.json())
+                    .then(data => setOrganizations(data.organizations || []));
+            }, []);
+
+            function handleChange(e) {
+                setForm({ ...form, [e.target.name]: e.target.value });
+            }
+
+            function handleCreate(e) {
+                e.preventDefault();
+                fetch('http://localhost:3000/organizations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(form)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.organization) {
+                        setOrganizations([...organizations, data.organization]);
+                        setMessage('Organization created successfully!');
+                        setForm({ name: '', description: '' });
+                        setTimeout(() => setMessage(''), 3000); 
+                    } else {
+                        setMessage('Failed to create organization.');
+                    }
+                })
+                .catch(() => setMessage('Failed to create organization.'));
+            }
+
+            function handleDelete(name) {
+                fetch(`http://localhost:3000/organizations/${name}`, { method: 'DELETE' })
+                    .then(() => setOrganizations(organizations.filter(org => org.name !== name)));
+            }
+            return (
+                <div>
+                    <h2>Organizations</h2>
+                    {message && <div style={{ color: 'green', marginBottom: '10px' }}>{message}</div>}
+                    <form onSubmit={handleCreate}>
+                        <input
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                            placeholder="Name"
+                            required
+                        />
+                        <input
+                            name="description"
+                            value={form.description}
+                            onChange={handleChange}
+                            placeholder="Description"
+                        />
+                        <button type="submit">Create</button>
+                    </form>
+                    <ul style={{ listStyleType: 'none' }}>
+                        {organizations.map(org => (
+                            <li key={org.id} >
+                                {org.name} - {org.description}
+                                <button onClick={() => handleDelete(org.name)}>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        
+        document.getElementById('manage-org-btn').addEventListener('click', function() {
+            const orgRoot = document.getElementById('org-root');
+            orgRoot.style.display = 'block';
+            ReactDOM.createRoot(orgRoot).render(<AdminOrganizations />);
+        });
+    </script>
+
+
 </body>
 </html>
