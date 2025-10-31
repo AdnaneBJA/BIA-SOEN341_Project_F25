@@ -1,0 +1,66 @@
+/* .discount-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 18px;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    margin: 12px;
+}
+
+.discount-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.discount-card h3 {
+    margin: 8px 0 6px;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.discount-card .price {
+    margin: 6px 0;
+    color: #222;
+    font-weight: bold;
+}
+
+.discount-card .price s {
+    color: #999;
+    margin-right: 6px;
+}
+
+.discount-card .starts-in {
+    margin: 4px 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.discount-card .start-time {
+    margin: 4px 0;
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.discount-card .claim-btn {
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #f57c00;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.discount-card .claim-btn:hover {
+    background: #e65100;
+}
+
+/* optional grid layout for multiple cards */
+/* .discount-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+} */ 

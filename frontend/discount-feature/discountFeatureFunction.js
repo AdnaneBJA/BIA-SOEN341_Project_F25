@@ -2,8 +2,6 @@ async function fetchAndRenderDiscounts(){
     const container = document.getElementById("discounts");
     if (!container) return;
 
-    container.innerHTML = "<h2>Last-minute Discounts</h2><p>Loading...</p>";
-
     try{
         const res = await fetch('http://localhost:3000/events/discounts');
         if (!res.ok) throw new Error('Network response was not ok');
@@ -22,11 +20,11 @@ async function fetchAndRenderDiscounts(){
         });
 
         if (lastMinuteEvents.length === 0){
-            container.innerHTML = "<h2>Last-minute Discounts</h2><p>No last-minute discounts available.</p>";
+            container.innerHTML = "<p>No last-minute discounts available.</p>";
             return;
         }
 
-        const cardsHtml = lastMinuteEvents.map(e => {
+        container.innerHTML = lastMinuteEvents.map(e => {
             const priceHtml = e.originalPrice > 0
                 ? `<div class="price"><s>$${e.originalPrice.toFixed(2)}</s> <strong>$${e.discountedPrice.toFixed(2)}</strong> (${e.discountPercent}% off)</div>`
                 : `<div class="price">Free</div>`;
@@ -45,7 +43,7 @@ async function fetchAndRenderDiscounts(){
             `;
             }).join('');
 
-            container.innerHTML = `<h2>Last-minute discounts</h2><div class="discount-grid">${cardsHtml}</div>`;
+            //container.innerHTML = `<h2>Last-minute discounts</h2><div class="discount-grid">${cardsHtml}</div>`;
             
             container.addEventListener('click', (ev) => {
                 const btn = ev.target.closest('.claim-btn');
@@ -64,3 +62,4 @@ async function fetchAndRenderDiscounts(){
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
   );
 }
+fetchAndRenderDiscounts();
