@@ -75,6 +75,13 @@ async function createTables(client) {
     CONSTRAINT unique_saved_event_per_student UNIQUE ("studentID", "eventID")
   );
 
+  CREATE TABLE IF NOT EXISTS "UserRoles" (
+  "userID" INTEGER NOT NULL,
+  "role" TEXT CHECK ("role" IN ('Admin', 'Organizer', 'Student')) NOT NULL,
+  "username" TEXT NOT NULL UNIQUE,
+  PRIMARY KEY ("username")
+);
+
   -- Migrations for legacy databases
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "qrCode" VARCHAR(255) NOT NULL DEFAULT 'pending';
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "purchaseAmount" INTEGER DEFAULT 0;

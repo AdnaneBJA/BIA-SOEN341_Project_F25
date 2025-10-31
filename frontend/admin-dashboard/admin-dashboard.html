@@ -81,7 +81,8 @@
                     <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Overview Organizer Dashboard</button>
                     <!-- additional button below!!!!!!!!-->
                      <button class="admin-btn" id="manage-org-btn">Manage Organizations</button>
-                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles</button>
+                     <button class="admin-btn" id="assign-roles-btn">Assign Roles</button>
+                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles (maybe delete this)</button>
                 </div>
                 <!-- addition below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
                  <div id="org-root" style="display:none; margin-top:20px;"></div>
@@ -97,7 +98,7 @@
         </div>
     </footer>
 
-    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ORGANIZATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
   
     <script type="text/babel">
         function AdminOrganizations() {
@@ -179,6 +180,110 @@
             ReactDOM.createRoot(orgRoot).render(<AdminOrganizations />);
         });
     </script>
+
+  <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ROLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <script type="text/babel">
+        function RoleManager() {
+            const [userId, setUserId] = React.useState('');
+            const [role, setRole] = React.useState('Student');
+            const [message, setMessage] = React.useState('');
+            const [messageType, setMessageType] = React.useState(''); 
+
+            async function handleAssign() {
+                if (!userId) {
+                    setMessageType('error');
+                    setMessage('Please enter a user ID.');
+                    return;
+                }
+
+                const res = await fetch('http://localhost:3000/roles/assign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, newRole: role, username: `${userId}`, password: `${userId}`})
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    setMessageType('success');
+                    setMessage(data.message || 'Role assigned successfully!');
+                } else {
+                    setMessageType('error');
+                    setMessage(data.error || 'Failed to assign role.');
+                }
+
+                // Clear message after 5 seconds
+                setTimeout(() => setMessage(''), 5000);
+            }
+
+            async function handleRevoke() {
+                if (!userId) {
+                    setMessageType('error');
+                    setMessage('Please enter a user ID.');
+                    return;
+                }
+
+                const res = await fetch(`http://localhost:3000/roles/revoke/${userId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    setMessageType('success');
+                    setMessage(data.message || 'Role revoked successfully!');
+                } else {
+                    setMessageType('error');
+                    setMessage(data.error || 'Failed to revoke role.');
+                }
+
+                // Clear message after 5 seconds
+                setTimeout(() => setMessage(''), 5000);
+            }
+
+            return (
+                <div style={{marginTop: '20px'}}>
+                    <h2>Assign or Revoke Roles</h2>
+                    <input
+                        type="number"
+                        placeholder="User ID"
+                        value={userId}
+                        onChange={e => setUserId(e.target.value)}
+                        style={{marginRight: '8px'}}
+                    />
+                    <select value={role} onChange={e => setRole(e.target.value)}>
+                        <option value="Student">Student</option>
+                        <option value="Organizer">Organizer</option>
+                        <option value="Admin">Administrator</option>
+                    </select>
+                    <div style={{marginTop: '10px'}}>
+                        <button onClick={handleAssign}>Assign Role</button>
+                        <button onClick={handleRevoke} style={{marginLeft: '10px'}}>Revoke Role</button>
+                    </div>
+
+                    {message && (
+                        <p
+                            style={{
+                                marginTop: '10px',
+                                color: messageType === 'success' ? 'green' : 'red',
+                                fontWeight: 'bold',
+                                transition: 'opacity 0.3s ease'
+                            }}
+                        >
+                            {message}
+                        </p>
+                    )}
+                </div>
+            );
+        }
+
+
+        
+        document.getElementById('assign-roles-btn').addEventListener('click', function() {
+            const orgRoot = document.getElementById('org-root');
+            orgRoot.style.display = 'block';
+            ReactDOM.createRoot(orgRoot).render(<RoleManager />);
+        });
+    </script>
+
 
 
 </body>
