@@ -14,6 +14,11 @@
 
 </head>
 <body>
+
+    <!--For the charts-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
     <nav class="menu-bar">
         <div class="menu-left">
             <span class="menu-logo"><b>BIA</b></span>
@@ -45,7 +50,7 @@
             </div>
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
-                <h2 style="margin-top:0;">Platform Statistics (hardcoded for the moment)</h2>
+                <h2 style="margin-top:0;">Platform Statistics</h2>
                 <table style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="text-align:left; border-bottom:2px solid #eaded3;">
@@ -55,24 +60,33 @@
                     </thead>
                     <tbody>
                         <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Total Organizers</td>
-                            <td style="padding:8px">12</td>
+                            <td style="padding:8px">Tickets Issued</td>
+                            <td style="padding:8px"><span id="totalTickets">0</span></td>
                         </tr>
                         <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Active Events</td>
-                            <td style="padding:8px">34</td>
+                            <td style="padding:8px">Total Events</td>
+                            <td style="padding:8px"><span id="totalEvents">0</span></td>
                         </tr>
-                        <tr>
-                            <td style="padding:8px">Tickets Issued</td>
-                            <td style="padding:8px">1,248</td>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Total Participants</td>
+                            <td style="padding:8px"><span id="totalParticipants">0</span></td>
                         </tr>
                     </tbody>
                 </table>
+                
             </div>
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
                 <h2 style="margin-top:0;">Participation trends</h2>
-                <p>[we should have a table or graph containing the participation trends inside this box]</p>
+                <!-- Additional analytics-->
+                <section id="analytics" style="padding: 2rem;"></section>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: start;">
+                    <canvas id="ticketsChart" style="max-width: 300px; height: 150px; margin-bottom: 2rem; margin-right: 40px"></canvas>
+                    <canvas id="participationChart" style="max-width: 300px; height: 150px;"></canvas>
+                </div>
+                    
+                </section>
+                <!-------------------------->
             </div>
 
             <div class="card" style="margin-top:16px;">
@@ -284,6 +298,78 @@
         });
     </script>
 
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANALYTICS AND CHARTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const baseUrl = 'http://localhost:3000/analytics'; 
+
+        function createChart(ctx, type, labels, data, label) {
+            return new Chart(ctx, {
+                type,
+                data: {
+                    labels: labels.length ? labels : ['No data'],
+                    datasets: [{
+                        label,
+                        data: data.length ? data : [0],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        fill: type === 'line',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+        }
+
+        try {
+            //For the Summary
+            const summary = await fetch(`${baseUrl}/summary`).then(res => res.json());
+            document.getElementById('totalEvents').textContent = summary.totalEvents;
+            document.getElementById('totalTickets').textContent = summary.totalTickets;
+            document.getElementById('totalParticipants').textContent = summary.totalParticipants;
+
+            // For the Ticket trends
+            const ticketData = await fetch(`${baseUrl}/tickets/monthly`).then(res => res.json());
+            const ticketLabels = ticketData.map(row => new Date(row.month).toLocaleString('default', { month: 'short', year: 'numeric' }));
+            const ticketCounts = ticketData.map(row => parseInt(row.tickets_sold));
+
+            createChart(
+                document.getElementById('ticketsChart'),
+                'line',
+                ticketLabels,
+                ticketCounts,
+                'Tickets Sold per Month'
+            );
+
+            // For the Participation by event type 
+            const participationData = await fetch(`${baseUrl}/participation/type`).then(res => res.json());
+            const typeLabels = participationData.map(row => row.eventType || 'Unknown');
+            const participantCounts = participationData.map(row => parseInt(row.participants));
+
+            createChart(
+                document.getElementById('participationChart'),
+                'bar',
+                typeLabels,
+                participantCounts,
+                'Participants per Event Type'
+            );
+
+        } catch (err) {
+            console.error('Error loading analytics:', err);
+        }
+    });
+</script>
 
 
 </body>

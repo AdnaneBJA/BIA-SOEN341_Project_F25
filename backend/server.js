@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var { Client } = require("pg");
 var cors = require("cors");
+
 const path = require('path');
 const PORT = 3000;
 const createTables = require('./tables.js');
@@ -174,6 +175,10 @@ app.use('/roles', (req, res, next) => {
     req.db = client;  
     next();
 }, rolesModificationRoutes);
+
+//for analytics
+const analyticsRouter = require('./endpoints/analytics');
+app.use('/analytics', analyticsRouter);
 
 // app.post('/events', async (req, res) => {
 //     try{
