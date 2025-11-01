@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../main-page/mainpage.css">
+    <link rel="stylesheet" href="admin-login.css">
+    <title>Admin Login - BIA</title>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../main-page/tickets.html">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status">Admin Login</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="center-content hero" style="margin-top:60px;">
+        <div class="login-container">
+            <h1>Admin Login</h1>
+            <p class="subtitle">Enter your admin credentials to access the dashboard</p>
+
+            <form id="admin-login-form" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter admin username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter admin password">
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+
+                <button type="submit" class="login-btn">Login</button>
+
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="../main-page/mainpage.html" style="color: #5a4634; text-decoration: none;">← Back to Home</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>© <span id="year"></span> BIA Events</span>
+            <span class="dot">•</span>
+            <a href="../event-discovery/event-discovery.html">Explore Events</a>
+        </div>
+    </footer>
+
+    <script src="adminAuth.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (loginAdmin(username, password)) {
+                errorMessage.textContent = '';
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                errorMessage.textContent = 'Invalid username or password. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Organizers</title>
+    <link rel="stylesheet" href="approve-organizer.css">
+    <script src="approve-organizer.js" defer></script>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../admin-dashboard/admin-dashboard.html">Return to Dashboard</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Manage Organizer Approvals</h1>
+            <p class="subtitle">Review and approve or revoke organizer accounts</p>
+        </div>
+
+        <div class="organizers-container">
+            <div id="loading-message" class="loading-message">Loading organizers...</div>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="organizers-list" class="organizers-list"></div>
+        </div>
+    </div>
+</body>
+</html>
+

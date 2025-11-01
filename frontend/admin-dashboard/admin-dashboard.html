@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="admin-dashboard.css">
     <title>Admin Dashboard - BIA</title>
 
+    <script src="adminAuth.js"></script>
+    <script>
+        // FYI, this makes the page inaccessible unless the admin is logged in
+        protectAdminPage();
+    </script>
+
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -18,15 +24,12 @@
     <!--For the charts-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
     <nav class="menu-bar">
         <div class="menu-left">
             <span class="menu-logo"><b>BIA</b></span>
         </div>
         <div class="menu-center">
             <a href="../main-page/mainpage.html">Home</a>
-            <a href="../event-discovery/event-discovery.html">Events</a>
-            <a href="../main-page/tickets.html">Tickets</a>
         </div>
         <div class="menu-right">
             <div class="menu-status">
@@ -44,8 +47,8 @@
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 style="margin-top:0;">Quick Actions</h2>
                 <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <button onclick="location.href='../signup/sign-up-page.html'">Approve Organizer</button>
-                    <button onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Moderate Event Listing</button>
+                    <button onclick="location.href='../approve-organizer-page/approve-organizer.html'">Approve Organizer</button>
+                    <button onclick="location.href='../moderate-event-listing/moderate-event-listing.html'">Moderate Event Listing</button>
                 </div>
             </div>
 
@@ -371,6 +374,7 @@
     });
 </script>
 
+<script src="admin-dashboard.js"></script>
 
 </body>
 </html>
