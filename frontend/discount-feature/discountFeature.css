@@ -64,3 +64,128 @@
     gap: 12px;
     justify-content: center;
 } */ 
+body{
+    background-color: #F6F1EC;
+}
+
+.header {
+
+    color: #5a4634;
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.discount-section{
+    padding: 40px 20px;
+    background-color: #eadccf;
+}
+
+.discount-section h2{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #5a4634;
+    font-size: 28px;
+}
+
+.discount-grid{
+    /* display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto; */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 40px 80px;
+}
+
+.discount-card{
+    /* background-color: #e2d6ca;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    position: relative; */
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    text-align: center;
+    width: 320px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    /* border: 1px solid rgba(170, 142, 112, 0.15); */
+}
+
+.discount-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.discount-card h3{
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.starts-in{
+    font-weight: 600;
+    color: #5a4634;
+    background: #fceae4;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    margin-bottom: 8px;
+}
+
+.price{
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}
+.price s{
+    color: #999;
+    margin-right: 6px;
+}
+
+.price strong{
+    color: #5a4634;
+}
+
+.discount-card div{
+    color: #555;
+    font-size: 14px;
+}
+
+.claim-btn{
+    margin-top: 12px;
+    padding: 10px 16px;
+    background-color: #7d6b59;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.claim-btn:hover{
+    background-color: #5a4634;
+}
+
+.discount-card::before{
+    content: "!!!EXPIRING SOON!!!";
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #5a4634;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
