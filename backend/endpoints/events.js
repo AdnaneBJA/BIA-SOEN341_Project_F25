@@ -136,5 +136,44 @@ module.exports = (client) => {
             res.status(500).json({ error: "Database error" });
         }
     });
+    router.delete("/:eventID", async (req, res) => {
+        const { eventID } = req.params;
+
+        if (!eventID) {
+            return res.status(400).json({
+                error: "Event ID is required"
+            });
+        }
+
+        try {
+            const deleteTicketsSql = `
+                DELETE FROM public."Ticket"
+                WHERE "eventID" = $1;
+            `;
+            await client.query(deleteTicketsSql, [eventID]);
+
+            const deleteEventSql = `
+                DELETE FROM public."Events"
+                WHERE "eventID" = $1
+                RETURNING *;
+            `;
+            const result = await client.query(deleteEventSql, [eventID]);
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({
+                    error: "Event not found"
+                });
+            }
+
+            res.status(200).json({
+                message: "Event and associated tickets deleted successfully",
+                data: result.rows[0]
+            });
+        } catch (error) {
+            console.error("Database error:", error);
+            res.status(500).json({ error: "Database error while deleting event" });
+        }
+    });
+
     return router;
 };
