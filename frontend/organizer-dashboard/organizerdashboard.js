@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Update user status in navbar
     updateUserStatus();
 
+    checkOrganizerApprovalStatus()
+
     // Setup disconnect button
     const disconnectBtn = document.getElementById('disconnect-btn');
     if (disconnectBtn) {
@@ -131,6 +133,47 @@ function updateUserStatus(){
     }
 }
 
+function checkOrganizerApprovalStatus() {
+    const role = localStorage.getItem('role');
+    const approved = localStorage.getItem('organizerApproved');
+    const createEventBtn = document.getElementById('create-event-btn');
+    const approvalMessage = document.getElementById('approval-message');
+
+
+    console.log(`approval status: ${approved}, role: ${role}`);
+
+    if (role === 'Organizer' && approved === 'false') {
+        // Disable the create event button
+        if (createEventBtn) {
+            createEventBtn.disabled = true;
+            createEventBtn.style.opacity = '0.5';
+            createEventBtn.style.cursor = 'not-allowed';
+            createEventBtn.onclick = (e) => {
+                e.preventDefault();
+                return false;
+            };
+        }
+
+        // Show approval pending message
+        if (approvalMessage) {
+            approvalMessage.textContent = '⚠️ Waiting for admin to approve this account before being able to create events';
+            approvalMessage.style.display = 'block';
+        }
+    } else if (role === 'Organizer' && approved === 'true') {
+        // Enable the create event button
+        if (createEventBtn) {
+            createEventBtn.disabled = false;
+            createEventBtn.style.opacity = '1';
+            createEventBtn.style.cursor = 'pointer';
+        }
+
+        // Hide approval message
+        if (approvalMessage) {
+            approvalMessage.style.display = 'none';
+        }
+    }
+}
+
 async function fetchEvents() {
     try {
         const role = localStorage.getItem('role');
@@ -253,11 +296,7 @@ async function loadTicketsIssued(eventID){
         }
     });
 
-    dropzone.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => {
-        setFilename(fileInput.files && fileInput.files[0] ? fileInput.files[0].name : '');
-        clearResult();
-    });
+    // NOTE: No manual fileInput.click() here; the label[for] already opens the picker.
 
     async function decodeQrFromFile(file){
         const dataUrl = await new Promise((resolve, reject) => {
@@ -314,6 +353,26 @@ async function loadTicketsIssued(eventID){
         }
     }
 
+    // Auto-scan as soon as a file is picked
+    fileInput.addEventListener('change', async () => {
+        setFilename(fileInput.files && fileInput.files[0] ? fileInput.files[0].name : '');
+        clearResult();
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+        try {
+            const data = await decodeQrFromFile(file);
+            if (!data) {
+                setResult('Could not find a QR code in this image', false);
+                return;
+            }
+            await validateTicketById(data);
+        } catch (e) {
+            console.error('Auto-scan failed', e);
+            setResult('Failed to scan the QR image', false);
+        }
+    });
+
+    // Manual scan button remains available
     scanBtn.addEventListener('click', async () => {
         clearResult();
         const file = fileInput.files && fileInput.files[0];
@@ -327,7 +386,6 @@ async function loadTicketsIssued(eventID){
                 setResult('Could not find a QR code in this image', false);
                 return;
             }
-            // Our QR encodes the ticketID as a string
             await validateTicketById(data);
         } catch (e) {
             console.error('QR scan failed', e);

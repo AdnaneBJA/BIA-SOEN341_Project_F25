@@ -34,8 +34,10 @@
 
     <div class="action-buttons">
         <button class="btn-attendee" onclick="handleExport()">Export Attendee List</button>
-        <button class="btn-event" onclick="location.href = '../event-creation/EventCreationPage.html'">Create New Event</button>
+        <button class="btn-event" id="create-event-btn" onclick="location.href = '../event-creation/EventCreationPage.html'">Create New Event</button>
     </div>
+
+    <div id="approval-message" class="approval-message" style="display: none;"></div>
 
     <div class="dashboard-content">
         <select id="eventSelect"></select>
