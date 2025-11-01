@@ -1,27 +1,3 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import AdminOrganizations from '../admin-dashboard/organizationMod';
-
-// const container = document.getElementById('admin-root');
-// const root = createRoot(container);
-// root.render(<AdminOrganizations />);
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// document.addEventListener('DOMContentLoaded', () => {
-//     const btn = document.getElementById('manage-org-btn');
-//     const orgRoot = document.getElementById('org-root');
-//     if (btn && orgRoot) {
-//         btn.addEventListener('click', () => {
-//             orgRoot.style.display = 'block';
-//             if (!orgRoot.hasChildNodes()) {
-//                 const root = createRoot(orgRoot);
-//                 root.render(<AdminOrganizations />);
-//             }
-//         });
-//     }
-// });
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 function updateAdminUserStatus(){
     const statusEl = document.getElementById('user-status');
     const disconnectBtn = document.getElementById('disconnect-btn');
@@ -52,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const disconnectBtn = document.getElementById('disconnect-btn');
     if (disconnectBtn) {
         disconnectBtn.addEventListener('click', () => {
-            try { localStorage.clear(); } catch (e) { console.error('Failed to clear localStorage', e); }
-            updateAdminUserStatus();
-            setTimeout(() => location.reload(), 200);
+            logoutAdmin();
+            localStorage.clear();
+            alert('You have been logged out.');
+            window.location.href = '../main-page/mainpage.html';
         });
     }
 });
-
