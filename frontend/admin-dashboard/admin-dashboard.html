@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="admin-dashboard.css">
     <title>Admin Dashboard - BIA</title>
 
-    <script src="adminAuth.js"></script>
+    <script src="../admin-login/admin-login.js"></script>
     <script>
         // FYI, this makes the page inaccessible unless the admin is logged in
         protectAdminPage();
@@ -104,11 +104,9 @@
             <div class="card" style="margin-top:16px;">
                 <h2 style="margin-top:0;">Management</h2>
                 <div class="row" style="margin-top:12px;">
-                    <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Overview Organizer Dashboard</button>
                     <!-- additional button below!!!!!!!!-->
                      <button class="admin-btn" id="manage-org-btn">Manage Organizations</button>
                      <button class="admin-btn" id="assign-roles-btn">Assign Roles</button>
-                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles (maybe delete this)</button>
                 </div>
                 <!-- addition below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
                  <div id="org-root" style="display:none; margin-top:20px;"></div>
@@ -323,8 +321,8 @@
                     datasets: [{
                         label,
                         data: data.length ? data : [0],
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)', 
-                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
                         fill: type === 'line',
                         tension: 0.3
                     }]
