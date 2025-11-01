@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var { Client } = require("pg");
 var cors = require("cors");
+
 const path = require('path');
 const PORT = 3000;
 const createTables = require('./tables.js');
@@ -16,8 +17,8 @@ const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
 const createTicketsRoutes = require('./endpoints/tickets');
 const discountFeatureRoutes = require('./endpoints/discountFeature');
+const createOrganizersManagementRoutes = require('./endpoints/organizers');
 
-//app.use('/organizations', (req, res, next) => { req.db = client; next(); }, organizationModificationRoutes);
 
 //app.use('/', claimTickets());
 app.use(express.json());
@@ -57,6 +58,7 @@ app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
 app.use("/calendar", calendarRoutes);
 app.use(createTicketsRoutes(client));
+app.use("/organizers", createOrganizersManagementRoutes(client));
 app.use('/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
 app.use('/events', discountFeatureRoutes(client));
 
@@ -170,6 +172,17 @@ app.use('/organizations', (req, res, next) => {
     req.db = client;
     next();
 }, organizationModificationRoutes);
+
+//for admin role modifications
+const rolesModificationRoutes = require('./endpoints/rolesModification');
+app.use('/roles', (req, res, next) => {
+    req.db = client;  
+    next();
+}, rolesModificationRoutes);
+
+//for analytics
+const analyticsRouter = require('./endpoints/analytics');
+app.use('/analytics', analyticsRouter);
 
 // app.post('/events', async (req, res) => {
 //     try{

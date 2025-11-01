@@ -158,5 +158,25 @@ module.exports = (client) => {
     }
   });
 
+  //fetch the total number of tickets
+  router.get('/ticket/total', async (req, res) => {
+      //In future, add admin validation
+      // const adminID = req.params.id;
+      // if (!adminID) {
+      //   return res.status(400).json({ error: 'Admin ID is required' });
+      // }
+      try {
+          const result = await client.query('SELECT COUNT(*) AS count FROM public."Ticket";');
+          return res.status(200).json({
+            message: "Retrieving total number of tickets",
+            ticketCount : Number(result.rows[0].count)
+          });
+
+      } catch (error){
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Database error" });
+      }
+  });
+
   return router;
 };

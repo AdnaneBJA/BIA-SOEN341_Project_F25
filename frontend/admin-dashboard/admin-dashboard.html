@@ -8,20 +8,28 @@
     <link rel="stylesheet" href="admin-dashboard.css">
     <title>Admin Dashboard - BIA</title>
 
+    <script src="adminAuth.js"></script>
+    <script>
+        // FYI, this makes the page inaccessible unless the admin is logged in
+        protectAdminPage();
+    </script>
+
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
 </head>
 <body>
+
+    <!--For the charts-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <nav class="menu-bar">
         <div class="menu-left">
             <span class="menu-logo"><b>BIA</b></span>
         </div>
         <div class="menu-center">
             <a href="../main-page/mainpage.html">Home</a>
-            <a href="../event-discovery/event-discovery.html">Events</a>
-            <a href="../main-page/tickets.html">Tickets</a>
         </div>
         <div class="menu-right">
             <div class="menu-status">
@@ -39,13 +47,13 @@
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 style="margin-top:0;">Quick Actions</h2>
                 <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <button onclick="location.href='../signup/sign-up-page.html'">Approve Organizer</button>
-                    <button onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Moderate Event Listing</button>
+                    <button onclick="location.href='../approve-organizer-page/approve-organizer.html'">Approve Organizer</button>
+                    <button onclick="location.href='../moderate-event-listing/moderate-event-listing.html'">Moderate Event Listing</button>
                 </div>
             </div>
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
-                <h2 style="margin-top:0;">Platform Statistics (hardcoded for the moment)</h2>
+                <h2 style="margin-top:0;">Platform Statistics</h2>
                 <table style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="text-align:left; border-bottom:2px solid #eaded3;">
@@ -54,25 +62,43 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- CHANGE VALUES -->
                         <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Total Organizers</td>
-                            <td style="padding:8px">12</td>
-                        </tr>
-                        <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Active Events</td>
-                            <td style="padding:8px">34</td>
-                        </tr>
-                        <tr>
                             <td style="padding:8px">Tickets Issued</td>
-                            <td style="padding:8px">1,248</td>
+                            <td style="padding:8px"><span id="totalTickets">0</span></td>
                         </tr>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Total Events</td>
+                            <td style="padding:8px"><span id="totalEvents">0</span></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Total Participants</td>
+                            <td style="padding:8px"><span id="totalParticipants">0</span></td>
+                        </tr>
+                        <!-- <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Active Events</td>
+                            <td id="totalEventsValue" style="padding:8px">Loading…</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Tickets Issued</td>
+                            <td id="totalTicketsValue" style="padding:8px">Loading…</td>
+                        </tr> -->
                     </tbody>
                 </table>
+                
             </div>
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
                 <h2 style="margin-top:0;">Participation trends</h2>
-                <p>[we should have a table or graph containing the participation trends inside this box]</p>
+                <!-- Additional analytics-->
+                <section id="analytics" style="padding: 2rem;"></section>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: start;">
+                    <canvas id="ticketsChart" style="max-width: 300px; height: 150px; margin-bottom: 2rem; margin-right: 40px"></canvas>
+                    <canvas id="participationChart" style="max-width: 300px; height: 150px;"></canvas>
+                </div>
+                    
+                </section>
+                <!-------------------------->
             </div>
 
             <div class="card" style="margin-top:16px;">
@@ -81,7 +107,8 @@
                     <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Overview Organizer Dashboard</button>
                     <!-- additional button below!!!!!!!!-->
                      <button class="admin-btn" id="manage-org-btn">Manage Organizations</button>
-                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles</button>
+                     <button class="admin-btn" id="assign-roles-btn">Assign Roles</button>
+                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles (maybe delete this)</button>
                 </div>
                 <!-- addition below !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
                  <div id="org-root" style="display:none; margin-top:20px;"></div>
@@ -97,7 +124,7 @@
         </div>
     </footer>
 
-    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ORGANIZATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
   
     <script type="text/babel">
         function AdminOrganizations() {
@@ -180,6 +207,185 @@
         });
     </script>
 
+  <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ROLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <script type="text/babel">
+        function RoleManager() {
+            const [userId, setUserId] = React.useState('');
+            const [role, setRole] = React.useState('Student');
+            const [message, setMessage] = React.useState('');
+            const [messageType, setMessageType] = React.useState(''); 
+
+            async function handleAssign() {
+                if (!userId) {
+                    setMessageType('error');
+                    setMessage('Please enter a user ID.');
+                    return;
+                }
+
+                const res = await fetch('http://localhost:3000/roles/assign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, newRole: role, username: `${userId}`, password: `${userId}`})
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    setMessageType('success');
+                    setMessage(data.message || 'Role assigned successfully!');
+                } else {
+                    setMessageType('error');
+                    setMessage(data.error || 'Failed to assign role.');
+                }
+
+                // Clear message after 5 seconds
+                setTimeout(() => setMessage(''), 5000);
+            }
+
+            async function handleRevoke() {
+                if (!userId) {
+                    setMessageType('error');
+                    setMessage('Please enter a user ID.');
+                    return;
+                }
+
+                const res = await fetch(`http://localhost:3000/roles/revoke/${userId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    setMessageType('success');
+                    setMessage(data.message || 'Role revoked successfully!');
+                } else {
+                    setMessageType('error');
+                    setMessage(data.error || 'Failed to revoke role.');
+                }
+
+                // Clear message after 5 seconds
+                setTimeout(() => setMessage(''), 5000);
+            }
+
+            return (
+                <div style={{marginTop: '20px'}}>
+                    <h2>Assign or Revoke Roles</h2>
+                    <input
+                        type="number"
+                        placeholder="User ID"
+                        value={userId}
+                        onChange={e => setUserId(e.target.value)}
+                        style={{marginRight: '8px'}}
+                    />
+                    <select value={role} onChange={e => setRole(e.target.value)}>
+                        <option value="Student">Student</option>
+                        <option value="Organizer">Organizer</option>
+                        <option value="Admin">Administrator</option>
+                    </select>
+                    <div style={{marginTop: '10px'}}>
+                        <button onClick={handleAssign}>Assign Role</button>
+                        <button onClick={handleRevoke} style={{marginLeft: '10px'}}>Revoke Role</button>
+                    </div>
+
+                    {message && (
+                        <p
+                            style={{
+                                marginTop: '10px',
+                                color: messageType === 'success' ? 'green' : 'red',
+                                fontWeight: 'bold',
+                                transition: 'opacity 0.3s ease'
+                            }}
+                        >
+                            {message}
+                        </p>
+                    )}
+                </div>
+            );
+        }
+
+
+        
+        document.getElementById('assign-roles-btn').addEventListener('click', function() {
+            const orgRoot = document.getElementById('org-root');
+            orgRoot.style.display = 'block';
+            ReactDOM.createRoot(orgRoot).render(<RoleManager />);
+        });
+    </script>
+
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANALYTICS AND CHARTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const baseUrl = 'http://localhost:3000/analytics'; 
+
+        function createChart(ctx, type, labels, data, label) {
+            return new Chart(ctx, {
+                type,
+                data: {
+                    labels: labels.length ? labels : ['No data'],
+                    datasets: [{
+                        label,
+                        data: data.length ? data : [0],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        fill: type === 'line',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+        }
+
+        try {
+            //For the Summary
+            const summary = await fetch(`${baseUrl}/summary`).then(res => res.json());
+            document.getElementById('totalEvents').textContent = summary.totalEvents;
+            document.getElementById('totalTickets').textContent = summary.totalTickets;
+            document.getElementById('totalParticipants').textContent = summary.totalParticipants;
+
+            // For the Ticket trends
+            const ticketData = await fetch(`${baseUrl}/tickets/monthly`).then(res => res.json());
+            const ticketLabels = ticketData.map(row => new Date(row.month).toLocaleString('default', { month: 'short', year: 'numeric' }));
+            const ticketCounts = ticketData.map(row => parseInt(row.tickets_sold));
+
+            createChart(
+                document.getElementById('ticketsChart'),
+                'line',
+                ticketLabels,
+                ticketCounts,
+                'Tickets Sold per Month'
+            );
+
+            // For the Participation by event type 
+            const participationData = await fetch(`${baseUrl}/participation/type`).then(res => res.json());
+            const typeLabels = participationData.map(row => row.eventType || 'Unknown');
+            const participantCounts = participationData.map(row => parseInt(row.participants));
+
+            createChart(
+                document.getElementById('participationChart'),
+                'bar',
+                typeLabels,
+                participantCounts,
+                'Participants per Event Type'
+            );
+
+        } catch (err) {
+            console.error('Error loading analytics:', err);
+        }
+    });
+</script>
+
+    <!-- IF USING ADMIN-DASHBOARD-PLAIN FUNCTIONS
+<script src="./admin-dashboard-plain.js" defer></script> -->
+<script src="admin-dashboard.js"></script>
 
 </body>
 </html>
