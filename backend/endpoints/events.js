@@ -121,6 +121,21 @@ module.exports = (client) => {
         }
     });
 
+    router.get("/total", async (req, res) => {
+        //add validation for admin: If (adminID) ... else error
+        try {
+            const sql = 'SELECT COUNT(*) AS count FROM public."Events"';
+            const result = await client.query(sql);
+
+            res.status(200).json({
+                message: "Retrieving total number of events",
+                data: Number(result.rows[0].count)
+            });
+        } catch (error) {
+            console.error("Database error:", error);
+            res.status(500).json({ error: "Database error" });
+        }
+    });
     router.delete("/:eventID", async (req, res) => {
         const { eventID } = req.params;
 

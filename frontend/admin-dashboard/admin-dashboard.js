@@ -19,6 +19,9 @@ function updateAdminUserStatus(){
     }
 }
 
+// // expose on window for non-module consumers
+// try { window.fetchTotalEvents = fetchTotalEvents; } catch (e) { /* ignore */ }
+
 document.addEventListener('DOMContentLoaded', () => {
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -35,3 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// // retrieve total active events
+// export async function fetchTotalEvents() {
+//   try {
+//     const resp = await fetch('http://localhost:3000/events/total'); 
+//     if (!resp.ok) throw new Error('Network response was not ok');
+//     const body = await resp.json();
+//     let count = Number(body.data ?? 0);
+//     if (!Number.isFinite(count)) count = 0;
+//     document.getElementById('totalEventsValue').textContent = count.toLocaleString();
+//   } catch (e) {
+//     console.error('Failed to load total events', e);
+//     document.getElementById('totalEventsValue').textContent = '—';
+//   }
+// }
+
