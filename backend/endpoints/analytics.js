@@ -37,7 +37,7 @@ router.get('/tickets/monthly', async (req, res) => {
 router.get('/participation/type', async (req, res) => {
   try {
     const result = await client.query(`
-      SELECT e."eventType", COUNT(DISTINCT b."studentID") AS participants
+      SELECT e."eventType" AS "eventType", COUNT(DISTINCT b."studentID") AS participants
       FROM "Booking" b
       JOIN "Events" e ON b."eventID" = e."eventID"
       GROUP BY e."eventType";
