@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { generateICS } = require("./calendarUtils");
-const client = require("../server");
+const client = require("../db");
 
 router.get("/:eventID", async (req, res) => {
   const { eventID } = req.params;
