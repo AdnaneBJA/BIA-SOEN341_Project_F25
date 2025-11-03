@@ -1,11 +1,11 @@
 const { Parser } = require('@json2csv/plainjs');
 
-
 require('dotenv').config();
 var express = require("express");
 var app = express();
 var { Client } = require("pg");
 var cors = require("cors");
+
 const path = require('path');
 const PORT = 3000;
 const createTables = require('./tables.js');
@@ -16,8 +16,11 @@ const createLoginRoutes = require("./endpoints/login");
 const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
 const createTicketsRoutes = require('./endpoints/tickets');
+const discountFeatureRoutes = require('./endpoints/discountFeature');
+const createOrganizersManagementRoutes = require('./endpoints/organizers');
 
 
+//app.use('/', claimTickets());
 app.use(express.json());
 app.use(
     cors({
@@ -55,7 +58,9 @@ app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
 app.use("/calendar", calendarRoutes);
 app.use(createTicketsRoutes(client));
+app.use("/organizers", createOrganizersManagementRoutes(client));
 app.use('/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
+app.use('/events', discountFeatureRoutes(client));
 
 function toCsv(attendees) {
     const parser = new Parser({
@@ -161,6 +166,41 @@ app.get('/export-attendees', async (req, res) => {
     }
 });
 
+//for admin modifications of organizations
+const organizationModificationRoutes = require('./endpoints/organizationModification');
+app.use('/organizations', (req, res, next) => {
+    req.db = client;
+    next();
+}, organizationModificationRoutes);
+
+//for admin role modifications
+const rolesModificationRoutes = require('./endpoints/rolesModification');
+app.use('/roles', (req, res, next) => {
+    req.db = client;  
+    next();
+}, rolesModificationRoutes);
+
+//for analytics
+const analyticsRouter = require('./endpoints/analytics');
+app.use('/analytics', analyticsRouter);
+
+// app.post('/events', async (req, res) => {
+//     try{
+//         const{ eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization} = req.body;
+//         const insertQuery = `
+//             INSERT INTO public."Events" 
+//             ("eventID", "eventName", "organizerID", "eventType", "startTime", "endTime", "location", "maxParticipants", "currentParticipants", "eventPrices", "eventDescription", "organizerUserName", "Organization") 
+//             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
+//         `;
+//         const values = [eventID, eventName, organizerID, eventType, startTime, endTime, location, maxParticipants, currentParticipants, eventPrices, eventDescription, organizerUserName, Organization];
+
+//         const result = await client.query(insertQuery, values);
+//         res.status(201).json(result.rows[0]);
+//     }catch (err) {
+//         console.error('Error creating event:', err);
+//         res.status(500).json({ error: 'Server error' });
+//     }
+// });
 
 app.listen(PORT, (err) => {
     if (err) {

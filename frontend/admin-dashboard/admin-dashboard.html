@@ -7,16 +7,27 @@
     <link rel="stylesheet" href="../main-page/mainpage.css">
     <link rel="stylesheet" href="admin-dashboard.css">
     <title>Admin Dashboard - BIA</title>
+
+    <script src="../admin-login/admin-login.js"></script>
+    <script>
+        // FYI, this makes the page inaccessible unless the admin is logged in
+        protectAdminPage();
+    </script>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
+
     <nav class="menu-bar">
         <div class="menu-left">
             <span class="menu-logo"><b>BIA</b></span>
         </div>
         <div class="menu-center">
             <a href="../main-page/mainpage.html">Home</a>
-            <a href="../event-discovery/event-discovery.html">Events</a>
-            <a href="../main-page/tickets.html">Tickets</a>
         </div>
         <div class="menu-right">
             <div class="menu-status">
@@ -27,20 +38,20 @@
     </nav>
 
     <main class="center-content hero" style="margin-top:40px; gap:12px;">
-        <h1>Admin Dashboard (MOCK page for the moment)</h1>
+        <h1>Admin Dashboard</h1>
         <p class="subtitle">Welcome to the admin area. Manage organizers, review events, and view platform analytics.</p>
 
-        <section style="width:90%; max-width:1000px; margin-top:18px;">
+        <section style="width:95%; max-width:1400px; margin-top:18px;">
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 style="margin-top:0;">Quick Actions</h2>
                 <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <button onclick="location.href='../signup/sign-up-page.html'">Approve Organizer</button>
-                    <button onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Moderate Event Listing</button>
+                    <button onclick="location.href='../approve-organizer-page/approve-organizer.html'">Approve Organizer</button>
+                    <button onclick="location.href='../moderate-event-listing/moderate-event-listing.html'">Moderate Event Listing</button>
                 </div>
             </div>
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
-                <h2 style="margin-top:0;">Platform Statistics (hardcoded for the moment)</h2>
+                <h2 style="margin-top:0;">Platform Statistics</h2>
                 <table style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="text-align:left; border-bottom:2px solid #eaded3;">
@@ -50,16 +61,16 @@
                     </thead>
                     <tbody>
                         <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Total Organizers</td>
-                            <td style="padding:8px">12</td>
+                            <td style="padding:8px">Tickets Issued</td>
+                            <td style="padding:8px"><span id="totalTickets">0</span></td>
                         </tr>
                         <tr style="border-bottom:1px solid #f0eaea;">
-                            <td style="padding:8px">Active Events</td>
-                            <td style="padding:8px">34</td>
+                            <td style="padding:8px">Total Events</td>
+                            <td style="padding:8px"><span id="totalEvents">0</span></td>
                         </tr>
-                        <tr>
-                            <td style="padding:8px">Tickets Issued</td>
-                            <td style="padding:8px">1,248</td>
+                        <tr style="border-bottom:1px solid #f0eaea;">
+                            <td style="padding:8px">Total Participants</td>
+                            <td style="padding:8px"><span id="totalParticipants">0</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -67,15 +78,19 @@
 
             <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
                 <h2 style="margin-top:0;">Participation trends</h2>
-                <p>[we should have a table or graph containing the participation trends inside this box]</p>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: start;">
+                    <canvas id="ticketsChart" style="max-width: 300px; height: 150px; margin-bottom: 2rem; margin-right: 40px"></canvas>
+                    <canvas id="participationChart" style="max-width: 300px; height: 150px;"></canvas>
+                </div>
             </div>
 
-            <div class="card" style="margin-top:16px;">
+            <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-top:16px;">
                 <h2 style="margin-top:0;">Management</h2>
-                <div class="row" style="margin-top:12px;">
-                    <button class="admin-btn" onclick="location.href='../organizer-dashboard/organizerdashboard.html'">Manage Organizations</button>
-                    <button class="admin-btn" onclick="alert('Assign roles UI placeholder')">Assign Roles</button>
+                <div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap;">
+                     <button class="admin-btn" id="manage-org-btn">Manage Organizations</button>
+                     <button class="admin-btn" id="assign-roles-btn">Assign Roles</button>
                 </div>
+                 <div id="org-root" style="display:none; margin-top:20px;"></div>
             </div>
         </section>
     </main>
@@ -88,7 +103,9 @@
         </div>
     </footer>
 
-    <!-- Admin page script -->
+    <!-- External JavaScript files -->
+    <script type="text/babel" src="admin-dashboard-react.js"></script>
     <script src="admin-dashboard.js"></script>
+
 </body>
 </html>

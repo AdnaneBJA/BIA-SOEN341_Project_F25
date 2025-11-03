@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderate Event Listings</title>
+    <link rel="stylesheet" href="moderate-event-listing.css">
+    <script src="moderate-event-listing.js" defer></script>
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../admin-dashboard/admin-dashboard.html">Return to Dashboard</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Moderate Event Listings</h1>
+            <p class="subtitle">Review and remove events that violate moderation policies</p>
+        </div>
+
+        <div class="events-container">
+            <div id="loading-message" class="loading-message">Loading events...</div>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="events-list" class="events-list"></div>
+        </div>
+    </div>
+</body>
+</html>

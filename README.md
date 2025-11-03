@@ -65,6 +65,8 @@ The additional feature will be a flexible pricing option for last minute ticket 
 1. Javascript<br>
 2. HTML<br>
 3. CSS<br>
-
 4. PostgreSQL<br>
+
+## System Architecture
+<img width="1051" height="905" alt="Image" src="https://github.com/user-attachments/assets/ac503012-9016-4498-b8e0-0f4701b30d72" />
 

@@ -10,10 +10,103 @@ body{
     background-color: var(--bg);
     color: var(--text);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.menu-bar{
+.menu-bar {
     background-color: var(--primary);
+    overflow: hidden;
+    padding: 10px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.menu-left { justify-self: start; }
+.menu-right { justify-self: end; }
+.menu-center {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-center a {
+    color: #000000;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-center a:hover { background-color: var(--accent); }
+
+.menu-logo {
+    font-weight: bold;
+    font-size: 1.8em;
+    margin-left: 14px;
+    letter-spacing: 2px;
+}
+
+.menu-status {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#user-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000;
+    font-size: 0.95em;
+}
+
+.disconnect-btn {
+    margin-left: 12px;
+    background: #ffffff;
+    color: #333;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.disconnect-btn:hover {
+    background-color: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.status-label {
+    color: #333;
+    font-weight: 600;
+}
+
+.status-username {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 4px 10px;
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    font-weight: 600;
+}
+
+.role-badge {
+    background: rgba(170, 142, 112, 0.12);
+    color: #5a4634;
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
 }
 
 .center-panel{
@@ -78,4 +171,3 @@ body{
 .column{ display:flex; flex-direction:column; gap:8px; }
 
 .footer .footer-inner{ justify-content: space-between; }
-
