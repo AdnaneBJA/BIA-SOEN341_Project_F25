@@ -262,7 +262,7 @@ function RoleManager() {
         const res = await fetch('http://localhost:3000/roles/assign', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, newRole: role })
+            body: JSON.stringify({ userId, currentRole: role })
         });
 
         const data = await res.json();
@@ -333,6 +333,9 @@ function RoleManager() {
                 <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#5a4634', fontSize: '1.15em' }}>
                     User Role Management
                 </h3>
+                <p style={{ marginTop: 0, marginBottom: '16px', color: '#6b5a49', fontSize: '0.95em' }}>
+                    Select the user's current role below. On Assign, they will be converted to the opposite role (Student ⇄ Organizer).
+                </p>
 
                 <div style={{
                     display: 'grid',
@@ -366,7 +369,7 @@ function RoleManager() {
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <label style={{ fontWeight: '600', color: '#5a4634', fontSize: '0.95em' }}>
-                            Role *
+                            Current Role *
                         </label>
                         <select
                             value={role}
@@ -386,7 +389,6 @@ function RoleManager() {
                         >
                             <option value="Student">Student</option>
                             <option value="Organizer">Organizer</option>
-                            <option value="Admin">Administrator</option>
                         </select>
                     </div>
                 </div>

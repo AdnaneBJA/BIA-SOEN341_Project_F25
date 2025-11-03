@@ -1,108 +1,92 @@
 const express = require('express');
 const router = express.Router();
 
+const roleMappings = {
+  admin: { table: '"Admin"', idCol: '"adminID"', userCol: '"adminUserName"', passCol: '"adminPassword"' },
+  organizer: { table: '"Organizer"', idCol: '"organizerID"', userCol: '"organizerUserName"', passCol: '"organizerPassword"' },
+  student: { table: '"Student"', idCol: '"studentID"', userCol: '"studentUserName"', passCol: '"studentPassword"' }
+};
+
+function oppositeRole(role) {
+  const r = String(role || '').toLowerCase();
+  if (r === 'student') return 'organizer';
+  if (r === 'organizer') return 'student';
+  return null;
+}
 
 router.post('/assign', async (req, res) => {
-  let { userId, newRole } = req.body;
-
-  newRole = newRole.toLowerCase();
+  // Contract: selected role in UI is the CURRENT role; convert to the opposite (Student <-> Organizer)
+  let { userId, currentRole, newRole } = req.body;
 
   try {
-    // Define table mappings
-    const roleMappings = {
-      'admin': { table: '"Admin"', idCol: '"adminID"', userCol: '"adminUserName"', passCol: '"adminPassword"' },
-      'organizer': { table: '"Organizer"', idCol: '"organizerID"', userCol: '"organizerUserName"', passCol: '"organizerPassword"' },
-      'student': { table: '"Student"', idCol: '"studentID"', userCol: '"studentUserName"', passCol: '"studentPassword"' }
-    };
+    if (!userId) return res.status(400).json({ error: 'userId is required' });
 
-    if (!roleMappings[newRole]) {
-      return res.status(400).json({ error: 'Invalid role specified' });
+    let targetRoleKey;
+    let sourceRoleKey;
+
+    if (newRole) {
+      targetRoleKey = String(newRole).toLowerCase();
+      if (!['student','organizer'].includes(targetRoleKey)) {
+        return res.status(400).json({ error: 'Only Student/Organizer conversion is supported.' });
+      }
+      const maybeSourceA = targetRoleKey === 'student' ? 'organizer' : 'student';
+      const srcProbe = await req.db.query(`SELECT 1 FROM ${roleMappings[maybeSourceA].table} WHERE ${roleMappings[maybeSourceA].idCol} = $1`, [userId]);
+      if (srcProbe.rows.length === 0) {
+        return res.status(404).json({ error: `${maybeSourceA.charAt(0).toUpperCase()+maybeSourceA.slice(1)} with ID ${userId} was not found.` });
+      }
+      sourceRoleKey = maybeSourceA;
+    } else {
+      sourceRoleKey = String(currentRole || '').toLowerCase();
+      if (!['student','organizer'].includes(sourceRoleKey)) {
+        return res.status(400).json({ error: 'Select current role as Student or Organizer to convert.' });
+      }
+      targetRoleKey = sourceRoleKey === 'student' ? 'organizer' : 'student';
     }
 
-    const targetRole = roleMappings[newRole];
+    const sourceRole = roleMappings[sourceRoleKey];
+    const targetRole = roleMappings[targetRoleKey];
 
-    // Check if user exists in other role tables and get their credentials
-    let sourceRole = null;
-    let sourceUsername = null;
-    let sourcePassword = null;
-    let sourceRoleName = null;
+    const src = await req.db.query(
+      `SELECT ${sourceRole.idCol} AS id, ${sourceRole.userCol} AS username, ${sourceRole.passCol} AS password FROM ${sourceRole.table} WHERE ${sourceRole.idCol} = $1`,
+      [userId]
+    );
+    if (src.rows.length === 0) {
+      return res.status(404).json({ error: `${sourceRoleKey.charAt(0).toUpperCase()+sourceRoleKey.slice(1)} with ID ${userId} was not found.` });
+    }
+    const { username, password } = src.rows[0];
 
-    for (const [roleName, roleData] of Object.entries(roleMappings)) {
-      const checkInRole = await req.db.query(
-        `SELECT ${roleData.idCol}, ${roleData.userCol}, ${roleData.passCol} FROM ${roleData.table} WHERE ${roleData.idCol} = $1`,
-        [userId]
-      );
-
-      if (checkInRole.rows.length > 0) {
-        // User found in this role table
-        if (roleName === newRole) {
-          // User already has the target role
-          return res.status(400).json({
-            error: `User with ID ${userId} already exists as a ${newRole}`
-          });
-        } else {
-          // User found in a different role table - prepare for conversion
-          sourceRole = roleData;
-          sourceRoleName = roleName;
-          const row = checkInRole.rows[0];
-
-          // Debug: Log all available keys in the row object
-          console.log('Available keys in row:', Object.keys(row));
-          console.log('Full row data:', row);
-
-          // PostgreSQL returns column names in lowercase by default
-          // We need to find the actual keys in the returned object
-          const allKeys = Object.keys(row);
-
-          // Find username and password keys (they should be lowercase versions)
-          const usernameKey = allKeys.find(k => k.toLowerCase().includes('username'));
-          const passwordKey = allKeys.find(k => k.toLowerCase().includes('password'));
-
-          if (!usernameKey || !passwordKey) {
-            console.error('Could not find username/password keys in row:', allKeys);
-            return res.status(500).json({ error: 'Database schema mismatch' });
-          }
-
-          sourceUsername = row[usernameKey];
-          sourcePassword = row[passwordKey];
-
-          console.log(`Converting user from ${roleName}:`, {
-            userId,
-            sourceUsername,
-            sourcePassword,
-            usernameKey,
-            passwordKey
-          });
-          break;
-        }
+    if (sourceRoleKey === 'organizer') {
+      const eventsCheck = await req.db.query('SELECT 1 FROM "Events" WHERE "organizerID" = $1 LIMIT 1', [userId]);
+      if (eventsCheck.rows.length > 0) {
+        return res.status(400).json({ error: 'Cannot convert Organizer who still has assigned events.' });
       }
     }
 
-    if (!sourceRole) {
-      return res.status(404).json({
-        error: `User with ID ${userId} not found in any role table. Please create the user first.`
-      });
+    const tgtUsernameExists = await req.db.query(
+      `SELECT 1 FROM ${targetRole.table} WHERE ${targetRole.userCol} = $1`,
+      [username]
+    );
+    if (tgtUsernameExists.rows.length > 0) {
+      return res.status(400).json({ error: `Cannot convert because username "${username}" already exists in ${targetRoleKey} table.` });
     }
 
-    // Insert into the target role table with the source credentials
-    await req.db.query(
-      `INSERT INTO ${targetRole.table} (${targetRole.idCol}, ${targetRole.userCol}, ${targetRole.passCol}) VALUES ($1, $2, $3)`,
-      [userId, sourceUsername, sourcePassword]
+    // Insert into target with same credentials, let ID be generated
+    const insertRes = await req.db.query(
+      `INSERT INTO ${targetRole.table} (${targetRole.userCol}, ${targetRole.passCol}) VALUES ($1, $2) RETURNING ${targetRole.idCol} AS id`,
+      [username, password]
     );
+    const newId = insertRes.rows[0]?.id;
 
-    // Delete from source role table (converting the user)
-    await req.db.query(
-      `DELETE FROM ${sourceRole.table} WHERE ${sourceRole.idCol} = $1`,
-      [userId]
-    );
+    // Remove from source
+    await req.db.query(`DELETE FROM ${sourceRole.table} WHERE ${sourceRole.idCol} = $1`, [userId]);
 
-    res.status(200).json({
-      message: `${sourceRoleName.charAt(0).toUpperCase() + sourceRoleName.slice(1)} with ID ${userId} successfully became a ${newRole}`
+    return res.status(200).json({
+      message: `${sourceRoleKey.charAt(0).toUpperCase()+sourceRoleKey.slice(1)} with ID ${userId} successfully became a ${targetRoleKey} with new ID ${newId}`,
+      newId
     });
-
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to assign role: ' + error.message });
+    return res.status(500).json({ error: 'Failed to assign role: ' + error.message });
   }
 });
 
@@ -129,7 +113,7 @@ router.delete('/revoke/:userId', async (req, res) => {
 
       // Check if organizer has events
       const eventsCheck = await req.db.query(
-        'SELECT * FROM "Events" WHERE "organizerID" = $1',
+        'SELECT 1 FROM "Events" WHERE "organizerID" = $1 LIMIT 1',
         [userId]
       );
       if (eventsCheck.rows.length > 0) {
