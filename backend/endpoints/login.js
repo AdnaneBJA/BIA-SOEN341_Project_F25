@@ -1,7 +1,8 @@
 const express = require("express");
-const app = express.Router();
 
 module.exports = (client) => {
+    const app = express.Router();
+
     app.get("/", (req, res) => {
         res.send("LOGIN ENDPOINT HIT");
     })
@@ -13,6 +14,7 @@ module.exports = (client) => {
             res.status(400).json({
                 error: "Username and password are required.",
             })
+            return;
         }
 
         let queryOrganizerTable = `SELECT *

@@ -1,8 +1,9 @@
 const express = require("express");
-const app = express.Router();
 
 module.exports = (client) => {
-    app.get("/", async (req, res) => {
+    const router = express.Router();
+
+    router.get("/", async (req, res) => {
         try {
             const query = `
                 SELECT "organizerID", "organizerUserName", "approved"
@@ -18,7 +19,7 @@ module.exports = (client) => {
         }
     });
 
-    app.post("/toggle-approval", async (req, res) => {
+    router.post("/toggle-approval", async (req, res) => {
         const { organizerID, approved } = req.body;
 
         if (!organizerID || typeof approved !== 'boolean') {
@@ -56,6 +57,5 @@ module.exports = (client) => {
         }
     });
 
-    return app;
+    return router;
 };
-
