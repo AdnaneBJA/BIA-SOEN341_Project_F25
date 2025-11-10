@@ -11,33 +11,55 @@ module.exports = (client) => {
             const now = new Date();
             const eventsWithDiscounts = result.rows.map(event => {
                 const eventData = { ...event };
+                const originalPrice = Number(event.eventPrices) || 0;
                 
                 // Only calculate discount if enabled and event is in the future
-                if (event.lastMinuteDiscountEnabled && event.eventPrices > 0) {
+                if (event.lastMinuteDiscountEnabled && originalPrice > 0 && event.startTime) {
                     const eventStart = new Date(event.startTime);
                     const hoursUntilStart = (eventStart - now) / (1000 * 60 * 60);
                     
-                    // Use custom discount settings from database
-                    const customDiscountPercent = event.discountPercentage || 25;
-                    const customTimeWindowHours = event.discountTimeWindowHours || 48;
+                    let discountPercent = 0;
+                    let hasDiscount = false;
                     
-                    // Check if within the custom time window (in hours)
-                    if (hoursUntilStart > 0 && hoursUntilStart <= customTimeWindowHours) {
-                        const originalPrice = Number(event.eventPrices) || 0;
-                        const discountedPrice = Math.round(originalPrice * (100 - customDiscountPercent) / 100 * 100) / 100;
+                    // Use custom discount settings if provided, otherwise use legacy logic
+                    if (event.discountPercentage !== null && event.discountPercentage !== undefined && 
+                        event.discountTimeWindowHours !== null && event.discountTimeWindowHours !== undefined) {
+                        // Custom discount settings
+                        const customDiscountPercent = event.discountPercentage;
+                        const customTimeWindowHours = event.discountTimeWindowHours;
                         
+                        // Check if within the custom time window (in hours)
+                        if (hoursUntilStart > 0 && hoursUntilStart <= customTimeWindowHours) {
+                            discountPercent = customDiscountPercent;
+                            hasDiscount = true;
+                        }
+                    } else {
+                        // Legacy hardcoded logic for backward compatibility
+                        const daysUntilStart = Math.ceil(hoursUntilStart / 24);
+                        if (hoursUntilStart > 0 && hoursUntilStart <= 48) { // 2 days = 48 hours
+                            if (daysUntilStart <= 1) {
+                                discountPercent = 50;
+                                hasDiscount = true;
+                            } else if (daysUntilStart <= 2) {
+                                discountPercent = 25;
+                                hasDiscount = true;
+                            }
+                        }
+                    }
+                    
+                    if (hasDiscount) {
                         eventData.originalPrice = originalPrice;
-                        eventData.discountedPrice = discountedPrice;
-                        eventData.discountPercent = customDiscountPercent;
+                        eventData.discountedPrice = Math.round(originalPrice * (100 - discountPercent) / 100 * 100) / 100;
+                        eventData.discountPercent = discountPercent;
                         eventData.hasDiscount = true;
                     } else {
-                        eventData.originalPrice = Number(event.eventPrices) || 0;
-                        eventData.discountedPrice = Number(event.eventPrices) || 0;
+                        eventData.originalPrice = originalPrice;
+                        eventData.discountedPrice = originalPrice;
                         eventData.hasDiscount = false;
                     }
                 } else {
-                    eventData.originalPrice = Number(event.eventPrices) || 0;
-                    eventData.discountedPrice = Number(event.eventPrices) || 0;
+                    eventData.originalPrice = originalPrice;
+                    eventData.discountedPrice = originalPrice;
                     eventData.hasDiscount = false;
                 }
                 

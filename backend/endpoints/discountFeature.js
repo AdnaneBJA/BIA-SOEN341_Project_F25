@@ -24,15 +24,26 @@ router.get('/discounts', async (req, res) => {
             const hoursUntilStart = (start - now) / (1000 * 60 * 60);
             const daysUntilStart = Math.ceil(hoursUntilStart / 24);
             
-            // Use custom discount settings from database
-            const customDiscountPercent = r.discountPercentage || 25;
-            const customTimeWindowHours = r.discountTimeWindowHours || 48;
-            
             let discountPercent = 0;
             
-            // Check if within the custom time window
-            if (hoursUntilStart > 0 && hoursUntilStart <= customTimeWindowHours) {
-                discountPercent = customDiscountPercent;
+            // Use custom discount settings if provided, otherwise fall back to legacy hardcoded logic
+            if (r.discountPercentage !== null && r.discountPercentage !== undefined && 
+                r.discountTimeWindowHours !== null && r.discountTimeWindowHours !== undefined) {
+                // Custom discount settings
+                const customDiscountPercent = r.discountPercentage;
+                const customTimeWindowHours = r.discountTimeWindowHours;
+                
+                // Check if within the custom time window
+                if (hoursUntilStart > 0 && hoursUntilStart <= customTimeWindowHours) {
+                    discountPercent = customDiscountPercent;
+                }
+            } else {
+                // Legacy hardcoded logic for backward compatibility (used by tests)
+                if (daysUntilStart <= 1) {
+                    discountPercent = 50;
+                } else if (daysUntilStart <= 2) {
+                    discountPercent = 25;
+                }
             }
 
             const remainingCapacity = (r.maxParticipants == null) ? null : Math.max(0, (r.maxParticipants - (r.currentParticipants || 0)));
