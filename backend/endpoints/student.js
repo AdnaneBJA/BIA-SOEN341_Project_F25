@@ -1,8 +1,9 @@
 const express = require("express");
 const path = require('path');
-const router = express.Router();
 
 module.exports = (client) => {
+    const router = express.Router();
+
     router.get("/", async (req, res) => {
         res.send("Student endpoint is working");
     });
@@ -55,7 +56,8 @@ module.exports = (client) => {
                 WHERE t."studentID" = $1
                 ORDER BY t."purchaseTime" DESC
             `;
-            const { rows } = await client.query(sql, [studentID]);
+            const result = await client.query(sql, [studentID]) || { rows: [] };
+            const rows = Array.isArray(result.rows) ? result.rows : [];
 
             // Map to include a URL to the QR image if stored
             const tickets = rows.map(r => {

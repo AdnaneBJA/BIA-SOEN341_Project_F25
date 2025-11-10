@@ -1,7 +1,7 @@
 const express = require("express");
-const router = express.Router();
 
 module.exports = (client) => {
+    const router = express.Router();
     router.get("/", async (req, res) => {
         try {
             const sql = `SELECT * FROM public."Events";`;
