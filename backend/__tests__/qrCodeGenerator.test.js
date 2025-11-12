@@ -13,7 +13,9 @@ describe('generateQRCodes (integration)', () => {
   // Clean up any prior artifact before test
   beforeAll(() => {
     if (fs.existsSync(expectedFile)) {
-      try { fs.unlinkSync(expectedFile); } catch (e) { /* ignore */ }
+      try { fs.unlinkSync(expectedFile); } catch (e) {
+        console.error("Error: ", e)
+      }
     }
   });
 

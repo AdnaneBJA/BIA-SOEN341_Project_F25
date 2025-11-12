@@ -302,12 +302,6 @@ function viewEvent(eventID) {
     window.location.href = `../event-discovery/event-discovery.html`;
 }
 
-// Filter by category
-function filterByCategory(category) {
-    // Redirect to events page with category filter
-    window.location.href = `../event-discovery/event-discovery.html`;
-}
-
 // Expose actions for inline handlers
 window.saveEvent = saveEvent;
 window.removeSavedEvent = removeSavedEvent;

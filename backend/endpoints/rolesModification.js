@@ -7,13 +7,6 @@ const roleMappings = {
   student: { table: '"Student"', idCol: '"studentID"', userCol: '"studentUserName"', passCol: '"studentPassword"' }
 };
 
-function oppositeRole(role) {
-  const r = String(role || '').toLowerCase();
-  if (r === 'student') return 'organizer';
-  if (r === 'organizer') return 'student';
-  return null;
-}
-
 router.post('/assign', async (req, res) => {
   // Contract: selected role in UI is the CURRENT role; convert to the opposite (Student <-> Organizer)
   let { userId, currentRole, newRole } = req.body;
