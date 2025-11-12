@@ -113,7 +113,17 @@ function displayResults(results) {
         const startDate = e.startTime ? new Date(e.startTime).toLocaleDateString() : "TBA";
         const startTime = e.startTime ? new Date(e.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "";
         const isPaidEvent = Number(e.eventPrices) > 0;
-        const price = isPaidEvent ? `$${e.eventPrices}` : "Free";
+        
+        // Display price with discount if applicable
+        let priceDisplay = "Free";
+        if (isPaidEvent) {
+            if (e.hasDiscount && e.discountedPrice !== undefined) {
+                priceDisplay = `<span style="text-decoration: line-through; color: #999; margin-right: 8px;">$${e.originalPrice.toFixed(2)}</span><strong style="color: #e74c3c;">$${e.discountedPrice.toFixed(2)}</strong> <span style="color: #27ae60; font-size: 0.9em;">(${e.discountPercent}% off)</span>`;
+            } else {
+                priceDisplay = `$${e.eventPrices}`;
+            }
+        }
+        
         const isClaimed = claimedEventIds.has(String(e.eventID));
         const safeEventName = (e.eventName || '').replace(/'/g, "\\'");
         const claimLabel = isPaidEvent ? 'Buy Ticket' : 'Claim Ticket';
@@ -131,7 +141,7 @@ function displayResults(results) {
                 <p><strong>Type:</strong> ${e.eventType}</p>
                 <p>\ud83d\udcc5 ${startDate} ${startTime}</p>
                 <p>\ud83d\udccd ${e.location}</p>
-                <p><strong>Price:</strong> ${price}</p>
+                <p><strong>Price:</strong> ${priceDisplay}</p>
                 <p><strong>Number of Participants:</strong> ${e.currentParticipants} / ${e.maxParticipants}</p>
                 <p style="font-size:0.9em; color:#666;">${e.eventDescription}</p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -172,7 +182,8 @@ async function claimTicket(eventID, eventName) {
 
         if (res.status === 402) {
             const price = typeof payload.price !== 'undefined' ? payload.price : 'unknown';
-            const proceed = confirm(`This event requires payment. Proceed with mock payment of $${price}?`);
+            const priceDisplay = typeof price === 'number' ? price.toFixed(2) : price;
+            const proceed = confirm(`This event requires payment. Proceed with mock payment of $${priceDisplay}?`);
             if (!proceed) return;
             ({ res, payload } = await attemptClaim(true));
         }

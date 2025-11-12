@@ -13,6 +13,25 @@ function togglePriceInput() {
   }
 }
 
+function toggleDiscountSettings() {
+  const discountEnabled = document.getElementById('lastMinuteDiscountEnabled').checked;
+  const discountSettings = document.getElementById('discountSettings');
+  const discountPercentage = document.getElementById('discountPercentage');
+  const discountTimeWindowHours = document.getElementById('discountTimeWindowHours');
+
+  if (discountEnabled) {
+    discountSettings.style.display = 'block';
+    discountPercentage.required = true;
+    discountTimeWindowHours.required = true;
+  } else {
+    discountSettings.style.display = 'none';
+    discountPercentage.required = false;
+    discountTimeWindowHours.required = false;
+    discountPercentage.value = '';
+    discountTimeWindowHours.value = '';
+  }
+}
+
 document.getElementById('eventForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -30,6 +49,9 @@ document.getElementById('eventForm').addEventListener('submit', function (e) {
   const capacity = document.getElementById('capacity').value;
   const ticketType = document.querySelector('input[name="ticketType"]:checked')?.value;
   const price = document.getElementById('price').value;
+  const lastMinuteDiscountEnabled = document.getElementById('lastMinuteDiscountEnabled').checked;
+  const discountPercentage = document.getElementById('discountPercentage').value;
+  const discountTimeWindowHours = document.getElementById('discountTimeWindowHours').value;
 
   // Clear errors
   document.querySelectorAll('.error-message').forEach(el => (el.textContent = ''));
@@ -77,6 +99,28 @@ document.getElementById('eventForm').addEventListener('submit', function (e) {
     valid = false;
   }
 
+  // Validate discount settings if enabled
+  if (lastMinuteDiscountEnabled) {
+    const discountPercentNum = Number(discountPercentage);
+    const timeWindowNum = Number(discountTimeWindowHours);
+
+    if (!discountPercentage || isNaN(discountPercentNum)) {
+      document.getElementById('discountPercentageError').textContent = 'Discount percentage is required.';
+      valid = false;
+    } else if (discountPercentNum < 5 || discountPercentNum > 50) {
+      document.getElementById('discountPercentageError').textContent = 'Discount percentage must be between 5% and 50%.';
+      valid = false;
+    }
+
+    if (!discountTimeWindowHours || isNaN(timeWindowNum)) {
+      document.getElementById('discountTimeWindowHoursError').textContent = 'Time window is required.';
+      valid = false;
+    } else if (timeWindowNum < 12 || timeWindowNum > 72) {
+      document.getElementById('discountTimeWindowHoursError').textContent = 'Time window must be between 12 and 72 hours.';
+      valid = false;
+    }
+  }
+
   if (!valid) return;
 
   // Prepare data
@@ -90,7 +134,10 @@ document.getElementById('eventForm').addEventListener('submit', function (e) {
     maxParticipants: parseInt(capacity),
     eventPrices: ticketType === 'paid' ? parseInt(price) : 0,
     eventDescription: description,
-    Organization: organization
+    Organization: organization,
+    lastMinuteDiscountEnabled: lastMinuteDiscountEnabled,
+    discountPercentage: lastMinuteDiscountEnabled ? parseInt(discountPercentage) : null,
+    discountTimeWindowHours: lastMinuteDiscountEnabled ? parseInt(discountTimeWindowHours) : null
   };
 
   console.log('Event Created:', formData);
@@ -122,4 +169,5 @@ function resetForm() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('date').min = new Date().toISOString().split('T')[0];
   togglePriceInput();
+  toggleDiscountSettings();
 });
