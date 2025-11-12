@@ -4,6 +4,13 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
+    ignores: [
+      "frontend/admin-dashboard/admin-dashboard-react.js", // Ignore react file
+      "node_modules/**",
+    ],
+  },
+
+  {
     files: ["**/*.js"],
 
     languageOptions: {
