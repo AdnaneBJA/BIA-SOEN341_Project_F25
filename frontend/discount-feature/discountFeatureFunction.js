@@ -16,7 +16,9 @@ async function claimTicket(eventID, eventName) {
                 body: JSON.stringify({ eventID, studentID, email, mockPaid })
             });
             let payload = {};
-            try { payload = await res.json(); } catch (_) {}
+            try { payload = await res.json(); } catch (error) {
+                throw `Exception caught when trying to attempt claim ${error}`;
+            }
             return { res, payload };
         };
 

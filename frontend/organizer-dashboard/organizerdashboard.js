@@ -205,51 +205,6 @@ async function fetchEvents() {
     }
 }
 
-async function getTicketsIssued(eventID) {
-    try {
-        const res = await fetch(`http://localhost:3000/eventdashboard/tickets-issued/${eventID}`);
-        const ticketsData = await res.json();
-        return ticketsData.total_tickets || 0;
-    } catch (error) {
-        console.error("Error fetching tickets:", error);
-        return 0;
-    }
-}
-
-async function loadTicketsIssued(eventID){
-    try {
-        const res = await fetch(`http://localhost:3000/eventdashboard/tickets-issued/${eventID}`);
-        const ticketsData = await res.json();
-
-        const chartCanvas = document.getElementById("ticketsIssuedChart");
-
-        if (window.ticketsChart) {
-            window.ticketsChart.destroy();
-        }
-
-        window.ticketsChart = new Chart(chartCanvas, {
-            type: "bar",
-            data: {
-                labels: [ticketsData.eventName || "Event"],
-                datasets: [{
-                    label: "Tickets Issued per Event",
-                    data: [Number(ticketsData.total_tickets) || 0],
-                    backgroundColor: "#525175ff",
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error("Error loading chart:", error);
-    }
-}
-
 // QR Ticket Validation Logic
 (function initQrValidation(){
     const dropzone = document.getElementById('qr-dropzone');
