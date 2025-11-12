@@ -257,13 +257,23 @@ async function loadUpcomingEvents() {
                     const saveControl = saved
                         ? `<button class="unsave-btn" data-event-id="${event.eventID}" onclick="removeSavedEvent(${event.eventID}, event)">Saved ✓ (Remove)</button>`
                         : `<button class="save-btn" data-event-id="${event.eventID}" onclick="saveEvent(${event.eventID}, event)">⭐ Save</button>`;
+                    // Display price with discount if applicable
+                    let priceDisplay = "Free";
+                    if (event.eventPrices > 0) {
+                        if (event.hasDiscount && event.discountedPrice !== undefined) {
+                            priceDisplay = `<span style="text-decoration: line-through; color: #999; margin-right: 8px;">$${event.originalPrice.toFixed(2)}</span><strong style="color: #e74c3c;">$${event.discountedPrice.toFixed(2)}</strong> <span style="color: #27ae60; font-size: 0.9em;">(${event.discountPercent}% off)</span>`;
+                        } else {
+                            priceDisplay = `$${event.eventPrices}`;
+                        }
+                    }
+                    
                     return `
                     <div class="event-card" onclick="viewEvent(${event.eventID})">
                         <h3>${event.eventName}</h3>
                         <p><strong>Date:</strong> ${dateText}</p>
                         <p><strong>Time:</strong> ${timeText}</p>
                         <p><strong>Location:</strong> ${event.location}</p>
-                        <p><strong>Price:</strong> ${event.eventPrices > 0 ? '$' + event.eventPrices : 'Free'}</p>
+                        <p><strong>Price:</strong> ${priceDisplay}</p>
                         <span class="event-type">${event.eventType || ''}</span>
                         <div class="event-actions" style="margin-top:8px;">${saveControl}</div>
                     </div>

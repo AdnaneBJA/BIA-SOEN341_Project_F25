@@ -170,6 +170,45 @@ form { width: 100%; display: contents; }
 .price-input { display: none; }
 .price-input.active { display: block; }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.checkbox-description {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 4px;
+    margin-left: 28px;
+    font-style: italic;
+}
+
+.discount-settings {
+    background: #f0f0f0;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+}
+
+.input-hint {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
 .btn-container {
     display: flex;
     gap: 8px;

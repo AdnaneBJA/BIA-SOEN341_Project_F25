@@ -95,6 +95,9 @@ async function createTables(client) {
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "purchaseAmount" INTEGER DEFAULT 0;
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "paymentStatus" VARCHAR(50) DEFAULT 'free';
   ALTER TABLE public."Ticket" ADD COLUMN IF NOT EXISTS "transactionId" VARCHAR(100);
+  ALTER TABLE public."Events" ADD COLUMN IF NOT EXISTS "lastMinuteDiscountEnabled" BOOLEAN DEFAULT FALSE;
+  ALTER TABLE public."Events" ADD COLUMN IF NOT EXISTS "discountPercentage" INTEGER;
+  ALTER TABLE public."Events" ADD COLUMN IF NOT EXISTS "discountTimeWindowHours" INTEGER;
 
   DO $$ BEGIN
     IF NOT EXISTS (
