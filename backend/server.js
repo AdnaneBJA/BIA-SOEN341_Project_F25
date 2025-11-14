@@ -64,7 +64,7 @@ app.use('/events', discountFeatureRoutes(client));
 
 function toCsv(attendees) {
     const parser = new Parser({
-        fields: ['studentID', 'studentUserName', 'studentPassword'],
+        fields: ['studentID', 'studentUserName', 'ticketID'],
         eol: '\r\n'
     });
     const core = parser.parse(attendees);
@@ -104,12 +104,14 @@ app.get('/events/:eventId/export-attendees', async (req, res) => {
         const eventName = evt.rows[0]?.eventName || `event_${eventId}`;
 
         const sql = `
-            SELECT s."studentID", s."studentUserName", s."studentPassword"
+            SELECT s."studentID", s."studentUserName", t."ticketID"
             FROM public."Ticket" t
             JOIN public."Student" s ON s."studentID" = t."studentID"
             WHERE t."eventID" = $1
             ORDER BY s."studentID" ASC
         `;
+
+        // Include ticket ID instead of student password for attendee export
         const result = await client.query(sql, [eventId]);
         const csv = toCsv(result.rows);
 
@@ -136,7 +138,7 @@ app.get('/export-attendees', async (req, res) => {
             const eventName = evt.rows[0]?.eventName || `event_${eventId}`;
 
             const sql = `
-                SELECT s."studentID", s."studentUserName", s."studentPassword"
+                SELECT s."studentID", s."studentUserName", t."ticketID"
                 FROM public."Ticket" t
                 JOIN public."Student" s ON s."studentID" = t."studentID"
                 WHERE t."eventID" = $1
@@ -153,7 +155,7 @@ app.get('/export-attendees', async (req, res) => {
 
         // Fallback: export all students (legacy behavior)
         const result = await client.query(`
-            SELECT "studentID", "studentUserName", "studentPassword"
+            SELECT "studentID", "studentUserName", NULL AS "ticketID"
              FROM public."Student"
         `);
         const csv = toCsv(result.rows);
