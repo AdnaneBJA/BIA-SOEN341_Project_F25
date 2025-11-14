@@ -19,17 +19,40 @@ module.exports = (client) => {
 
       // Lock the event row to avoid race conditions and get price
       const eventResult = await client.query(
-        'SELECT "eventName", "eventPrices", "maxParticipants", "currentParticipants" FROM public."Events" WHERE "eventID" = $1 FOR UPDATE',
+        'SELECT "eventName", "eventPrices", "maxParticipants", "currentParticipants", "startTime", "lastMinuteDiscountEnabled", "discountPercentage", "discountTimeWindowHours" FROM public."Events" WHERE "eventID" = $1 FOR UPDATE',
         [eventID]
       );
       if (eventResult.rows.length === 0) {
         await client.query('ROLLBACK');
         return res.status(404).json({ error: 'Event not found' });
       }
-      const { eventprices, maxparticipants, currentparticipants, eventname } = eventResult.rows[0];
-      const price = eventprices || 0;
+      const { eventprices, maxparticipants, currentparticipants, eventname, starttime, lastminutediscountenabled, discountpercentage, discounttimewindowhours } = eventResult.rows[0];
+      let price = eventprices || 0;
       const maxParticipants = maxparticipants;
       const currentParticipants = currentparticipants;
+      const startTime = starttime;
+      const discountEnabled = lastminutediscountenabled === true; // Must be explicitly true
+
+      // Apply last-minute discount if enabled
+      if (discountEnabled && price > 0) {
+        const now = new Date();
+        const eventStart = new Date(startTime);
+        const hoursUntilStart = (eventStart - now) / (1000 * 60 * 60);
+        
+        // Use custom discount settings from database
+        const customDiscountPercent = discountpercentage || 25;
+        const customTimeWindowHours = discounttimewindowhours || 48;
+        
+        let discountPercent = 0;
+        // Check if within the custom time window (in hours)
+        if (hoursUntilStart > 0 && hoursUntilStart <= customTimeWindowHours) {
+          discountPercent = customDiscountPercent;
+        }
+        
+        if (discountPercent > 0) {
+          price = Math.round(price * (100 - discountPercent) / 100 * 100) / 100;
+        }
+      }
 
       const isPaid = Number(price) > 0;
       if (isPaid && !mockPaid) {
@@ -156,6 +179,26 @@ module.exports = (client) => {
       console.error('Error generating QR for preview:', err);
       res.status(500).send('Error generating QR code');
     }
+  });
+
+  //fetch the total number of tickets
+  router.get('/ticket/total', async (req, res) => {
+      //In future, add admin validation
+      // const adminID = req.params.id;
+      // if (!adminID) {
+      //   return res.status(400).json({ error: 'Admin ID is required' });
+      // }
+      try {
+          const result = await client.query('SELECT COUNT(*) AS count FROM public."Ticket";');
+          return res.status(200).json({
+            message: "Retrieving total number of tickets",
+            ticketCount : Number(result.rows[0].count)
+          });
+
+      } catch (error){
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Database error" });
+      }
   });
 
   return router;

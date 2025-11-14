@@ -50,9 +50,11 @@ form.addEventListener("submit", async (event) => {
             const organizerID = receivedInfo.data[0].organizerID;
             const organizerUsername = receivedInfo.data[0].organizerUserName;
             const organizerPassword = receivedInfo.data[0].organizerPassword;
+            const approved = receivedInfo.data[0].approved;
             localStorage.setItem("organizerID", organizerID);
             localStorage.setItem("organizerUsername", organizerUsername);
             localStorage.setItem("organizerPassword", organizerPassword);
+            localStorage.setItem("organizerApproved", approved);
             localStorage.setItem("role", "Organizer");
 
             // Show styled success message
@@ -63,7 +65,7 @@ form.addEventListener("submit", async (event) => {
             }
 
             setTimeout(() => {
-                window.location.href = "../main-page/organizerDashboard.html";
+                window.location.href = "../organizer-dashboard/organizerDashboard.html";
             }, 1500);
             return;
         }

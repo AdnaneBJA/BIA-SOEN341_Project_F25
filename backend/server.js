@@ -16,6 +16,8 @@ const createLoginRoutes = require("./endpoints/login");
 const createEventDashboardRoutes = require("./endpoints/eventdashboard")
 const calendarRoutes = require("./endpoints/calendar");
 const createTicketsRoutes = require('./endpoints/tickets');
+const discountFeatureRoutes = require('./endpoints/discountFeature');
+const createOrganizersManagementRoutes = require('./endpoints/organizers');
 
 
 //app.use('/', claimTickets());
@@ -56,7 +58,9 @@ app.use("/login", createLoginRoutes(client));
 app.use("/eventdashboard", createEventDashboardRoutes(client));
 app.use("/calendar", calendarRoutes);
 app.use(createTicketsRoutes(client));
+app.use("/organizers", createOrganizersManagementRoutes(client));
 app.use('/qrcodes', express.static(path.join(__dirname, 'qrcodes')));
+app.use('/events', discountFeatureRoutes(client));
 
 function toCsv(attendees) {
     const parser = new Parser({

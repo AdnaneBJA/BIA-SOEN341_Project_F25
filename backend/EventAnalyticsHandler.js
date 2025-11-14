@@ -8,10 +8,13 @@ const analyticsData = {
     '2': {attnedee: 80, ticketsSold: 150, revenue: 2000},
     '3': {attnedee: 200, ticketsSold: 250, revenue: 5000},
     
-}
+};
+
+// In-memory events store for the demo POST endpoint
+const events = [];
 
 router.get('/:eventId', (req, res) => {
-    const eventID = req.params.eventID; //extract the eventID from the URL
+    const eventID = req.params.eventId; //extract the eventID from the URL
     const data = analyticsData[eventID]; //look up the data for the eventID given
 
     if (data) {

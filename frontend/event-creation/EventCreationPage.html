@@ -13,9 +13,7 @@
             <span class="menu-logo"><b>BIA</b></span>
         </div>
         <div class="menu-center">
-            <a href="../main-page/mainpage.html">Home</a>
-            <a href="../event-discovery/event-discovery.html">Events</a>
-            <a href="../main-page/tickets.html">Tickets</a>
+            <a href="../organizer-dashboard/organizerdashboard.html">Organizer Dashboard</a>
         </div>
         <div class="menu-right">
             <div class="menu-status">
@@ -134,6 +132,32 @@
                         <label for="price">Ticket Price ($) <span class="required">*</span></label>
                         <input type="number" id="price" name="price" placeholder="Enter ticket price (e.g. 500)" min="1" step="1">
                         <span class="error-message" id="priceError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="lastMinuteDiscountEnabled" name="lastMinuteDiscountEnabled" onchange="toggleDiscountSettings()">
+                            <span>Enable last-minute discounts</span>
+                        </label>
+                        <p class="checkbox-description">Apply discounts when tickets are purchased within the specified time window before the event</p>
+                    </div>
+
+                    <div class="discount-settings" id="discountSettings" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="discountPercentage">Discount Percentage (%) <span class="required">*</span></label>
+                                <input type="number" id="discountPercentage" name="discountPercentage" placeholder="e.g. 20" min="5" max="50" step="1">
+                                <span class="error-message" id="discountPercentageError"></span>
+                                <p class="input-hint">Must be between 5% and 50%</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="discountTimeWindowHours">Time Window (hours) <span class="required">*</span></label>
+                                <input type="number" id="discountTimeWindowHours" name="discountTimeWindowHours" placeholder="e.g. 24" min="12" max="72" step="1">
+                                <span class="error-message" id="discountTimeWindowHoursError"></span>
+                                <p class="input-hint">Must be between 12 and 72 hours</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
