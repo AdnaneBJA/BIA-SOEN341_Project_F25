@@ -253,8 +253,10 @@ function showTicketModal({ eventName, ticketID, qrCodeDataUrl }) {
     document.body.appendChild(overlay);
 
     overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) document.body.removeChild(overlay);
-    });
+    // Don't close on overlay click - only on explicit close button
+    e.preventDefault();
+    e.stopPropagation();
+});
     card.querySelector('#closeTicketModal').addEventListener('click', () => {
         document.body.removeChild(overlay);
     });
