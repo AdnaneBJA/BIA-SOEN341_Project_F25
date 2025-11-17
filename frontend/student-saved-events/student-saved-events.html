@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Saved Events</title>
+    <link rel="stylesheet" href="../student-dashboard/student-dashboard.css">
+    <link rel="stylesheet" href="student-saved-events.css"> 
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../student-tickets/student-tickets.html">Tickets</a>
+            <a href="student-saved-events.html" class="active-link">Saved</a> 
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="dashboard-header">
+        <h1>My Saved Events</h1>
+        <p class="welcome-text">A complete list of all the events you've saved.</p>
+    </div>
+
+    <main class="dashboard-container">
+        <section class="dashboard-section saved-events-section"> 
+            <div id="results" class="events-grid">
+                <p class="loading-text">Loading your saved events...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="../student-dashboard/student-dashboard.js"></script>
+    <script src="student-saved-events.js"></script>
+</body>
+</html>
