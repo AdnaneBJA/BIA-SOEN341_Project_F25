@@ -15,7 +15,7 @@ module.exports = (client) => {
     }
 
     try {
-      await client.query('BEGIN');
+      await client.query('BEGIN'); 
 
       // Lock the event row to avoid race conditions and get price
       const eventResult = await client.query(
@@ -87,6 +87,15 @@ module.exports = (client) => {
         RETURNING "ticketID"`;
       const insertResultToDB = await client.query(insertQuery, [eventID, studentID, true, 'pending', purchaseAmount, paymentStatus, transactionId]);
       const ticketID = insertResultToDB.rows[0].ticketid || insertResultToDB.rows[0].ticketID;
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!INSERTION INTO BOOKING TABLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+      await client.query(`
+        INSERT INTO public."Booking" ("eventID", "studentID", "bookingTime", "paymentStatus")
+        VALUES ($1, $2, NOW(), $3)
+      `, [eventID, studentID, paymentStatus]);
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       // Generate QR code (file on disk for email + data URL for frontend)
       const { qrPath, relPath, dataUrl } = await generateQRCodes(ticketID);

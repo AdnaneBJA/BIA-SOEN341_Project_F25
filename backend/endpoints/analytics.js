@@ -6,7 +6,7 @@ router.get('/summary', async (req, res) => {
   try {
     const totalEvents = await client.query(`SELECT COUNT(*) FROM "Events"`);
     const totalTickets = await client.query(`SELECT COUNT(*) FROM "Ticket"`);
-    const totalParticipants = await client.query(`SELECT COUNT(DISTINCT "studentID") FROM "Booking"`);
+    const totalParticipants = await client.query(`SELECT COUNT(DISTINCT "studentID") FROM "Booking"`); 
 
     res.json({
       totalEvents: parseInt(totalEvents.rows[0].count),
