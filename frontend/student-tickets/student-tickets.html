@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All My Tickets</title>
+    <link rel="stylesheet" href="../student-dashboard/student-dashboard.css">
+    <link rel="stylesheet" href="student-tickets.css"> 
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="menu-left">
+            <span class="menu-logo"><b>BIA</b></span>
+        </div>
+        <div class="menu-center">
+            <a href="../main-page/mainpage.html">Home</a>
+            <a href="../event-discovery/event-discovery.html">Events</a>
+            <a href="../student-tickets/student-tickets.html" class="active-link">Tickets</a>
+        </div>
+        <div class="menu-right">
+            <div class="menu-status">
+                <span id="user-status"></span>
+                <button id="disconnect-btn" class="disconnect-btn" type="button">Disconnect</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="dashboard-header">
+        <h1>All My Tickets</h1>
+        <p class="welcome-text">A complete list of your claimed and purchased event tickets.</p>
+    </div>
+
+    <main class="dashboard-container">
+        <section class="dashboard-section tickets-section"> 
+            <div id="results" class="tickets-grid">
+                <p class="loading-text">Loading your full ticket list...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="../student-dashboard/student-dashboard.js"></script>
+    <script src="student-tickets.js"></script>
+</body>
+</html>
