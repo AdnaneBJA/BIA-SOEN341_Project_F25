@@ -1,0 +1,10 @@
+/* * File: student-tickets.css
+ * * Purpose: Contains only essential styles that override the dashboard.css or are unique to this page.
+ */
+
+/* Override for the active link in the menu bar to visually indicate the current page. */
+.menu-center a.active-link {
+    background-color: #AA8E70;
+    color: #ffffff;
+    font-weight: 700;
+}
