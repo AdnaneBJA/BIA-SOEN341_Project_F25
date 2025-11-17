@@ -252,6 +252,37 @@ function showTicketModal({ eventName, ticketID, qrCodeDataUrl }) {
     overlay.appendChild(card);
     document.body.appendChild(overlay);
 
+    // For download of QR code
+const downloadLink = card.querySelector('#downloadQR');
+if (downloadLink) {
+  downloadLink.addEventListener('click', async (ev) => {
+    ev.preventDefault(); // stop native behavior
+    const href = downloadLink.href;
+    const filename = downloadLink.getAttribute('download') || `ticket_${ticketID}.png`;
+
+    try {
+      // fetch works for data: URLs and http(s) URLs (if same-origin or CORS allowed)
+      const res = await fetch(href);
+      if (!res.ok) throw new Error('Network response not ok: ' + res.status);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      console.log('QR download triggered:', filename);
+    } catch (err) {
+      console.error('QR download failed:', err);
+      // Fallback: open image in new tab so user can save manually
+      window.open(href, '_blank');
+    }
+  });
+}
+
     overlay.addEventListener('click', (e) => {
     // Don't close on overlay click - only on explicit close button
     e.preventDefault();
