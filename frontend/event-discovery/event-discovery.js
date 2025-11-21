@@ -9,10 +9,13 @@ const events = [
 let allEvents = [];
 // Track which events the current student has already claimed
 let claimedEventIds = new Set();
+// Track which events the current student has saved (for save/unsave button logic)
+let savedEventIds = new Set();
 
 // Fetch events from database on page load
 document.addEventListener("DOMContentLoaded", async () => {
     await prefetchClaimedTickets();
+    await loadSavedEventIds();
     await fetchOrganizations();
     await fetchEventsFromDatabase();
 });
@@ -29,6 +32,96 @@ async function prefetchClaimedTickets() {
     } catch (err) {
         console.error('Error prefetching claimed tickets:', err);
     }
+}
+
+async function loadSavedEventIds() {
+    // Uses studentID to check saved events (for save/unsave button)
+    const studentID = localStorage.getItem('studentID') || localStorage.getItem('StudentID');
+    if (!studentID) return;
+
+    try {
+        // Fetch saved events from backend
+        const response = await fetch(`http://localhost:3000/student/saved-events/${studentID}`);
+        const savedEvents = await response.json();
+
+        // Update local set for quick checks
+        if (Array.isArray(savedEvents)) {
+            savedEventIds = new Set(savedEvents.map(e => String(e.eventID)));
+        }
+    } catch (error) {
+        console.error('Error loading saved event IDs:', error);
+    }
+}
+
+// Save an event for the student
+async function saveEvent(eventID, ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    const studentID = localStorage.getItem('studentID') || localStorage.getItem('StudentID');
+    if (!studentID) {
+        alert('Please log in to save events.');
+        return;
+    }
+    try {
+        const res = await fetch('http://localhost:3000/student/saved-events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ studentID, eventID })
+        });
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload.error || 'Failed to save event');
+        
+        // Update local set and UI button state
+        savedEventIds.add(String(eventID));
+        updateEventCardButton(eventID, 'saved');
+        
+    } catch (e) {
+        console.error('Save event error:', e);
+        alert('Could not save event.');
+    }
+}
+
+// Remove a saved event for the student
+async function removeSavedEvent(eventID, ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    const studentID = localStorage.getItem('studentID') || localStorage.getItem('StudentID');
+    if (!studentID) {
+        alert('Please log in.');
+        return;
+    }
+    try {
+        const res = await fetch('http://localhost:3000/student/saved-events', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ studentID, eventID })
+        });
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload.error || 'Failed to remove saved event');
+        
+        // Update local set and UI button state
+        savedEventIds.delete(String(eventID));
+        updateEventCardButton(eventID, 'unsaved');
+        
+    } catch (e) {
+        console.error('Remove saved event error:', e);
+        alert('Could not remove saved event.');
+    }
+}
+
+// Helper function to update button state without re-rendering the whole grid
+function updateEventCardButton(eventID, state) {
+    const card = document.querySelector(`.event-card[data-event-id='${eventID}']`);
+    const container = card ? card.querySelector('.save-control-container') : null;
+    if (!container) return;
+    
+    let newButtonHTML = '';
+    if (state === 'saved') {
+        // Use the new unsave-btn class for styling
+        newButtonHTML = `<button class="unsave-btn" data-event-id="${eventID}" onclick="removeSavedEvent(${eventID}, event)">Saved ✓ (Remove)</button>`;
+    } else {
+        // Use the new save-btn class for styling
+        newButtonHTML = `<button class="save-btn" data-event-id="${eventID}" onclick="saveEvent(${eventID}, event)">⭐ Save</button>`;
+    }
+    container.innerHTML = newButtonHTML;
 }
 
 async function fetchOrganizations() {
@@ -130,11 +223,17 @@ function displayResults(results) {
         const claimControl = isClaimed
             ? `<span class="claimed-label" style="display:inline-block;padding:8px 12px;border-radius:6px;background:#eef;color:#556;">Ticket already claimed</span>`
             : `<button class="claim-ticket-btn" data-event-id="${e.eventID}" onclick="claimTicket('${e.eventID}', '${safeEventName}')">\ud83c\udf9f\ufe0f ${claimLabel}</button>`;
+        
+        // **EXISTING LOGIC**: Check saved state and create button HTML
+        const isSaved = savedEventIds.has(String(e.eventID));
+        const saveControl = isSaved
+            ? `<button class="unsave-btn" data-event-id="${e.eventID}" onclick="removeSavedEvent(${e.eventID}, event)">Saved ✓ (Remove)</button>`
+            : `<button class="save-btn" data-event-id="${e.eventID}" onclick="saveEvent(${e.eventID}, event)">⭐ Save</button>`;
+
         const icsHref = `http://localhost:3000/calendar/${e.eventID}`;
 
         return `
-            <div class="event-card">
-              <div class="event-info">
+            <div class="event-card" data-event-id="${e.eventID}">               <div class="event-info">
                 <h2>${e.eventName}</h2>
                 <p><strong>Hosted by:</strong> ${e.organizerUserName}</p>
                  <p><strong>Organization:</strong> ${e.Organization}</p>
@@ -146,6 +245,7 @@ function displayResults(results) {
                 <p style="font-size:0.9em; color:#666;">${e.eventDescription}</p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                   ${claimControl}
+                                    <div class="save-control-container">${saveControl}</div> 
                   <a class="add-to-cal" href="${icsHref}" download style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;text-decoration:none;">\ud83d\udcc5 Add to Calendar</a>
                 </div>
               </div>
@@ -295,3 +395,5 @@ if (downloadLink) {
 
 // Expose function for inline onclick
 window.claimTicket = claimTicket;
+window.saveEvent = saveEvent;
+window.removeSavedEvent = removeSavedEvent;
