@@ -195,3 +195,56 @@ header {
 .event-info button:hover {
   background-color: #8f735b;
 }
+
+/* Styling for the standard, unsaved state */
+.save-btn {
+    padding: 8px 12px;
+    border: 1px solid #3498db; /* Blue border */
+    border-radius: 6px;
+    background-color: #ecf0f1; /* Light gray background */
+    color: #3498db; /* Blue text */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.save-btn:hover {
+    background-color: #dbe4e6;
+    border-color: #2980b9;
+}
+
+/* Styling for the saved state (the button that removes the save) */
+.unsave-btn {
+    padding: 8px 12px;
+    border: 1px solid #2ecc71; /* Green border */
+    border-radius: 6px;
+    background-color: #2ecc71; /* Solid green background */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    white-space: nowrap;
+    opacity: 0.9;
+}
+
+.unsave-btn:hover {
+    background-color: #27ae60; /* Darker green on hover */
+    opacity: 1;
+}
+
+/* Ensure buttons in the action container look good together */
+.save-control-container {
+    /* ensures container doesn't take up unnecessary space */
+    display: inline-block; 
+}
+
+.claim-ticket-btn {
+    /* Example base style for the primary action button */
+    padding: 8px 12px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

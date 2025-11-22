@@ -1,0 +1,25 @@
+/* * File: student-saved-events.css
+ * * Purpose: Contains only essential styles that override the dashboard.css or are unique to this page.
+ */
+
+/* Override for the new active link in the menu bar */
+.menu-center a.active-link {
+    background-color: #AA8E70;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Optional: Slight color adjustment for the remove button to match the danger style in dashboard.css */
+.unsave-btn.btn-danger {
+    background-color: #ffffff !important; 
+    color: #7a2f2f !important;
+    border-color: #d8a2a2 !important;
+    padding: 8px 12px; /* Make it slightly smaller for a clean look */
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.unsave-btn.btn-danger:hover {
+    background-color: #fff0f0 !important;
+    border-color: #c67f7f !important;
+}

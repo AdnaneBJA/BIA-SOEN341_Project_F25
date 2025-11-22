@@ -81,7 +81,7 @@ async function fetchAndRenderDiscounts(){
 
         const lastMinuteEvents = events.filter(e => {
             const days = getDaysUntil(e.startTime);
-            return days > 0 && days <= 2;
+            return days > 0 && days <= 3;
         });
 
         if (lastMinuteEvents.length === 0){
