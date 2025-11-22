@@ -53,4 +53,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show title instantly for a smoother first paint (no waiting)
     const typedEl = document.getElementById('typed');
     if (typedEl) typedEl.textContent = phrase;
+
+    // Intercept Organizer Dashboard button click: show popup for non-organizers and stay on page
+    try {
+        const organizerBtn = document.querySelector('button[onclick*="organizerdashboard.html"]');
+        if (organizerBtn) {
+            // Prevent the inline onclick from taking effect by removing it and handling navigation here
+            organizerBtn.removeAttribute('onclick');
+            organizerBtn.addEventListener('click', (e) => {
+                const role = localStorage.getItem('role');
+                    const low = role ? role.toLowerCase() : '';
+                    if (low === 'organizer' || low === 'admin') {
+                        // allow navigation for organizers and admins
+                        window.location.href = '../organizer-dashboard/organizerdashboard.html';
+                    } else if (!role) {
+                        window.location.href = '../login/login.html';
+                    } else {
+                        // simple popup and remain on the main page
+                        try { alert('Please log in as an organizer'); } catch (err) { console.warn('Alert unavailable', err); }
+                    }
+            });
+        }
+    } catch (e) {
+        console.error('Failed to attach organizer button handler', e);
+    }
 });
