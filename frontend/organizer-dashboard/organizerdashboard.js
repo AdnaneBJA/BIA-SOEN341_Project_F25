@@ -118,7 +118,9 @@ function updateUserStatus(){
     if (!statusEl) return;
 
     const role = localStorage.getItem('role');
-    if (role) {
+    // allow organizers and admins to access this page
+    const low = role ? role.toLowerCase() : '';
+    if (low === 'organizer' || low === 'admin') {
         const usernameKey = `${role.toLowerCase()}Username`;
         const username = localStorage.getItem(usernameKey) || 'Unknown';
         statusEl.innerHTML = `
@@ -127,9 +129,21 @@ function updateUserStatus(){
             <span class="role-badge">${role}</span>
         `;
         if (disconnectBtn) disconnectBtn.style.display = 'inline-flex';
+    } else if (role) {
+        // Return other type of user to mainpage
+        // Show a brief popup so the user understands why they're being redirected
+        try {
+            window.alert('Please log in as an organizer');
+        } catch (e) {
+            // ignore if alert not available in the environment
+            console.warn('Popup alert failed', e);
+        }
+        window.location.href = '../main-page/mainpage.html'
     } else {
         statusEl.innerHTML = `<span class="status-label">Not logged in</span>`;
         if (disconnectBtn) disconnectBtn.style.display = 'none';
+        // Redirect to login if not logged in
+        window.location.href = '../login/login.html';
     }
 }
 
@@ -171,14 +185,26 @@ function checkOrganizerApprovalStatus() {
         if (approvalMessage) {
             approvalMessage.style.display = 'none';
         }
+    } else if (role != 'Organizer'){
+        // Disable the create event button
+        if (createEventBtn) {
+            createEventBtn.disabled = true;
+            createEventBtn.style.opacity = '0.5';
+            createEventBtn.style.cursor = 'not-allowed';
+            createEventBtn.onclick = (e) => {
+                e.preventDefault();
+                return false;
+            };
+        }
     }
 }
 
 async function fetchEvents() {
     try {
         const role = localStorage.getItem('role');
-        if (role !== 'Organizer') {
-            console.warn('Only organizers can view organizer dashboard events.');
+        const low = role ? role.toLowerCase() : '';
+        if (low !== 'organizer' && low !== 'admin') {
+            console.warn('Only organizers and admins can view organizer dashboard events.');
             return [];
         }
 
