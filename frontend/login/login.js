@@ -85,7 +85,7 @@ form.addEventListener("submit", async (event) => {
                 successBox.style.display = "block";
             }
             setTimeout(() => {
-                window.location.href = "../main-page/mainpage.html";
+                window.location.href = "../student-dashboard/student-dashboard.html";
             }, 1500);
             return;
         }
